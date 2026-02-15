@@ -237,6 +237,8 @@
             font-family: inherit;
             font-size: 13px;
             resize: none;
+            max-height: 100px;
+            overflow-y: auto;
         }
 
         .message-input:focus {
@@ -386,9 +388,12 @@
             }
 
             .message-input {
-                font-size: 14px;
+                font-size: 16px; /* Prevents zoom on iOS */
                 padding: 12px;
-                min-height: 44px; /* Better tap target */
+                height: 44px; /* Fixed height */
+                max-height: 44px; /* Prevent expansion */
+                overflow: hidden; /* Hide overflow */
+                white-space: nowrap; /* Single line */
             }
 
             .send-btn {
@@ -487,12 +492,12 @@
 
                 <div class="message-input-container">
                     <div class="input-wrapper">
-                        <textarea 
+                        <input 
+                            type="text"
                             class="message-input" 
                             id="messageInput" 
                             placeholder="Message #general..."
-                            rows="1"
-                        ></textarea>
+                        />
                         <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
                     </div>
                 </div>
@@ -743,7 +748,7 @@
             const input = document.getElementById('messageInput');
             if (input) {
                 input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    if (e.key === 'Enter') {
                         e.preventDefault();
                         sendMessage();
                     }
