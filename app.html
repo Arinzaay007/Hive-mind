@@ -331,6 +331,122 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -240px;
+                top: 58px;
+                height: calc(100vh - 58px);
+                z-index: 100;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block !important;
+            }
+
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo {
+                font-size: 14px;
+            }
+
+            .user-info {
+                font-size: 11px;
+                gap: 8px;
+            }
+
+            .sign-out-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+
+            .messages {
+                padding: 12px;
+                padding-bottom: 100px; /* Extra space for input */
+            }
+
+            .message-input-container {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 12px;
+                background: var(--bg-secondary);
+                border-top: 2px solid var(--border);
+                z-index: 50;
+            }
+
+            .message-input {
+                font-size: 14px;
+                padding: 12px;
+                min-height: 44px; /* Better tap target */
+            }
+
+            .send-btn {
+                padding: 12px 16px;
+                font-size: 14px;
+                min-width: 70px;
+            }
+
+            .chat-header h2 {
+                font-size: 14px;
+            }
+
+            .message {
+                gap: 8px;
+            }
+
+            .avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .username {
+                font-size: 12px;
+            }
+
+            .message-text {
+                font-size: 13px;
+            }
+
+            .timestamp {
+                font-size: 10px;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 400px) {
+            .logo {
+                font-size: 12px;
+            }
+
+            .messages {
+                padding: 8px;
+            }
+
+            .message-input-container {
+                padding: 8px;
+            }
+
+            .input-wrapper {
+                gap: 6px;
+            }
+
+            .send-btn {
+                padding: 10px 12px;
+                min-width: 60px;
+            }
+        }
     </style>
 </head>
 <body>
