@@ -825,38 +825,62 @@ function subscribeToMessages(channelId) {
         }
 
         // Send message
-        async function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const content = input.value.trim();
-            
-            if (!content) return;
+      async function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const content = input.value.trim();
+    
+    if (!content) return;
 
-            const btn = document.getElementById('sendBtn');
-            btn.disabled = true;
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = true;
 
-            try {
-                const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+    try {
+        const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
 
-                const { error } = await supabaseClient
-                    .from('messages')
-                    .insert({
-                        channel_id: currentChannel,
-                        user_id: currentUser.id,
-                        username: username,
-                        content: content,
-                        type: 'text'
-                    });
+        // 🔍 DETAILED DEBUGGING
+        console.log('=== SEND MESSAGE DEBUG ===');
+        console.log('Current Channel:', currentChannel);
+        console.log('User ID:', currentUser.id);
+        console.log('Username:', username);
+        console.log('Content:', content);
+        console.log('Supabase Client Exists?', !!supabaseClient);
 
-                if (error) throw error;
+        const messageData = {
+            channel_id: currentChannel,
+            user_id: currentUser.id,
+            username: username,
+            content: content,
+            type: 'text'
+        };
+        
+        console.log('Message Data to Insert:', messageData);
 
-                input.value = '';
-            } catch (error) {
-                console.error('Send message error:', error);
-                alert('Failed to send message: ' + error.message);
-            } finally {
-                btn.disabled = false;
-            }
+        const { data, error } = await supabaseClient
+            .from('messages')
+            .insert(messageData)
+            .select();
+
+        console.log('Insert Response - Data:', data);
+        console.log('Insert Response - Error:', error);
+
+        if (error) {
+            console.error('❌ INSERT ERROR:', error);
+            throw error;
         }
+
+        console.log('✅ Message inserted successfully!');
+        input.value = '';
+        
+    } catch (error) {
+        console.error('❌ CATCH BLOCK ERROR:', error);
+        console.error('Error name:', error.name);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        alert('Failed to send message: ' + error.message);
+    } finally {
+        btn.disabled = false;
+    }
+}
 
         // Sign out
         async function signOut() {
