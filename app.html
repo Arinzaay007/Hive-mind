@@ -654,9 +654,10 @@
 
                 // Load messages for current channel
                 await loadMessages(currentChannel);
-
-               
-
+                
+// Subscribe to real-time messages
+subscribeToMessages(currentChannel);
+                
                 // Show app, hide loading
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('appContainer').style.display = 'flex';
