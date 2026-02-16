@@ -403,6 +403,29 @@
             50% { opacity: 0.5; }
         }
 
+
+        /* Mention highlighting */
+.mention {
+    background: var(--accent);
+    color: var(--bg-primary);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.mention-me {
+    background: #ff006e;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    animation: pulse-mention 2s infinite;
+}
+
+@keyframes pulse-mention {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .sidebar {
@@ -638,7 +661,11 @@
                 // Show app, hide loading
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('appContainer').style.display = 'flex';
+                // Request notification permission
+setTimeout(() => requestNotificationPermission(), 2000);
 
+
+        
             } catch (error) {
                 console.error('Initialization error:', error);
                 alert('⚠️ Not signed in! Redirecting...');
@@ -708,12 +735,29 @@
                         filter: `channel_id=eq.${channelId}`
                     },
                     (payload) => {
-                        addMessageToUI(payload.new);
-                    }
-                )
-                .subscribe();
+        const msg = payload.new;
+        addMessageToUI(msg);
+        
+        // Show notification if not from current user
+        if (msg.user_id !== currentUser.id) {
+            const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+            const isMentioned = checkForMentions(msg.content, currentUsername);
+            
+            if (isMentioned) {
+                // Mentioned notification
+                showNotification(
+                    `${msg.username} mentioned you in #${currentChannel}`,
+                    msg.content
+                );
+            } else if (!isTabFocused) {
+                // Regular message notification
+                showNotification(
+                    `${msg.username} in #${currentChannel}`,
+                    msg.content
+                );
+            }
         }
-
+    }
         // Render messages
         function renderMessages(messages) {
             const container = document.getElementById('messages');
@@ -766,7 +810,7 @@
                     <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
                     <span class="timestamp">${time}${editedLabel}</span>
                 </div>
-                <div class="message-text">${escapeHtml(msg.content)}</div>
+                <div class="message-text">${highlightMentions(escapeHtml(msg.content), currentUser.user_metadata?.username || currentUser.email.split('@')[0])}</div>
             </div>
             ${actionsMenu}
         </div>
@@ -926,6 +970,92 @@ async function deleteMessage(messageId, event) {
     }
 }
 
+
+        // Notification system
+let notificationPermission = 'default';
+let isTabFocused = true;
+
+// Track tab focus
+window.addEventListener('focus', () => { isTabFocused = true; });
+window.addEventListener('blur', () => { isTabFocused = false; });
+
+// Request notification permission
+async function requestNotificationPermission() {
+    if ('Notification' in window && Notification.permission === 'default') {
+        notificationPermission = await Notification.requestPermission();
+        if (notificationPermission === 'granted') {
+            showNotification('Notifications enabled!', 'You\'ll be notified of new messages and @mentions');
+        }
+    } else {
+        notificationPermission = Notification.permission;
+    }
+}
+
+// Show notification
+function showNotification(title, body, icon = '') {
+    if (!('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+    if (isTabFocused) return;
+
+    const notification = new Notification(title, {
+        body: body,
+        icon: icon || 'https://api.dicebear.com/7.x/shapes/svg?seed=hivemind',
+        badge: 'https://api.dicebear.com/7.x/shapes/svg?seed=hive',
+        tag: 'hive-mind-notification'
+    });
+
+    notification.onclick = () => {
+        window.focus();
+        notification.close();
+    };
+
+    playNotificationSound();
+}
+
+// Notification sound
+function playNotificationSound() {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (e) {
+        // Sound failed, ignore
+    }
+}
+
+// Check for @mentions
+function checkForMentions(message, currentUsername) {
+    const mentionRegex = /@(\w+)/g;
+    const mentions = message.match(mentionRegex);
+    
+    if (mentions) {
+        return mentions.some(mention => 
+            mention.toLowerCase() === `@${currentUsername.toLowerCase()}`
+        );
+    }
+    return false;
+}
+
+// Highlight @mentions
+function highlightMentions(text, currentUsername) {
+    return text.replace(/@(\w+)/g, (match, username) => {
+        const isMentioningMe = username.toLowerCase() === currentUsername.toLowerCase();
+        const className = isMentioningMe ? 'mention-me' : 'mention';
+        return `<span class="${className}">${match}</span>`;
+    });
+}
         
         // Start the app!
         init();
