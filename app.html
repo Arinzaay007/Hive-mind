@@ -31,6 +31,55 @@
             --matrix-glow: rgba(0, 204, 51, 0.2);
         }
 
+
+
+        [data-theme="cyberpunk"] {
+    --bg-primary: #0d001a;
+    --bg-secondary: #1a0033;
+    --bg-tertiary: #2d0052;
+    --text-primary: #ff00ff;
+    --text-secondary: #ff00aa;
+    --text-muted: #8855aa;
+    --border: #4d0080;
+    --accent: #ff00ff;
+    --matrix-glow: rgba(255, 0, 255, 0.4);
+}
+
+[data-theme="ocean"] {
+    --bg-primary: #001a1f;
+    --bg-secondary: #002633;
+    --bg-tertiary: #003d4d;
+    --text-primary: #00d9ff;
+    --text-secondary: #00b8d4;
+    --text-muted: #5591a3;
+    --border: #004d5c;
+    --accent: #00ffff;
+    --matrix-glow: rgba(0, 255, 255, 0.3);
+}
+
+[data-theme="forest"] {
+    --bg-primary: #0a1f0a;
+    --bg-secondary: #153315;
+    --bg-tertiary: #1f4d1f;
+    --text-primary: #00ff00;
+    --text-secondary: #00cc00;
+    --text-muted: #669966;
+    --border: #2d662d;
+    --accent: #00ff00;
+    --matrix-glow: rgba(0, 255, 0, 0.3);
+}
+
+[data-theme="sunset"] {
+    --bg-primary: #1f0a0a;
+    --bg-secondary: #331515;
+    --bg-tertiary: #4d1f1f;
+    --text-primary: #ff6600;
+    --text-secondary: #ff8833;
+    --text-muted: #b36644;
+    --border: #662d1f;
+    --accent: #ff6600;
+    --matrix-glow: rgba(255, 102, 0, 0.3);
+}
         * {
             margin: 0;
             padding: 0;
@@ -487,7 +536,14 @@
         <div class="header">
             <div class="logo">HIVE MIND</div>
             <div class="user-info">
-                <button class="sign-out-btn" onclick="toggleTheme()" style="margin-right: 8px;">🌓</button>
+                <select id="themeSelector" onchange="changeTheme(this.value)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 6px; color: var(--text-primary); margin-right: 8px; font-family: inherit; font-size: 12px;">
+    <option value="dark">🌑 Dark</option>
+    <option value="light">☀️ Light</option>
+    <option value="cyberpunk">💜 Cyberpunk</option>
+    <option value="ocean">🌊 Ocean</option>
+    <option value="forest">🌲 Forest</option>
+    <option value="sunset">🌅 Sunset</option>
+</select>
                 <button class="sign-out-btn" onclick="goToProfile()" style="margin-right: 8px;">Profile</button>
                 <span><span class="status-indicator"></span><span id="currentUser">Loading...</span></span>
                 <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
@@ -689,24 +745,33 @@
         }
 
         // Create message HTML
-        function createMessageHTML(msg) {
-            const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const initial = msg.username.charAt(0).toUpperCase();
-            
-            return `
-                <div class="message">
-                    <div class="avatar">${initial}</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
-                            <span class="timestamp">${time}</span>
-                        </div>
-                        <div class="message-text">${escapeHtml(msg.content)}</div>
-                    </div>
+      function createMessageHTML(msg) {
+    const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const initial = msg.username.charAt(0).toUpperCase();
+    const isOwnMessage = msg.user_id === currentUser.id;
+    const editedLabel = msg.edited ? '<span style="font-size: 10px; color: var(--text-muted);"> (edited)</span>' : '';
+    
+    const actionsMenu = isOwnMessage ? `
+        <div class="message-actions" style="display: none; position: absolute; top: 8px; right: 8px;">
+            <button onclick="editMessage('${msg.id}', \`${escapeHtml(msg.content).replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">✏️ Edit</button>
+            <button onclick="deleteMessage('${msg.id}', event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; color: #ff006e; font-size: 11px;">🗑️ Delete</button>
+        </div>
+    ` : '';
+    
+    return `
+        <div class="message" data-message-id="${msg.id}" style="position: relative;" onmouseenter="this.querySelector('.message-actions')?.style.setProperty('display', 'block')" onmouseleave="this.querySelector('.message-actions')?.style.setProperty('display', 'none')">
+            <div class="avatar">${initial}</div>
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
+                    <span class="timestamp">${time}${editedLabel}</span>
                 </div>
-            `;
-        }
-
+                <div class="message-text">${escapeHtml(msg.content)}</div>
+            </div>
+            ${actionsMenu}
+        </div>
+    `;
+}
         // View user profile
         function viewUserProfile(userId) {
             window.location.href = `user-profile.html?id=${userId}`;
@@ -784,12 +849,11 @@
         });
 
         // Theme toggle
-        function toggleTheme() {
-            const current = document.body.getAttribute('data-theme') || 'dark';
-            const newTheme = current === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        }
+       // Theme functions
+function changeTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+}
 
         // Profile navigation
         function goToProfile() {
@@ -798,8 +862,71 @@
 
         // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.body.setAttribute('data-theme', savedTheme);
+document.body.setAttribute('data-theme', savedTheme);
+window.addEventListener('DOMContentLoaded', () => {
+    const selector = document.getElementById('themeSelector');
+    if (selector) selector.value = savedTheme;
+});
 
+// Edit message
+async function editMessage(messageId, currentContent, event) {
+    event.stopPropagation();
+    
+    const newContent = prompt('Edit message:', currentContent);
+    if (!newContent || newContent === currentContent) return;
+    
+    try {
+        const { error } = await supabaseClient
+            .from('messages')
+            .update({
+                content: newContent,
+                edited: true,
+                edited_at: new Date().toISOString()
+            })
+            .eq('id', messageId);
+        
+        if (error) throw error;
+        
+        // Update UI
+        const messageEl = document.querySelector(`[data-message-id="${messageId}"] .message-text`);
+        if (messageEl) {
+            messageEl.textContent = newContent;
+            const timestamp = document.querySelector(`[data-message-id="${messageId}"] .timestamp`);
+            if (timestamp && !timestamp.innerHTML.includes('edited')) {
+                timestamp.innerHTML += '<span style="font-size: 10px; color: var(--text-muted);"> (edited)</span>';
+            }
+        }
+    } catch (error) {
+        alert('Error editing message: ' + error.message);
+    }
+}
+
+// Delete message
+async function deleteMessage(messageId, event) {
+    event.stopPropagation();
+    
+    if (!confirm('Delete this message?')) return;
+    
+    try {
+        const { error } = await supabaseClient
+            .from('messages')
+            .delete()
+            .eq('id', messageId);
+        
+        if (error) throw error;
+        
+        // Remove from UI
+        const messageEl = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (messageEl) {
+            messageEl.style.opacity = '0';
+            setTimeout(() => messageEl.remove(), 300);
+        }
+    } catch (error) {
+        alert('Error deleting message: ' + error.message);
+    }
+}
+
+        
         // Start the app!
         init();
     </script>
