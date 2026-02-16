@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hive Mind - My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #00ff41;
+            --text-secondary: #00cc33;
+            --text-muted: #666666;
+            --border: #222222;
+            --accent: #00ff41;
+            --matrix-glow: rgba(0, 255, 65, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #e8e8e8;
+            --text-primary: #0a0a0a;
+            --text-secondary: #333333;
+            --text-muted: #888888;
+            --border: #dddddd;
+            --accent: #00cc33;
+            --matrix-glow: rgba(0, 204, 51, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--matrix-glow);
+        }
+
+        .profile-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            align-items: center;
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--text-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--bg-primary);
+        }
+
+        .profile-info h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .profile-info p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--matrix-glow);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .tech-tag {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tech-tag.selected {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="container">
+        <div class="header">
+            <div class="logo">HIVE MIND</div>
+            <div class="header-actions">
+                <button class="btn" onclick="toggleTheme()">🌓 Theme</button>
+                <button class="btn" onclick="goToApp()">← Back to Chat</button>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar-large" id="avatarLarge">H</div>
+                <div class="profile-info">
+                    <h1 id="displayName">Loading...</h1>
+                    <p id="displayEmail">email@example.com</p>
+                </div>
+            </div>
+
+            <form id="profileForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="username" placeholder="Your username" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-textarea" id="bio" placeholder="Tell us about yourself..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" id="location" placeholder="City, Country">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tech Stack (Select all that apply)</label>
+                    <div class="tech-stack" id="techStack">
+                        <div class="tech-tag" data-tech="javascript">JavaScript</div>
+                        <div class="tech-tag" data-tech="python">Python</div>
+                        <div class="tech-tag" data-tech="react">React</div>
+                        <div class="tech-tag" data-tech="nodejs">Node.js</div>
+                        <div class="tech-tag" data-tech="typescript">TypeScript</div>
+                        <div class="tech-tag" data-tech="vue">Vue</div>
+                        <div class="tech-tag" data-tech="angular">Angular</div>
+                        <div class="tech-tag" data-tech="go">Go</div>
+                        <div class="tech-tag" data-tech="rust">Rust</div>
+                        <div class="tech-tag" data-tech="java">Java</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Profile</button>
+            </form>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="messagesCount">0</div>
+                    <div class="stat-label">Messages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="joinedDate">-</div>
+                    <div class="stat-label">Member Since</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="projectsShipped">0</div>
+                    <div class="stat-label">Projects Shipped</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://cwoaqiwnpcpawignecsb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
+
+        const { createClient } = window.supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
+        let selectedTech = [];
+
+        // Load theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+
+        async function init() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) {
+                window.location.href = 'signin.html';
+                return;
+            }
+            currentUser = user;
+            
+            const username = user.user_metadata?.username || user.email.split('@')[0];
+            document.getElementById('displayName').textContent = username;
+            document.getElementById('displayEmail').textContent = user.email;
+            document.getElementById('username').value = username;
+            document.getElementById('avatarLarge').textContent = username.charAt(0).toUpperCase();
+
+            // Load profile data
+            await loadProfile();
+            await loadStats();
+        }
+
+        async function loadProfile() {
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .single();
+
+            if (data) {
+                document.getElementById('bio').value = data.bio || '';
+                document.getElementById('location').value = data.location || '';
+                selectedTech = data.tech_stack || [];
+                updateTechDisplay();
+            }
+        }
+
+        async function loadStats() {
+            // Count messages
+            const { count } = await supabaseClient
+                .from('messages')
+                .select('*', { count: 'exact', head: true })
+                .eq('user_id', currentUser.id);
+
+            document.getElementById('messagesCount').textContent = count || 0;
+
+            // Show join date
+            const joinDate = new Date(currentUser.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            document.getElementById('joinedDate').textContent = joinDate;
+        }
+
+        function updateTechDisplay() {
+            document.querySelectorAll('.tech-tag').forEach(tag => {
+                if (selectedTech.includes(tag.dataset.tech)) {
+                    tag.classList.add('selected');
+                }
+            });
+        }
+
+        // Tech stack selection
+        document.getElementById('techStack').addEventListener('click', (e) => {
+            if (e.target.classList.contains('tech-tag')) {
+                const tech = e.target.dataset.tech;
+                if (selectedTech.includes(tech)) {
+                    selectedTech = selectedTech.filter(t => t !== tech);
+                    e.target.classList.remove('selected');
+                } else {
+                    selectedTech.push(tech);
+                    e.target.classList.add('selected');
+                }
+            }
+        });
+
+        // Save profile
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const bio = document.getElementById('bio').value;
+            const location = document.getElementById('location').value;
+
+            const { error } = await supabaseClient
+                .from('profiles')
+                .upsert({
+                    id: currentUser.id,
+                    username: currentUser.user_metadata?.username || currentUser.email.split('@')[0],
+                    bio: bio,
+                    location: location,
+                    tech_stack: selectedTech,
+                    updated_at: new Date().toISOString()
+                });
+
+            if (error) {
+                alert('Error saving profile: ' + error.message);
+            } else {
+                alert('✅ Profile saved successfully!');
+            }
+        });
+
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function goToApp() {
+            window.location.href = 'app.html';
+        }
+
+        init();
+    </script>
+</body>
+</html>
