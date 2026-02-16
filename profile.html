@@ -248,7 +248,18 @@
 
         <div class="profile-card">
             <div class="profile-header">
-                <div class="avatar-large" id="avatarLarge">H</div>
+                <div class="avatar-large" id="avatarLarge" style="position: relative; cursor: pointer;" onclick="document.getElementById('avatarUpload').click()">
+    <img id="avatarImage" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: none;">
+    <span id="avatarInitial">H</span>
+    <div style="position: absolute; bottom: 0; right: 0; background: var(--accent); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid var(--bg-primary); color: var(--bg-primary); font-size: 18px;">📸</div>
+</div>
+<div class="profile-info">
+    <h1 id="displayName">Loading...</h1>
+    <p id="displayEmail">email@example.com</p>
+    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+    <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">📸 Click avatar to upload picture</p>
+</div>
+
                 <div class="profile-info">
                     <h1 id="displayName">Loading...</h1>
                     <p id="displayEmail">email@example.com</p>
@@ -428,6 +439,75 @@
         }
 
         init();
+
+
+
+
+        // ADD THIS SCRIPT TO YOUR PROFILE.HTML RIGHT BEFORE </script> TAG
+
+// Handle avatar upload
+document.getElementById('avatarUpload').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        alert('Image must be less than 2MB!');
+        return;
+    }
+
+    // Show loading
+    document.getElementById('avatarLarge').style.opacity = '0.5';
+
+    try {
+        // Create unique filename
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+
+        // Upload to Supabase Storage
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+            .from('avatars')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: true
+            });
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: urlData } = supabaseClient.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+
+        const avatarUrl = urlData.publicUrl;
+
+        // Save URL to profile
+        const { error: updateError } = await supabaseClient
+            .from('profiles')
+            .upsert({
+                id: currentUser.id,
+                avatar_url: avatarUrl,
+                updated_at: new Date().toISOString()
+            });
+
+        if (updateError) throw updateError;
+
+        // Update display
+        const img = document.getElementById('avatarImage');
+        img.src = avatarUrl;
+        img.style.display = 'block';
+        document.getElementById('avatarInitial').style.display = 'none';
+        document.getElementById('avatarLarge').style.opacity = '1';
+
+        alert('✅ Profile picture updated!');
+
+    } catch (error) {
+        console.error('Upload error:', error);
+        alert('❌ Error uploading image: ' + error.message);
+        document.getElementById('avatarLarge').style.opacity = '1';
+    }
+});
+
     </script>
 </body>
 </html>
