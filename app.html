@@ -825,7 +825,7 @@ function subscribeToMessages(channelId) {
         }
 
         // Send message
-      async function sendMessage() {
+    async function sendMessage() {
     const input = document.getElementById('messageInput');
     const content = input.value.trim();
     
@@ -881,7 +881,42 @@ function subscribeToMessages(channelId) {
         btn.disabled = false;
     }
 }
+```
 
+---
+
+## **Step 6: Commit the Changes**
+
+1. Scroll down to the bottom of the page
+2. You'll see **"Commit changes"**
+3. In the text box, type: `Add debug logging to sendMessage`
+4. Click the green **"Commit changes"** button
+
+---
+
+## **Step 7: Wait for Vercel to Deploy**
+
+1. Go to **https://vercel.com**
+2. Sign in
+3. Click on your **hive-mind** project
+4. You should see a **new deployment starting** (yellow "Building")
+5. **Wait 1-2 minutes** until it shows **"Ready"** (green checkmark)
+
+---
+
+## **Step 8: Test the App**
+
+1. Go to: **https://hive-mind-henna.vercel.app**
+2. Press **Ctrl+Shift+R** (hard refresh)
+3. Press **F12** → **Console tab**
+4. **Log in**
+5. **Go to # random**
+6. **Send message:** "GitHub edit test"
+7. **Look at the console** - you should see:
+```
+   === SEND MESSAGE DEBUG ===
+   Current Channel: random
+   User ID: ...
         // Sign out
         async function signOut() {
             if (!confirm('Sign out of Hive Mind?')) return;
