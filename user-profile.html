@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hive Mind - User Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #00ff41;
+            --text-secondary: #00cc33;
+            --text-muted: #666666;
+            --border: #222222;
+            --accent: #00ff41;
+            --matrix-glow: rgba(0, 255, 65, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #e8e8e8;
+            --text-primary: #0a0a0a;
+            --text-secondary: #333333;
+            --text-muted: #888888;
+            --border: #dddddd;
+            --accent: #00cc33;
+            --matrix-glow: rgba(0, 204, 51, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .profile-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            align-items: center;
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--text-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .profile-info p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .info-section {
+            margin-bottom: 32px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .info-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .tech-tag {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--accent);
+            font-size: 12px;
+            color: var(--accent);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 18px;
+        }
+
+        .error {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--error, #ff006e);
+            padding: 20px;
+            text-align: center;
+            color: var(--error, #ff006e);
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="container">
+        <div class="header">
+            <div class="logo">HIVE MIND</div>
+            <div>
+                <a href="app.html" class="btn">← Back to Chat</a>
+            </div>
+        </div>
+
+        <div id="loadingScreen" class="loading">
+            Loading profile...
+        </div>
+
+        <div id="profileCard" class="profile-card" style="display: none;">
+            <div class="profile-header">
+                <div class="avatar-large" id="userAvatar">
+                    <img id="avatarImage" style="display: none;">
+                    <span id="avatarInitial">?</span>
+                </div>
+                <div class="profile-info">
+                    <h1 id="userName">Loading...</h1>
+                    <p id="userLocation">📍 Location unknown</p>
+                    <p id="memberSince">🗓️ Member since...</p>
+                </div>
+            </div>
+
+            <div class="info-section" id="bioSection" style="display: none;">
+                <div class="info-label">Bio</div>
+                <div class="info-content" id="userBio"></div>
+            </div>
+
+            <div class="info-section" id="techSection" style="display: none;">
+                <div class="info-label">Tech Stack</div>
+                <div class="tech-stack" id="techStack"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="messagesCount">0</div>
+                    <div class="stat-label">Messages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="projectsShipped">0</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="channels">0</div>
+                    <div class="stat-label">Channels</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorScreen" class="error" style="display: none;">
+            ❌ User not found or profile doesn't exist.
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://cwoaqiwnpcpawignecsb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
+
+        const { createClient } = window.supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Load theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+
+        async function loadUserProfile() {
+            // Get user ID from URL
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('id');
+
+            if (!userId) {
+                showError();
+                return;
+            }
+
+            try {
+                // Load profile
+                const { data: profile, error: profileError } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', userId)
+                    .single();
+
+                if (profileError || !profile) {
+                    showError();
+                    return;
+                }
+
+                // Display profile
+                document.getElementById('userName').textContent = profile.username || 'Anonymous';
+                document.getElementById('avatarInitial').textContent = (profile.username || 'A').charAt(0).toUpperCase();
+
+                // Avatar
+                if (profile.avatar_url) {
+                    document.getElementById('avatarImage').src = profile.avatar_url;
+                    document.getElementById('avatarImage').style.display = 'block';
+                    document.getElementById('avatarInitial').style.display = 'none';
+                }
+
+                // Location
+                if (profile.location) {
+                    document.getElementById('userLocation').textContent = '📍 ' + profile.location;
+                }
+
+                // Member since
+                const joinDate = new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                document.getElementById('memberSince').textContent = '🗓️ Member since ' + joinDate;
+
+                // Bio
+                if (profile.bio) {
+                    document.getElementById('bioSection').style.display = 'block';
+                    document.getElementById('userBio').textContent = profile.bio;
+                }
+
+                // Tech stack
+                if (profile.tech_stack && profile.tech_stack.length > 0) {
+                    document.getElementById('techSection').style.display = 'block';
+                    document.getElementById('techStack').innerHTML = profile.tech_stack
+                        .map(tech => `<div class="tech-tag">${tech}</div>`)
+                        .join('');
+                }
+
+                // Stats - Message count
+                const { count: messageCount } = await supabaseClient
+                    .from('messages')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('user_id', userId);
+
+                document.getElementById('messagesCount').textContent = messageCount || 0;
+
+                // Projects (from profile)
+                document.getElementById('projectsShipped').textContent = profile.projects_shipped || 0;
+
+                // Channels active in
+                const { data: channelData } = await supabaseClient
+                    .from('messages')
+                    .select('channel_id')
+                    .eq('user_id', userId);
+
+                const uniqueChannels = new Set(channelData?.map(m => m.channel_id) || []);
+                document.getElementById('channels').textContent = uniqueChannels.size;
+
+                // Show profile
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('profileCard').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showError();
+            }
+        }
+
+        function showError() {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('errorScreen').style.display = 'block';
+        }
+
+        loadUserProfile();
+    </script>
+</body>
+</html>

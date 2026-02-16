@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hive Mind - Main App</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #00ff41;
+            --text-secondary: #00cc33;
+            --text-muted: #666666;
+            --border: #222222;
+            --accent: #00ff41;
+            --matrix-glow: rgba(0, 255, 65, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #e8e8e8;
+            --text-primary: #0a0a0a;
+            --text-secondary: #333333;
+            --text-muted: #888888;
+            --border: #dddddd;
+            --accent: #00cc33;
+            --matrix-glow: rgba(0, 204, 51, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo::before {
+            content: '> ';
+            color: var(--accent);
+        }
+
+        .user-info {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .sign-out-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .sign-out-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .channel {
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+        }
+
+        .channel:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .channel.active {
+            background: var(--bg-tertiary);
+            border-left-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+        }
+
+        .chat-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--text-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--bg-primary);
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 4px;
+            align-items: baseline;
+        }
+
+        .username {
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .username:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .message-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        /* Message Input */
+        .message-input-container {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 16px 20px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .message-input {
+            flex: 1;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            resize: none;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--matrix-glow);
+        }
+
+        .send-btn {
+            background: var(--accent);
+            border: none;
+            padding: 10px 20px;
+            color: var(--bg-primary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            box-shadow: 0 0 20px var(--matrix-glow);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 9999;
+        }
+
+        .loading-screen.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -240px;
+                top: 58px;
+                height: calc(100vh - 58px);
+                z-index: 100;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block !important;
+            }
+
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo {
+                font-size: 14px;
+            }
+
+            .user-info {
+                font-size: 11px;
+                gap: 8px;
+            }
+
+            .sign-out-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+
+            .messages {
+                padding: 12px;
+                padding-bottom: 100px; /* Extra space for input */
+            }
+
+            .message-input-container {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 12px;
+                background: var(--bg-secondary);
+                border-top: 2px solid var(--border);
+                z-index: 50;
+            }
+
+            .message-input {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px;
+                height: 44px; /* Fixed height */
+                max-height: 44px; /* Prevent expansion */
+                overflow: hidden; /* Hide overflow */
+                white-space: nowrap; /* Single line */
+            }
+
+            .send-btn {
+                padding: 12px 16px;
+                font-size: 14px;
+                min-width: 70px;
+            }
+
+            .chat-header h2 {
+                font-size: 14px;
+            }
+
+            .message {
+                gap: 8px;
+            }
+
+            .avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .username {
+                font-size: 12px;
+            }
+
+            .message-text {
+                font-size: 13px;
+            }
+
+            .timestamp {
+                font-size: 10px;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 400px) {
+            .logo {
+                font-size: 12px;
+            }
+
+            .messages {
+                padding: 8px;
+            }
+
+            .message-input-container {
+                padding: 8px;
+            }
+
+            .input-wrapper {
+                gap: 6px;
+            }
+
+            .send-btn {
+                padding: 10px 12px;
+                min-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+        <div>Loading Hive Mind...</div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" style="display: none;" id="appContainer">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">HIVE MIND</div>
+            <div class="user-info">
+                <button class="sign-out-btn" onclick="toggleTheme()" style="margin-right: 8px;">🌓</button>
+                <button class="sign-out-btn" onclick="goToProfile()" style="margin-right: 8px;">Profile</button>
+                <span><span class="status-indicator"></span><span id="currentUser">Loading...</span></span>
+                <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <div class="section-title">Text Channels</div>
+                    <div id="channelList"></div>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="chat-area">
+                <div class="chat-header">
+                    <h2 id="currentChannelName"># general</h2>
+                </div>
+
+                <div class="messages" id="messages"></div>
+
+                <div class="message-input-container">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text"
+                            class="message-input" 
+                            id="messageInput" 
+                            placeholder="Message #general..."
+                        />
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // TODO: REPLACE THESE WITH YOUR ACTUAL KEYS!
+        // ==========================================
+        const SUPABASE_URL = 'https://cwoaqiwnpcpawignecsb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
+        // ==========================================
+
+        // Supabase client
+        let supabaseClient = null;
+        let currentUser = null;
+        let currentChannel = 'general';
+        let messageSubscription = null;
+
+        // Channels
+        const channels = [
+            { id: 'general', name: 'general', topic: 'Welcome to BuilderHub' },
+            { id: 'random', name: 'random', topic: 'Off-topic vibes' },
+            { id: 'react-native', name: 'react-native', topic: 'React Native dev' },
+            { id: 'backend-wizards', name: 'backend-wizards', topic: 'Backend & APIs' },
+            { id: 'shipped-today', name: 'shipped-today', topic: 'Show what you shipped' }
+        ];
+
+        // Initialize app
+        async function init() {
+            try {
+                // Initialize Supabase with hardcoded keys
+                const { createClient } = window.supabase;
+                supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+                // Check if user is logged in
+                const { data: { user }, error } = await supabaseClient.auth.getUser();
+
+                if (error || !user) {
+                    throw new Error('Not authenticated');
+                }
+
+                currentUser = user;
+
+                // Update UI with user info
+                const username = user.user_metadata?.username || user.email.split('@')[0];
+                document.getElementById('currentUser').textContent = username;
+
+                // Render channels
+                renderChannels();
+
+                // Load messages for current channel
+                await loadMessages(currentChannel);
+
+                // Subscribe to real-time messages
+                subscribeToMessages(currentChannel);
+
+                // Show app, hide loading
+                document.getElementById('loadingScreen').classList.add('hidden');
+                document.getElementById('appContainer').style.display = 'flex';
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                alert('⚠️ Not signed in! Redirecting...');
+                window.location.href = 'signin.html';
+            }
+        }
+
+        // Render channels
+        function renderChannels() {
+            const list = document.getElementById('channelList');
+            list.innerHTML = channels.map(ch => `
+                <div class="channel ${ch.id === currentChannel ? 'active' : ''}" onclick="switchChannel('${ch.id}')">
+                    # ${ch.name}
+                </div>
+            `).join('');
+        }
+
+        // Switch channel
+        async function switchChannel(channelId) {
+            currentChannel = channelId;
+            
+            const channel = channels.find(c => c.id === channelId);
+            document.getElementById('currentChannelName').textContent = `# ${channel.name}`;
+            document.getElementById('messageInput').placeholder = `Message #${channel.name}...`;
+            
+            renderChannels();
+            
+            // Unsubscribe from old channel
+            if (messageSubscription) {
+                messageSubscription.unsubscribe();
+            }
+            
+            // Load and subscribe to new channel
+            await loadMessages(channelId);
+            subscribeToMessages(channelId);
+        }
+
+        // Load messages from database
+        async function loadMessages(channelId) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('messages')
+                    .select('*')
+                    .eq('channel_id', channelId)
+                    .order('created_at', { ascending: true })
+                    .limit(50);
+
+                if (error) throw error;
+
+                renderMessages(data || []);
+            } catch (error) {
+                console.error('Load messages error:', error);
+                renderMessages([]);
+            }
+        }
+
+        // Subscribe to real-time messages
+        function subscribeToMessages(channelId) {
+            messageSubscription = supabaseClient
+                .channel(`messages:${channelId}`)
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'INSERT',
+                        schema: 'public',
+                        table: 'messages',
+                        filter: `channel_id=eq.${channelId}`
+                    },
+                    (payload) => {
+                        addMessageToUI(payload.new);
+                    }
+                )
+                .subscribe();
+        }
+
+        // Render messages
+        function renderMessages(messages) {
+            const container = document.getElementById('messages');
+            
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); padding: 40px;">
+                        No messages yet. Be the first to say something! 👋
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = messages.map(msg => createMessageHTML(msg)).join('');
+            scrollToBottom();
+        }
+
+        // Add new message to UI
+        function addMessageToUI(message) {
+            const container = document.getElementById('messages');
+            
+            // Check if this is the first message (remove "no messages" text)
+            if (container.innerHTML.includes('No messages yet')) {
+                container.innerHTML = '';
+            }
+            
+            container.innerHTML += createMessageHTML(message);
+            scrollToBottom();
+        }
+
+        // Create message HTML
+        function createMessageHTML(msg) {
+            const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const initial = msg.username.charAt(0).toUpperCase();
+            
+            return `
+                <div class="message">
+                    <div class="avatar">${initial}</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
+                            <span class="timestamp">${time}</span>
+                        </div>
+                        <div class="message-text">${escapeHtml(msg.content)}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // View user profile
+        function viewUserProfile(userId) {
+            window.location.href = `user-profile.html?id=${userId}`;
+        }
+
+        // Send message
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content) return;
+
+            const btn = document.getElementById('sendBtn');
+            btn.disabled = true;
+
+            try {
+                const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+
+                const { error } = await supabaseClient
+                    .from('messages')
+                    .insert({
+                        channel_id: currentChannel,
+                        user_id: currentUser.id,
+                        username: username,
+                        content: content,
+                        type: 'text'
+                    });
+
+                if (error) throw error;
+
+                input.value = '';
+            } catch (error) {
+                console.error('Send message error:', error);
+                alert('Failed to send message: ' + error.message);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // Sign out
+        async function signOut() {
+            if (!confirm('Sign out of Hive Mind?')) return;
+
+            try {
+                await supabaseClient.auth.signOut();
+                window.location.href = 'signin.html';
+            } catch (error) {
+                console.error('Sign out error:', error);
+            }
+        }
+
+        // Utility functions
+        function scrollToBottom() {
+            const container = document.getElementById('messages');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Enter to send
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('messageInput');
+            if (input) {
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        // Theme toggle
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme') || 'dark';
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Profile navigation
+        function goToProfile() {
+            window.location.href = 'profile.html';
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+
+        // Start the app!
+        init();
+    </script>
+</body>
+</html>
