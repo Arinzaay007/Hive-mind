@@ -483,9 +483,11 @@ document.getElementById('avatarUpload').addEventListener('change', async (e) => 
 
         // Save URL to profile
         const { error: updateError } = await supabaseClient
+    const username = user.user_metadata?.username || user.email.split('@')[0];
             .from('profiles')
             .upsert({
                 id: currentUser.id,
+    username: username,
                 avatar_url: avatarUrl,
                 updated_at: new Date().toISOString()
             });
