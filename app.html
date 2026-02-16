@@ -31,55 +31,54 @@
             --matrix-glow: rgba(0, 204, 51, 0.2);
         }
 
-
-
         [data-theme="cyberpunk"] {
-    --bg-primary: #0d001a;
-    --bg-secondary: #1a0033;
-    --bg-tertiary: #2d0052;
-    --text-primary: #ff00ff;
-    --text-secondary: #ff00aa;
-    --text-muted: #8855aa;
-    --border: #4d0080;
-    --accent: #ff00ff;
-    --matrix-glow: rgba(255, 0, 255, 0.4);
-}
+            --bg-primary: #0d001a;
+            --bg-secondary: #1a0033;
+            --bg-tertiary: #2d0052;
+            --text-primary: #ff00ff;
+            --text-secondary: #ff00aa;
+            --text-muted: #8855aa;
+            --border: #4d0080;
+            --accent: #ff00ff;
+            --matrix-glow: rgba(255, 0, 255, 0.4);
+        }
 
-[data-theme="ocean"] {
-    --bg-primary: #001a1f;
-    --bg-secondary: #002633;
-    --bg-tertiary: #003d4d;
-    --text-primary: #00d9ff;
-    --text-secondary: #00b8d4;
-    --text-muted: #5591a3;
-    --border: #004d5c;
-    --accent: #00ffff;
-    --matrix-glow: rgba(0, 255, 255, 0.3);
-}
+        [data-theme="ocean"] {
+            --bg-primary: #001a1f;
+            --bg-secondary: #002633;
+            --bg-tertiary: #003d4d;
+            --text-primary: #00d9ff;
+            --text-secondary: #00b8d4;
+            --text-muted: #5591a3;
+            --border: #004d5c;
+            --accent: #00ffff;
+            --matrix-glow: rgba(0, 255, 255, 0.3);
+        }
 
-[data-theme="forest"] {
-    --bg-primary: #0a1f0a;
-    --bg-secondary: #153315;
-    --bg-tertiary: #1f4d1f;
-    --text-primary: #00ff00;
-    --text-secondary: #00cc00;
-    --text-muted: #669966;
-    --border: #2d662d;
-    --accent: #00ff00;
-    --matrix-glow: rgba(0, 255, 0, 0.3);
-}
+        [data-theme="forest"] {
+            --bg-primary: #0a1f0a;
+            --bg-secondary: #153315;
+            --bg-tertiary: #1f4d1f;
+            --text-primary: #00ff00;
+            --text-secondary: #00cc00;
+            --text-muted: #669966;
+            --border: #2d662d;
+            --accent: #00ff00;
+            --matrix-glow: rgba(0, 255, 0, 0.3);
+        }
 
-[data-theme="sunset"] {
-    --bg-primary: #1f0a0a;
-    --bg-secondary: #331515;
-    --bg-tertiary: #4d1f1f;
-    --text-primary: #ff6600;
-    --text-secondary: #ff8833;
-    --text-muted: #b36644;
-    --border: #662d1f;
-    --accent: #ff6600;
-    --matrix-glow: rgba(255, 102, 0, 0.3);
-}
+        [data-theme="sunset"] {
+            --bg-primary: #1f0a0a;
+            --bg-secondary: #331515;
+            --bg-tertiary: #4d1f1f;
+            --text-primary: #ff6600;
+            --text-secondary: #ff8833;
+            --text-muted: #b36644;
+            --border: #662d1f;
+            --accent: #ff6600;
+            --matrix-glow: rgba(255, 102, 0, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -100,7 +99,6 @@
             flex-direction: column;
         }
 
-        /* Header */
         .header {
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
@@ -145,14 +143,12 @@
             color: var(--accent);
         }
 
-        /* Main Content */
         .main-content {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 240px;
             background: var(--bg-secondary);
@@ -194,7 +190,6 @@
             color: var(--accent);
         }
 
-        /* Chat Area */
         .chat-area {
             flex: 1;
             display: flex;
@@ -285,7 +280,6 @@
             color: var(--text-secondary);
         }
 
-        /* Message Input */
         .message-input-container {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
@@ -337,7 +331,6 @@
             cursor: not-allowed;
         }
 
-        /* Loading Screen */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -370,7 +363,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -403,30 +395,28 @@
             50% { opacity: 0.5; }
         }
 
+        .mention {
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
 
-        /* Mention highlighting */
-.mention {
-    background: var(--accent);
-    color: var(--bg-primary);
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-weight: 600;
-}
+        .mention-me {
+            background: #ff006e;
+            color: white;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+            animation: pulse-mention 2s infinite;
+        }
 
-.mention-me {
-    background: #ff006e;
-    color: white;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-weight: 600;
-    animation: pulse-mention 2s infinite;
-}
+        @keyframes pulse-mention {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
 
-@keyframes pulse-mention {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-        /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -465,7 +455,7 @@
 
             .messages {
                 padding: 12px;
-                padding-bottom: 100px; /* Extra space for input */
+                padding-bottom: 100px;
             }
 
             .message-input-container {
@@ -480,12 +470,12 @@
             }
 
             .message-input {
-                font-size: 16px; /* Prevents zoom on iOS */
+                font-size: 16px;
                 padding: 12px;
-                height: 44px; /* Fixed height */
-                max-height: 44px; /* Prevent expansion */
-                overflow: hidden; /* Hide overflow */
-                white-space: nowrap; /* Single line */
+                height: 44px;
+                max-height: 44px;
+                overflow: hidden;
+                white-space: nowrap;
             }
 
             .send-btn {
@@ -521,7 +511,6 @@
             }
         }
 
-        /* Very small phones */
         @media (max-width: 400px) {
             .logo {
                 font-size: 12px;
@@ -547,35 +536,30 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="spinner"></div>
         <div>Loading Hive Mind...</div>
     </div>
 
-    <!-- Main App -->
     <div class="app-container" style="display: none;" id="appContainer">
-        <!-- Header -->
         <div class="header">
             <div class="logo">HIVE MIND</div>
             <div class="user-info">
                 <select id="themeSelector" onchange="changeTheme(this.value)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 6px; color: var(--text-primary); margin-right: 8px; font-family: inherit; font-size: 12px;">
-    <option value="dark">🌑 Dark</option>
-    <option value="light">☀️ Light</option>
-    <option value="cyberpunk">💜 Cyberpunk</option>
-    <option value="ocean">🌊 Ocean</option>
-    <option value="forest">🌲 Forest</option>
-    <option value="sunset">🌅 Sunset</option>
-</select>
+                    <option value="dark">🌑 Dark</option>
+                    <option value="light">☀️ Light</option>
+                    <option value="cyberpunk">💜 Cyberpunk</option>
+                    <option value="ocean">🌊 Ocean</option>
+                    <option value="forest">🌲 Forest</option>
+                    <option value="sunset">🌅 Sunset</option>
+                </select>
                 <button class="sign-out-btn" onclick="goToProfile()" style="margin-right: 8px;">Profile</button>
                 <span><span class="status-indicator"></span><span id="currentUser">Loading...</span></span>
                 <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Sidebar -->
             <div class="sidebar">
                 <div class="sidebar-section">
                     <div class="section-title">Text Channels</div>
@@ -583,7 +567,6 @@
                 </div>
             </div>
 
-            <!-- Chat Area -->
             <div class="chat-area">
                 <div class="chat-header">
                     <h2 id="currentChannelName"># general</h2>
@@ -607,20 +590,14 @@
     </div>
 
     <script>
-        // ==========================================
-        // TODO: REPLACE THESE WITH YOUR ACTUAL KEYS!
-        // ==========================================
         const SUPABASE_URL = 'https://cwoaqiwnpcpawignecsb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
-        // ==========================================
 
-        // Supabase client
         let supabaseClient = null;
         let currentUser = null;
         let currentChannel = 'general';
         let messageSubscription = null;
 
-        // Channels
         const channels = [
             { id: 'general', name: 'general', topic: 'Welcome to BuilderHub' },
             { id: 'random', name: 'random', topic: 'Off-topic vibes' },
@@ -629,14 +606,11 @@
             { id: 'shipped-today', name: 'shipped-today', topic: 'Show what you shipped' }
         ];
 
-        // Initialize app
         async function init() {
             try {
-                // Initialize Supabase with hardcoded keys
                 const { createClient } = window.supabase;
                 supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-                // Check if user is logged in
                 const { data: { user }, error } = await supabaseClient.auth.getUser();
 
                 if (error || !user) {
@@ -645,27 +619,17 @@
 
                 currentUser = user;
 
-                // Update UI with user info
                 const username = user.user_metadata?.username || user.email.split('@')[0];
                 document.getElementById('currentUser').textContent = username;
 
-                // Render channels
                 renderChannels();
-
-                // Load messages for current channel
                 await loadMessages(currentChannel);
-                
-// Subscribe to real-time messages
-subscribeToMessages(currentChannel);
-                
-                // Show app, hide loading
+                subscribeToMessages(currentChannel);
+
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('appContainer').style.display = 'flex';
-                // Request notification permission
-setTimeout(() => requestNotificationPermission(), 2000);
-
-
-        
+                
+                setTimeout(() => requestNotificationPermission(), 2000);
             } catch (error) {
                 console.error('Initialization error:', error);
                 alert('⚠️ Not signed in! Redirecting...');
@@ -673,7 +637,6 @@ setTimeout(() => requestNotificationPermission(), 2000);
             }
         }
 
-        // Render channels
         function renderChannels() {
             const list = document.getElementById('channelList');
             list.innerHTML = channels.map(ch => `
@@ -683,7 +646,6 @@ setTimeout(() => requestNotificationPermission(), 2000);
             `).join('');
         }
 
-        // Switch channel
         async function switchChannel(channelId) {
             currentChannel = channelId;
             
@@ -693,17 +655,14 @@ setTimeout(() => requestNotificationPermission(), 2000);
             
             renderChannels();
             
-            // Unsubscribe from old channel
             if (messageSubscription) {
                 messageSubscription.unsubscribe();
             }
             
-            // Load and subscribe to new channel
             await loadMessages(channelId);
             subscribeToMessages(channelId);
         }
 
-        // Load messages from database
         async function loadMessages(channelId) {
             try {
                 const { data, error } = await supabaseClient
@@ -722,46 +681,42 @@ setTimeout(() => requestNotificationPermission(), 2000);
             }
         }
 
-       // Subscribe to real-time messages
-function subscribeToMessages(channelId) {
-    messageSubscription = supabaseClient
-        .channel(`messages:${channelId}`)
-        .on(
-            'postgres_changes',
-            {
-                event: 'INSERT',
-                schema: 'public',
-                table: 'messages',
-                filter: `channel_id=eq.${channelId}`
-            },
-            (payload) => {
-                const msg = payload.new;
-                addMessageToUI(msg);
-                
-                // Show notification if not from current user
-                if (msg.user_id !== currentUser.id) {
-                    const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-                    const isMentioned = checkForMentions(msg.content, currentUsername);
-                    
-                    if (isMentioned) {
-                        // Mentioned notification
-                        showNotification(
-                            `${msg.username} mentioned you in #${currentChannel}`,
-                            msg.content
-                        );
-                    } else if (!isTabFocused) {
-                        // Regular message notification
-                        showNotification(
-                            `${msg.username} in #${currentChannel}`,
-                            msg.content
-                        );  // ✅ FIXED
+        function subscribeToMessages(channelId) {
+            messageSubscription = supabaseClient
+                .channel(`messages:${channelId}`)
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'INSERT',
+                        schema: 'public',
+                        table: 'messages',
+                        filter: `channel_id=eq.${channelId}`
+                    },
+                    (payload) => {
+                        const msg = payload.new;
+                        addMessageToUI(msg);
+                        
+                        if (msg.user_id !== currentUser.id) {
+                            const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+                            const isMentioned = checkForMentions(msg.content, currentUsername);
+                            
+                            if (isMentioned) {
+                                showNotification(
+                                    `${msg.username} mentioned you in #${currentChannel}`,
+                                    msg.content
+                                );
+                            } else if (!isTabFocused) {
+                                showNotification(
+                                    `${msg.username} in #${currentChannel}`,
+                                    msg.content
+                                );
+                            }
+                        }
                     }
-                }
-            }
-        )
-        .subscribe();
-}
-        // Render messages
+                )
+                .subscribe();
+        }
+
         function renderMessages(messages) {
             const container = document.getElementById('messages');
             
@@ -778,11 +733,9 @@ function subscribeToMessages(channelId) {
             scrollToBottom();
         }
 
-        // Add new message to UI
         function addMessageToUI(message) {
             const container = document.getElementById('messages');
             
-            // Check if this is the first message (remove "no messages" text)
             if (container.innerHTML.includes('No messages yet')) {
                 container.innerHTML = '';
             }
@@ -791,133 +744,94 @@ function subscribeToMessages(channelId) {
             scrollToBottom();
         }
 
-        // Create message HTML
-      function createMessageHTML(msg) {
-    const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const initial = msg.username.charAt(0).toUpperCase();
-    const isOwnMessage = msg.user_id === currentUser.id;
-    const editedLabel = msg.edited ? '<span style="font-size: 10px; color: var(--text-muted);"> (edited)</span>' : '';
-    
-    const actionsMenu = isOwnMessage ? `
-        <div class="message-actions" style="display: none; position: absolute; top: 8px; right: 8px;">
-            <button onclick="editMessage('${msg.id}', \`${escapeHtml(msg.content).replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">✏️ Edit</button>
-            <button onclick="deleteMessage('${msg.id}', event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; color: #ff006e; font-size: 11px;">🗑️ Delete</button>
-        </div>
-    ` : '';
-    
-    return `
-        <div class="message" data-message-id="${msg.id}" style="position: relative;" onmouseenter="this.querySelector('.message-actions')?.style.setProperty('display', 'block')" onmouseleave="this.querySelector('.message-actions')?.style.setProperty('display', 'none')">
-            <div class="avatar">${initial}</div>
-            <div class="message-content">
-                <div class="message-header">
-                    <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
-                    <span class="timestamp">${time}${editedLabel}</span>
+        function createMessageHTML(msg) {
+            const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const initial = msg.username.charAt(0).toUpperCase();
+            const isOwnMessage = msg.user_id === currentUser.id;
+            const editedLabel = msg.edited ? '<span style="font-size: 10px; color: var(--text-muted);"> (edited)</span>' : '';
+            
+            const actionsMenu = isOwnMessage ? `
+                <div class="message-actions" style="display: none; position: absolute; top: 8px; right: 8px;">
+                    <button onclick="editMessage('${msg.id}', \`${escapeHtml(msg.content).replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">✏️ Edit</button>
+                    <button onclick="deleteMessage('${msg.id}', event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; color: #ff006e; font-size: 11px;">🗑️ Delete</button>
                 </div>
-                <div class="message-text">${highlightMentions(escapeHtml(msg.content), currentUser.user_metadata?.username || currentUser.email.split('@')[0])}</div>
-            </div>
-            ${actionsMenu}
-        </div>
-    `;
-}
-        // View user profile
+            ` : '';
+            
+            return `
+                <div class="message" data-message-id="${msg.id}" style="position: relative;" onmouseenter="this.querySelector('.message-actions')?.style.setProperty('display', 'block')" onmouseleave="this.querySelector('.message-actions')?.style.setProperty('display', 'none')">
+                    <div class="avatar">${initial}</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
+                            <span class="timestamp">${time}${editedLabel}</span>
+                        </div>
+                        <div class="message-text">${highlightMentions(escapeHtml(msg.content), currentUser.user_metadata?.username || currentUser.email.split('@')[0])}</div>
+                    </div>
+                    ${actionsMenu}
+                </div>
+            `;
+        }
+
         function viewUserProfile(userId) {
             window.location.href = `user-profile.html?id=${userId}`;
         }
 
-        // Send message
-    async function sendMessage() {
-    const input = document.getElementById('messageInput');
-    const content = input.value.trim();
-    
-    if (!content) return;
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content) return;
 
-    const btn = document.getElementById('sendBtn');
-    btn.disabled = true;
+            const btn = document.getElementById('sendBtn');
+            btn.disabled = true;
 
-    try {
-        const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+            try {
+                const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
 
-        // 🔍 DETAILED DEBUGGING
-        console.log('=== SEND MESSAGE DEBUG ===');
-        console.log('Current Channel:', currentChannel);
-        console.log('User ID:', currentUser.id);
-        console.log('Username:', username);
-        console.log('Content:', content);
-        console.log('Supabase Client Exists?', !!supabaseClient);
+                console.log('=== SEND MESSAGE DEBUG ===');
+                console.log('Current Channel:', currentChannel);
+                console.log('User ID:', currentUser.id);
+                console.log('Username:', username);
+                console.log('Content:', content);
+                console.log('Supabase Client Exists?', !!supabaseClient);
 
-        const messageData = {
-            channel_id: currentChannel,
-            user_id: currentUser.id,
-            username: username,
-            content: content,
-            type: 'text'
-        };
-        
-        console.log('Message Data to Insert:', messageData);
+                const messageData = {
+                    channel_id: currentChannel,
+                    user_id: currentUser.id,
+                    username: username,
+                    content: content,
+                    type: 'text'
+                };
+                
+                console.log('Message Data to Insert:', messageData);
 
-        const { data, error } = await supabaseClient
-            .from('messages')
-            .insert(messageData)
-            .select();
+                const { data, error } = await supabaseClient
+                    .from('messages')
+                    .insert(messageData)
+                    .select();
 
-        console.log('Insert Response - Data:', data);
-        console.log('Insert Response - Error:', error);
+                console.log('Insert Response - Data:', data);
+                console.log('Insert Response - Error:', error);
 
-        if (error) {
-            console.error('❌ INSERT ERROR:', error);
-            throw error;
+                if (error) {
+                    console.error('❌ INSERT ERROR:', error);
+                    throw error;
+                }
+
+                console.log('✅ Message inserted successfully!');
+                input.value = '';
+                
+            } catch (error) {
+                console.error('❌ CATCH BLOCK ERROR:', error);
+                console.error('Error name:', error.name);
+                console.error('Error message:', error.message);
+                console.error('Error stack:', error.stack);
+                alert('Failed to send message: ' + error.message);
+            } finally {
+                btn.disabled = false;
+            }
         }
 
-        console.log('✅ Message inserted successfully!');
-        input.value = '';
-        
-    } catch (error) {
-        console.error('❌ CATCH BLOCK ERROR:', error);
-        console.error('Error name:', error.name);
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-        alert('Failed to send message: ' + error.message);
-    } finally {
-        btn.disabled = false;
-    }
-}
-```
-
----
-
-## **Step 6: Commit the Changes**
-
-1. Scroll down to the bottom of the page
-2. You'll see **"Commit changes"**
-3. In the text box, type: `Add debug logging to sendMessage`
-4. Click the green **"Commit changes"** button
-
----
-
-## **Step 7: Wait for Vercel to Deploy**
-
-1. Go to **https://vercel.com**
-2. Sign in
-3. Click on your **hive-mind** project
-4. You should see a **new deployment starting** (yellow "Building")
-5. **Wait 1-2 minutes** until it shows **"Ready"** (green checkmark)
-
----
-
-## **Step 8: Test the App**
-
-1. Go to: **https://hive-mind-henna.vercel.app**
-2. Press **Ctrl+Shift+R** (hard refresh)
-3. Press **F12** → **Console tab**
-4. **Log in**
-5. **Go to # random**
-6. **Send message:** "GitHub edit test"
-7. **Look at the console** - you should see:
-```
-   === SEND MESSAGE DEBUG ===
-   Current Channel: random
-   User ID: ...
-        // Sign out
         async function signOut() {
             if (!confirm('Sign out of Hive Mind?')) return;
 
@@ -929,7 +843,6 @@ function subscribeToMessages(channelId) {
             }
         }
 
-        // Utility functions
         function scrollToBottom() {
             const container = document.getElementById('messages');
             container.scrollTop = container.scrollHeight;
@@ -941,7 +854,6 @@ function subscribeToMessages(channelId) {
             return div.innerHTML;
         }
 
-        // Enter to send
         document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('messageInput');
             if (input) {
@@ -954,172 +866,155 @@ function subscribeToMessages(channelId) {
             }
         });
 
-        // Theme toggle
-       // Theme functions
-function changeTheme(theme) {
-    document.body.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-}
+        function changeTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
 
-        // Profile navigation
         function goToProfile() {
             window.location.href = 'profile.html';
         }
 
-        // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
-document.body.setAttribute('data-theme', savedTheme);
-window.addEventListener('DOMContentLoaded', () => {
-    const selector = document.getElementById('themeSelector');
-    if (selector) selector.value = savedTheme;
-});
+        document.body.setAttribute('data-theme', savedTheme);
+        window.addEventListener('DOMContentLoaded', () => {
+            const selector = document.getElementById('themeSelector');
+            if (selector) selector.value = savedTheme;
+        });
 
-// Edit message
-async function editMessage(messageId, currentContent, event) {
-    event.stopPropagation();
-    
-    const newContent = prompt('Edit message:', currentContent);
-    if (!newContent || newContent === currentContent) return;
-    
-    try {
-        const { error } = await supabaseClient
-            .from('messages')
-            .update({
-                content: newContent,
-                edited: true,
-                edited_at: new Date().toISOString()
-            })
-            .eq('id', messageId);
-        
-        if (error) throw error;
-        
-        // Update UI
-        const messageEl = document.querySelector(`[data-message-id="${messageId}"] .message-text`);
-        if (messageEl) {
-            messageEl.textContent = newContent;
-            const timestamp = document.querySelector(`[data-message-id="${messageId}"] .timestamp`);
-            if (timestamp && !timestamp.innerHTML.includes('edited')) {
-                timestamp.innerHTML += '<span style="font-size: 10px; color: var(--text-muted);"> (edited)</span>';
+        async function editMessage(messageId, currentContent, event) {
+            event.stopPropagation();
+            
+            const newContent = prompt('Edit message:', currentContent);
+            if (!newContent || newContent === currentContent) return;
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('messages')
+                    .update({
+                        content: newContent,
+                        edited: true,
+                        edited_at: new Date().toISOString()
+                    })
+                    .eq('id', messageId);
+                
+                if (error) throw error;
+                
+                const messageEl = document.querySelector(`[data-message-id="${messageId}"] .message-text`);
+                if (messageEl) {
+                    messageEl.textContent = newContent;
+                    const timestamp = document.querySelector(`[data-message-id="${messageId}"] .timestamp`);
+                    if (timestamp && !timestamp.innerHTML.includes('edited')) {
+                        timestamp.innerHTML += '<span style="font-size: 10px; color: var(--text-muted);"> (edited)</span>';
+                    }
+                }
+            } catch (error) {
+                alert('Error editing message: ' + error.message);
             }
         }
-    } catch (error) {
-        alert('Error editing message: ' + error.message);
-    }
-}
 
-// Delete message
-async function deleteMessage(messageId, event) {
-    event.stopPropagation();
-    
-    if (!confirm('Delete this message?')) return;
-    
-    try {
-        const { error } = await supabaseClient
-            .from('messages')
-            .delete()
-            .eq('id', messageId);
-        
-        if (error) throw error;
-        
-        // Remove from UI
-        const messageEl = document.querySelector(`[data-message-id="${messageId}"]`);
-        if (messageEl) {
-            messageEl.style.opacity = '0';
-            setTimeout(() => messageEl.remove(), 300);
+        async function deleteMessage(messageId, event) {
+            event.stopPropagation();
+            
+            if (!confirm('Delete this message?')) return;
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('messages')
+                    .delete()
+                    .eq('id', messageId);
+                
+                if (error) throw error;
+                
+                const messageEl = document.querySelector(`[data-message-id="${messageId}"]`);
+                if (messageEl) {
+                    messageEl.style.opacity = '0';
+                    setTimeout(() => messageEl.remove(), 300);
+                }
+            } catch (error) {
+                alert('Error deleting message: ' + error.message);
+            }
         }
-    } catch (error) {
-        alert('Error deleting message: ' + error.message);
-    }
-}
 
+        let notificationPermission = 'default';
+        let isTabFocused = true;
 
-        // Notification system
-let notificationPermission = 'default';
-let isTabFocused = true;
+        window.addEventListener('focus', () => { isTabFocused = true; });
+        window.addEventListener('blur', () => { isTabFocused = false; });
 
-// Track tab focus
-window.addEventListener('focus', () => { isTabFocused = true; });
-window.addEventListener('blur', () => { isTabFocused = false; });
-
-// Request notification permission
-async function requestNotificationPermission() {
-    if ('Notification' in window && Notification.permission === 'default') {
-        notificationPermission = await Notification.requestPermission();
-        if (notificationPermission === 'granted') {
-            showNotification('Notifications enabled!', 'You\'ll be notified of new messages and @mentions');
+        async function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                notificationPermission = await Notification.requestPermission();
+                if (notificationPermission === 'granted') {
+                    showNotification('Notifications enabled!', 'You\'ll be notified of new messages and @mentions');
+                }
+            } else {
+                notificationPermission = Notification.permission;
+            }
         }
-    } else {
-        notificationPermission = Notification.permission;
-    }
-}
 
-// Show notification
-function showNotification(title, body, icon = '') {
-    if (!('Notification' in window)) return;
-    if (Notification.permission !== 'granted') return;
-    if (isTabFocused) return;
+        function showNotification(title, body, icon = '') {
+            if (!('Notification' in window)) return;
+            if (Notification.permission !== 'granted') return;
+            if (isTabFocused) return;
 
-    const notification = new Notification(title, {
-        body: body,
-        icon: icon || 'https://api.dicebear.com/7.x/shapes/svg?seed=hivemind',
-        badge: 'https://api.dicebear.com/7.x/shapes/svg?seed=hive',
-        tag: 'hive-mind-notification'
-    });
+            const notification = new Notification(title, {
+                body: body,
+                icon: icon || 'https://api.dicebear.com/7.x/shapes/svg?seed=hivemind',
+                badge: 'https://api.dicebear.com/7.x/shapes/svg?seed=hive',
+                tag: 'hive-mind-notification'
+            });
 
-    notification.onclick = () => {
-        window.focus();
-        notification.close();
-    };
+            notification.onclick = () => {
+                window.focus();
+                notification.close();
+            };
 
-    playNotificationSound();
-}
+            playNotificationSound();
+        }
 
-// Notification sound
-function playNotificationSound() {
-    try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
+        function playNotificationSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
 
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
 
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
 
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
 
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
-    } catch (e) {
-        // Sound failed, ignore
-    }
-}
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                // Sound failed, ignore
+            }
+        }
 
-// Check for @mentions
-function checkForMentions(message, currentUsername) {
-    const mentionRegex = /@(\w+)/g;
-    const mentions = message.match(mentionRegex);
-    
-    if (mentions) {
-        return mentions.some(mention => 
-            mention.toLowerCase() === `@${currentUsername.toLowerCase()}`
-        );
-    }
-    return false;
-}
+        function checkForMentions(message, currentUsername) {
+            const mentionRegex = /@(\w+)/g;
+            const mentions = message.match(mentionRegex);
+            
+            if (mentions) {
+                return mentions.some(mention => 
+                    mention.toLowerCase() === `@${currentUsername.toLowerCase()}`
+                );
+            }
+            return false;
+        }
 
-// Highlight @mentions
-function highlightMentions(text, currentUsername) {
-    return text.replace(/@(\w+)/g, (match, username) => {
-        const isMentioningMe = username.toLowerCase() === currentUsername.toLowerCase();
-        const className = isMentioningMe ? 'mention-me' : 'mention';
-        return `<span class="${className}">${match}</span>`;
-    });
-}
+        function highlightMentions(text, currentUsername) {
+            return text.replace(/@(\w+)/g, (match, username) => {
+                const isMentioningMe = username.toLowerCase() === currentUsername.toLowerCase();
+                const className = isMentioningMe ? 'mention-me' : 'mention';
+                return `<span class="${className}">${match}</span>`;
+            });
+        }
         
-        // Start the app!
         init();
     </script>
 </body>
