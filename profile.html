@@ -492,20 +492,9 @@ document.getElementById('avatarUpload').addEventListener('change', async (e) => 
 
         if (updateError) throw updateError;
 
-        // Update display
-        const img = document.getElementById('avatarImage');
-        if (img) {
-            img.src = avatarUrl;
-            img.style.display = 'block';
-            document.getElementById('avatarInitial').style.display = 'none';
-        } else {
-            // If img doesn't exist, just reload the page
-            location.reload();
-        }
-        document.getElementById('avatarInitial').style.display = 'none';
-        document.getElementById('avatarLarge').style.opacity = '1';
-
-        alert('✅ Profile picture updated!');
+       // Update display - just reload page to show new avatar
+        alert('✅ Profile picture uploaded!');
+        location.reload();
 
     } catch (error) {
         console.error('Upload error:', error);
