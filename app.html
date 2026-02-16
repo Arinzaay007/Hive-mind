@@ -19,6 +19,18 @@
             --matrix-glow: rgba(0, 255, 65, 0.3);
         }
 
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #e8e8e8;
+            --text-primary: #0a0a0a;
+            --text-secondary: #333333;
+            --text-muted: #888888;
+            --border: #dddddd;
+            --accent: #00cc33;
+            --matrix-glow: rgba(0, 204, 51, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -30,6 +42,7 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             overflow: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .app-container {
@@ -203,6 +216,13 @@
         .username {
             font-weight: 700;
             font-size: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .username:hover {
+            color: var(--accent);
+            text-decoration: underline;
         }
 
         .timestamp {
@@ -467,6 +487,8 @@
         <div class="header">
             <div class="logo">HIVE MIND</div>
             <div class="user-info">
+                <button class="sign-out-btn" onclick="toggleTheme()" style="margin-right: 8px;">🌓</button>
+                <button class="sign-out-btn" onclick="goToProfile()" style="margin-right: 8px;">Profile</button>
                 <span><span class="status-indicator"></span><span id="currentUser">Loading...</span></span>
                 <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
             </div>
@@ -676,13 +698,19 @@
                     <div class="avatar">${initial}</div>
                     <div class="message-content">
                         <div class="message-header">
-                            <span class="username">${escapeHtml(msg.username)}</span>
+                            <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
                             <span class="timestamp">${time}</span>
                         </div>
                         <div class="message-text">${escapeHtml(msg.content)}</div>
                     </div>
                 </div>
             `;
+        }
+
+        // View user profile
+        function viewUserProfile(userId) {
+            alert(`Profile feature coming soon! User ID: ${userId}`);
+            // TODO: In next update, create user-profile.html page
         }
 
         // Send message
@@ -755,6 +783,23 @@
                 });
             }
         });
+
+        // Theme toggle
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme') || 'dark';
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Profile navigation
+        function goToProfile() {
+            window.location.href = 'profile.html';
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
 
         // Start the app!
         init();
