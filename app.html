@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Hive Mind</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,8 +20,10 @@
         [data-theme="sunset"]{--bg-primary:#1f0a0a;--bg-secondary:#331515;--bg-tertiary:#4d1f1f;--text-primary:#ff6600;--text-secondary:#ff8833;--text-muted:#b36644;--border:#662d1f;--accent:#ff6600;--matrix-glow:rgba(255,102,0,.3);}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'IBM Plex Mono',monospace;background:var(--bg-primary);color:var(--text-primary);overflow:hidden;transition:background .3s,color .3s;}
-        .app-container{display:flex;height:100vh;flex-direction:column;}
-        .header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+
+        /* ── LAYOUT ── */
+        .app-container{display:flex;height:100vh;height:100dvh;flex-direction:column;overflow:hidden;}
+        .header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-shrink:0;}
         .logo{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;letter-spacing:2px;white-space:nowrap;}
         .logo::before{content:'> ';color:var(--accent);}
         .user-info{display:flex;gap:10px;align-items:center;font-size:13px;flex-wrap:wrap;}
@@ -29,7 +31,7 @@
         .btn:hover{border-color:var(--accent);color:var(--accent);}
         .btn-accent{background:var(--accent);color:var(--bg-primary);font-weight:700;border:none;padding:10px 20px;}
         .btn-accent:hover{box-shadow:0 0 20px var(--matrix-glow);color:var(--bg-primary);}
-        .main-content{display:flex;flex:1;overflow:hidden;}
+        .main-content{display:flex;flex:1;overflow:hidden;min-height:0;}
         .level-badge{background:var(--level-color);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;}
         .xp-bar-container{background:var(--bg-tertiary);border-radius:4px;height:6px;width:80px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px;}
         .xp-bar{height:100%;background:var(--level-color);transition:width .5s ease;}
@@ -37,9 +39,9 @@
         .levelup-toast.show{display:block;}
         @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 
-        /* SIDEBAR */
-        .sidebar{width:260px;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-        .sidebar-tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;}
+        /* ── SIDEBAR ── */
+        .sidebar{width:260px;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
+        .sidebar-tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;}
         .sidebar-tab{flex:1;padding:9px 4px;text-align:center;cursor:pointer;font-size:10px;transition:all .2s;border-bottom:2px solid transparent;white-space:nowrap;}
         .sidebar-tab:hover{background:var(--bg-tertiary);}
         .sidebar-tab.active{border-bottom-color:var(--accent);color:var(--accent);}
@@ -51,7 +53,7 @@
         .channel:hover{background:var(--bg-tertiary);}
         .channel.active{background:var(--bg-tertiary);border-left-color:var(--accent);color:var(--accent);}
 
-        /* DM */
+        /* ── DM ── */
         .dm-item{padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;border-left:2px solid transparent;}
         .dm-item:hover{background:var(--bg-tertiary);}
         .dm-item.active{background:var(--bg-tertiary);border-left-color:var(--dm-color);}
@@ -60,7 +62,7 @@
         .dm-preview{font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
         .unread-badge{background:var(--dm-color);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
-        /* FRIENDS */
+        /* ── FRIENDS ── */
         .friend-item{padding:10px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
         .friend-info{flex:1;}
         .friend-name{font-size:13px;font-weight:600;}
@@ -75,7 +77,7 @@
         .add-friend-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:8px;color:var(--text-primary);font-family:inherit;font-size:12px;margin-bottom:8px;}
         .add-friend-input:focus{outline:none;border-color:var(--accent);}
 
-        /* LEADERBOARD */
+        /* ── LEADERBOARD ── */
         .leaderboard-item{padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);transition:background .2s;cursor:pointer;}
         .leaderboard-item:hover{background:var(--bg-tertiary);}
         .leaderboard-rank{font-size:14px;font-weight:700;width:22px;text-align:center;flex-shrink:0;}
@@ -87,7 +89,7 @@
         .leaderboard-stats{font-size:10px;color:var(--text-muted);}
         .leaderboard-points{font-size:12px;font-weight:700;color:var(--level-color);text-align:right;}
 
-        /* SEARCH */
+        /* ── SEARCH ── */
         .search-box{padding:12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-secondary);z-index:10;}
         .search-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;border-radius:6px;}
         .search-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 8px var(--matrix-glow);}
@@ -100,7 +102,7 @@
         .search-empty{padding:32px;text-align:center;color:var(--text-muted);font-size:13px;}
         .search-hint{padding:20px;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.8;}
 
-        /* USER CARD MODAL */
+        /* ── MODAL ── */
         .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
         .modal-overlay.open{display:flex;}
         .modal{background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:28px;width:90%;max-width:360px;position:relative;}
@@ -120,14 +122,14 @@
         .modal-actions{display:flex;gap:10px;}
         .modal-actions .btn{flex:1;text-align:center;padding:10px;}
 
-        /* EMOJI AVATAR */
+        /* ── EMOJI AVATAR ── */
         .emoji-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
         .emoji-avatar.sm{width:28px;height:28px;font-size:14px;}
 
-        /* CHAT */
-        .chat-area{flex:1;display:flex;flex-direction:column;}
-        .chat-header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
-        .messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;}
+        /* ── CHAT ── */
+        .chat-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;position:relative;}
+        .chat-header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+        .messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;min-height:0;}
         .message{display:flex;gap:12px;animation:slideIn .3s ease;}
         .message.own{flex-direction:row-reverse;}
         @keyframes slideIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
@@ -140,7 +142,7 @@
         .timestamp{font-size:11px;color:var(--text-muted);}
         .message-text{font-size:13px;line-height:1.5;color:var(--text-secondary);background:var(--bg-tertiary);padding:8px 12px;border-radius:8px;display:inline-block;max-width:100%;}
         .message.own .message-text{background:var(--accent);color:var(--bg-primary);}
-        .message-input-container{background:var(--bg-secondary);border-top:1px solid var(--border);padding:16px 20px;position:relative;}
+        .message-input-container{background:var(--bg-secondary);border-top:1px solid var(--border);padding:12px 16px;flex-shrink:0;padding-bottom:calc(12px + env(safe-area-inset-bottom, 0px));}
         .input-wrapper{display:flex;gap:8px;align-items:flex-end;}
         .message-input{flex:1;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;resize:none;max-height:100px;overflow-y:auto;}
         .message-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 10px var(--matrix-glow);}
@@ -148,7 +150,7 @@
         .reply-preview-close{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px;}
         .reply-reference{background:var(--bg-tertiary);border-left:3px solid var(--accent);padding:6px 10px;margin-bottom:6px;border-radius:4px;font-size:11px;color:var(--text-muted);}
         .reply-reference-user{color:var(--accent);font-weight:600;}
-        .mention-dropdown{position:absolute;bottom:100%;left:20px;right:20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:4px;max-height:200px;overflow-y:auto;display:none;z-index:1000;}
+        .mention-dropdown{position:absolute;bottom:100%;left:0;right:0;background:var(--bg-secondary);border:1px solid var(--border);border-radius:4px;max-height:200px;overflow-y:auto;display:none;z-index:1000;}
         .mention-dropdown.active{display:block;}
         .mention-item{padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;}
         .mention-item:hover,.mention-item.selected{background:var(--bg-tertiary);}
@@ -169,21 +171,86 @@
         .notif-dot{width:8px;height:8px;background:var(--dm-color);border-radius:50%;display:inline-block;margin-left:4px;animation:pulse 2s infinite;}
         .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--text-muted);gap:12px;padding:40px;text-align:center;}
         .empty-state-icon{font-size:48px;}
+
+        /* ════════════════════════════════════════
+           MOBILE FIXES
+           ════════════════════════════════════════ */
         @media(max-width:768px){
-            .sidebar{position:fixed;left:-260px;top:58px;height:calc(100vh - 58px);z-index:100;transition:left .3s ease;}
+            /* Sidebar slides in over content */
+            .sidebar{
+                position:fixed;
+                left:-260px;
+                top:0;
+                height:100%;
+                height:100dvh;
+                z-index:100;
+                transition:left .3s ease;
+            }
             .sidebar.mobile-open{left:0;}
             .sidebar-overlay.active{display:block;}
             .mobile-menu-btn{display:block!important;}
-            .header{padding:10px 12px;}
+
+            /* Header compact */
+            .header{padding:8px 12px;}
             .logo{font-size:13px;}
             .user-info{font-size:11px;gap:6px;}
             .btn{padding:4px 8px;font-size:11px;}
-            .messages{padding:12px;padding-bottom:100px;}
-            .message-input-container{position:fixed;bottom:0;left:0;right:0;padding:12px;background:var(--bg-secondary);border-top:2px solid var(--border);z-index:50;}
-            .message-input{font-size:16px;padding:12px;min-height:48px;}
-            .btn-accent{padding:14px 16px;min-height:48px;}
-            .message-content{max-width:85%;}
             .xp-bar-container{display:none;}
+
+            /* Chat layout: full height minus header, input stays in flow NOT fixed */
+            .chat-area{
+                display:flex;
+                flex-direction:column;
+                height:100%;
+                overflow:hidden;
+            }
+
+            /* Messages scroll naturally, input stays at bottom */
+            .messages{
+                flex:1;
+                overflow-y:auto;
+                padding:12px;
+                min-height:0;
+                /* Extra bottom padding so last message clears the input bar */
+                padding-bottom:16px;
+            }
+
+            /* Input container stays in flow at bottom — NOT fixed */
+            .message-input-container{
+                position:relative;
+                bottom:auto;
+                left:auto;
+                right:auto;
+                padding:10px 12px;
+                padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+                flex-shrink:0;
+                background:var(--bg-secondary);
+                border-top:2px solid var(--border);
+            }
+
+            /* Bigger tap targets on mobile */
+            .message-input{
+                font-size:16px; /* prevents iOS zoom on focus */
+                padding:12px;
+                min-height:44px;
+            }
+            .btn-accent{
+                padding:12px 16px;
+                min-height:44px;
+                font-size:13px;
+            }
+
+            /* Wider message bubbles on small screens */
+            .message-content{max-width:85%;}
+
+            /* Send button doesn't shrink */
+            #sendBtn{flex-shrink:0;}
+        }
+
+        /* Extra small screens */
+        @media(max-width:380px){
+            .message-content{max-width:90%;}
+            .logo{font-size:12px;}
         }
     </style>
 </head>
@@ -238,7 +305,6 @@
                     <div class="sidebar-tab" onclick="switchSidebarTab('leaderboard')" id="tab-leaderboard">🏆 Buzzers</div>
                 </div>
 
-                <!-- CHANNELS -->
                 <div class="sidebar-panel active" id="panel-channels">
                     <div class="sidebar-section">
                         <div class="section-title">Public Rooms</div>
@@ -246,7 +312,6 @@
                     </div>
                 </div>
 
-                <!-- DMS -->
                 <div class="sidebar-panel" id="panel-dms">
                     <div style="padding:12px;border-bottom:1px solid var(--border);">
                         <div class="section-title">Direct Messages</div>
@@ -254,7 +319,6 @@
                     </div>
                 </div>
 
-                <!-- FRIENDS -->
                 <div class="sidebar-panel" id="panel-friends">
                     <div class="add-friend-form">
                         <div class="section-title">Add Friend</div>
@@ -265,7 +329,6 @@
                     <div id="friendsList"></div>
                 </div>
 
-                <!-- SEARCH -->
                 <div class="sidebar-panel" id="panel-search">
                     <div class="search-box">
                         <input class="search-input" id="searchInput" placeholder="🔍 Search users..." oninput="handleSearch(this.value)" />
@@ -279,7 +342,6 @@
                     </div>
                 </div>
 
-                <!-- LEADERBOARD -->
                 <div class="sidebar-panel" id="panel-leaderboard">
                     <div style="padding:12px 14px;border-bottom:1px solid var(--border);">
                         <div class="section-title">🏆 Top Buzzers</div>
@@ -359,7 +421,6 @@
             }
         }
 
-        // ─── PROFILE / LEVEL ──────────────────────────────────
         async function loadMyProfile() {
             try {
                 const { data } = await supabaseClient.from('profiles')
@@ -413,7 +474,6 @@
             return `<div class="emoji-avatar ${size}" style="background:${color||'#1a1a1a'};">${emoji||'🐝'}</div>`;
         }
 
-        // ─── USER SEARCH ──────────────────────────────────────
         function handleSearch(query) {
             clearTimeout(searchTimeout);
             const q = query.trim();
@@ -436,12 +496,10 @@
                     .limit(20);
 
                 const container = document.getElementById('searchResults');
-
                 if (!data || data.length === 0) {
                     container.innerHTML = `<div class="search-empty">No users found for "<strong>${escapeHtml(query)}</strong>"</div>`;
                     return;
                 }
-
                 container.innerHTML = data.map(user => {
                     const isFriend = friendsList.find(f => f.userId === user.id && f.status === 'accepted');
                     const isPending = friendsList.find(f => f.userId === user.id && f.status === 'pending');
@@ -485,11 +543,9 @@
             } catch(e) { alert('Error: ' + e.message); }
         }
 
-        // ─── USER MODAL ───────────────────────────────────────
         async function showUserModal(userId) {
             const modal = document.getElementById('userModal');
             modal.classList.add('open');
-
             document.getElementById('modalUsername').textContent = 'Loading...';
             document.getElementById('modalBio').textContent = '';
             document.getElementById('modalLevel').innerHTML = '';
@@ -499,7 +555,6 @@
             try {
                 const profile = await getProfile(userId);
                 if (!profile) { modal.classList.remove('open'); return; }
-
                 const level = profile.level || 1;
                 const points = profile.points || 0;
                 const xpInLevel = points % 100;
@@ -516,7 +571,6 @@
                 document.getElementById('modalXpFill').style.background = `linear-gradient(90deg,${levelColor},#06b6d4)`;
                 document.getElementById('modalXpLabel').textContent = `${xpInLevel} / 100 XP · ${points} total pts`;
 
-                // Get message count
                 const { count: msgCount } = await supabaseClient.from('messages')
                     .select('*', { count: 'exact', head: true }).eq('user_id', userId);
 
@@ -539,7 +593,6 @@
                         ? `<button class="btn" style="flex:1;opacity:.5;" disabled>⏳ Pending</button>`
                         : `<button class="btn btn-accent" style="flex:1;" onclick="quickAddFriend('${userId}','${escapeHtml(username).replace(/'/g,"\\'")}',this)">➕ Add Friend</button>`
                     }`;
-
             } catch(e) { console.error('showUserModal:', e); }
         }
 
@@ -549,7 +602,6 @@
             }
         }
 
-        // ─── LEADERBOARD ──────────────────────────────────────
         async function loadLeaderboard() {
             try {
                 const { data } = await supabaseClient.from('profiles')
@@ -584,7 +636,6 @@
             } catch(e) { console.error('loadLeaderboard:', e); }
         }
 
-        // ─── CHANNELS ─────────────────────────────────────────
         function renderChannels() {
             document.getElementById('channelList').innerHTML = channels.map(ch => `
                 <div class="channel ${ch.id===currentChannel&&currentMode==='channel'?'active':''}" onclick="switchChannel('${ch.id}')"># ${ch.name}</div>`).join('');
@@ -810,8 +861,8 @@
             if(msg.reply_to_username&&msg.reply_to_content) replyHTML=`<div class="reply-reference"><span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0,60))}${msg.reply_to_content.length>60?'...':''}</div>`;
             const contentText=mode==='dm'?`<div class="message-text">${escapeHtml(msg.content)}</div>`:`<div class="message-text">${highlightMentions(escapeHtml(msg.content||''),myUsername)}</div>`;
             const actionsMenu=`<div class="message-actions" style="display:none;position:absolute;top:4px;${isOwn?'left':'right'}:4px;z-index:10;white-space:nowrap;">
-                <button onclick="replyToMessage('${msg.id}','${escapeHtml(senderUsername).replace(/'/g,"\\'")}',\`${escapeHtml(msg.content||'').replace(/`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">💬</button>
-                ${isOwn&&mode!=='dm'?`<button onclick="editMessage('${msg.id}',\`${escapeHtml(msg.content||'').replace(/`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">✏️</button>`:''}
+                <button onclick="replyToMessage('${msg.id}','${escapeHtml(senderUsername).replace(/'/g,"\\'")}',\`${escapeHtml(msg.content||'').replace(/\`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">💬</button>
+                ${isOwn&&mode!=='dm'?`<button onclick="editMessage('${msg.id}',\`${escapeHtml(msg.content||'').replace(/\`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">✏️</button>`:''}
                 ${isOwn?`<button onclick="deleteMessage('${msg.id}','${mode}',event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;cursor:pointer;color:#ff006e;font-size:10px;font-family:inherit;">🗑️</button>`:''}
             </div>`;
             return `<div class="message ${isOwn?'own':''}" data-message-id="${msg.id}" style="position:relative;"
@@ -848,7 +899,7 @@
                     const {error}=await supabaseClient.from('messages').insert(msgData);
                     if(error) throw error;
                 }
-                input.value=''; cancelReply();
+                input.value=''; input.style.height='auto'; cancelReply();
                 setTimeout(()=>loadMyProfile(),1200);
             } catch(e){alert('Failed to send: '+e.message);}
             finally{btn.disabled=false;}
@@ -875,7 +926,18 @@
             try{const {error}=await supabaseClient.from(mode==='dm'?'direct_messages':'messages').delete().eq('id',messageId);if(error)throw error;const el=document.querySelector(`[data-message-id="${messageId}"]`);if(el){el.style.opacity='0';setTimeout(()=>el.remove(),300);}}catch(e){alert('Error: '+e.message);}
         }
 
-        document.addEventListener('DOMContentLoaded',()=>{const input=document.getElementById('messageInput');if(input){input.addEventListener('input',handleMentionInput);input.addEventListener('keydown',handleMentionKeydown);}});
+        document.addEventListener('DOMContentLoaded',()=>{
+            const input=document.getElementById('messageInput');
+            if(input){
+                input.addEventListener('input',handleMentionInput);
+                input.addEventListener('keydown',handleMentionKeydown);
+                // Auto-resize textarea
+                input.addEventListener('input', function(){
+                    this.style.height='auto';
+                    this.style.height=Math.min(this.scrollHeight,100)+'px';
+                });
+            }
+        });
 
         function handleMentionInput(e){
             if(currentMode==='dm') return;
@@ -915,12 +977,14 @@
             if(tab==='search') setTimeout(()=>document.getElementById('searchInput').focus(),100);
         }
 
-        function scrollToBottom(){const c=document.getElementById('messages');c.scrollTop=c.scrollHeight;}
+        function scrollToBottom(){
+            const c=document.getElementById('messages');
+            requestAnimationFrame(()=>{ c.scrollTop=c.scrollHeight; });
+        }
         function escapeHtml(text){if(!text)return'';const d=document.createElement('div');d.textContent=text;return d.innerHTML;}
         function highlightMentions(text,currentUsername){return text.replace(/@(\w+)/g,(match,username)=>`<span class="${username.toLowerCase()===currentUsername.toLowerCase()?'mention-me':'mention'}">${match}</span>`);}
         function changeTheme(theme){document.body.setAttribute('data-theme',theme);localStorage.setItem('theme',theme);}
         function goToProfile(){window.location.href='profile.html';}
-        function viewUserProfile(userId){showUserModal(userId);}
         async function signOut(){if(!confirm('Sign out?'))return;await supabaseClient.auth.signOut();window.location.href='signin.html';}
         function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('mobile-open');document.querySelector('.sidebar-overlay').classList.toggle('active');}
         function closeSidebar(){document.querySelector('.sidebar').classList.remove('mobile-open');document.querySelector('.sidebar-overlay').classList.remove('active');}
