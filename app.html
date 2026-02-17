@@ -30,18 +30,12 @@
         .btn-accent{background:var(--accent);color:var(--bg-primary);font-weight:700;border:none;padding:10px 20px;}
         .btn-accent:hover{box-shadow:0 0 20px var(--matrix-glow);color:var(--bg-primary);}
         .main-content{display:flex;flex:1;overflow:hidden;}
-
-        /* LEVEL BADGE */
         .level-badge{background:var(--level-color);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;}
         .xp-bar-container{background:var(--bg-tertiary);border-radius:4px;height:6px;width:80px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px;}
         .xp-bar{height:100%;background:var(--level-color);transition:width .5s ease;}
-
-        /* LEVEL UP ANIMATION */
         .levelup-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--level-color);color:#fff;padding:12px 24px;border-radius:8px;font-weight:700;font-size:14px;z-index:9999;animation:toastIn .3s ease;display:none;}
         .levelup-toast.show{display:block;}
         @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
-
-        /* SIDEBAR */
         .sidebar{width:260px;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
         .sidebar-tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;}
         .sidebar-tab{flex:1;padding:10px 6px;text-align:center;cursor:pointer;font-size:11px;transition:all .2s;border-bottom:2px solid transparent;white-space:nowrap;}
@@ -54,20 +48,14 @@
         .channel{padding:8px 12px;font-size:13px;cursor:pointer;border-left:2px solid transparent;transition:all .2s;margin-bottom:2px;}
         .channel:hover{background:var(--bg-tertiary);}
         .channel.active{background:var(--bg-tertiary);border-left-color:var(--accent);color:var(--accent);}
-
-        /* DM */
         .dm-item{padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;border-left:2px solid transparent;}
         .dm-item:hover{background:var(--bg-tertiary);}
         .dm-item.active{background:var(--bg-tertiary);border-left-color:var(--dm-color);}
-        .dm-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--dm-color),#ff8e53);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:13px;flex-shrink:0;}
         .dm-info{flex:1;min-width:0;}
         .dm-name{font-size:13px;font-weight:600;}
         .dm-preview{font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
         .unread-badge{background:var(--dm-color);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-
-        /* FRIENDS */
         .friend-item{padding:10px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
-        .friend-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--friend-color),#ff6b6b);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;font-size:13px;flex-shrink:0;}
         .friend-info{flex:1;}
         .friend-name{font-size:13px;font-weight:600;}
         .friend-status{font-size:11px;color:var(--text-muted);}
@@ -80,30 +68,28 @@
         .add-friend-form{padding:12px;border-bottom:1px solid var(--border);}
         .add-friend-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:8px;color:var(--text-primary);font-family:inherit;font-size:12px;margin-bottom:8px;}
         .add-friend-input:focus{outline:none;border-color:var(--accent);}
-
-        /* LEADERBOARD */
-        .leaderboard-item{padding:10px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);transition:background .2s;}
+        .leaderboard-item{padding:10px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);transition:background .2s;cursor:pointer;}
         .leaderboard-item:hover{background:var(--bg-tertiary);}
         .leaderboard-rank{font-size:16px;font-weight:700;width:24px;text-align:center;flex-shrink:0;}
         .leaderboard-rank.gold{color:#ffd700;}
         .leaderboard-rank.silver{color:#c0c0c0;}
         .leaderboard-rank.bronze{color:#cd7f32;}
-        .leaderboard-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--level-color),#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:13px;flex-shrink:0;}
         .leaderboard-info{flex:1;}
         .leaderboard-name{font-size:13px;font-weight:600;}
         .leaderboard-stats{font-size:11px;color:var(--text-muted);}
-        .leaderboard-points{font-size:13px;font-weight:700;color:var(--level-color);}
+        .leaderboard-points{font-size:13px;font-weight:700;color:var(--level-color);text-align:right;}
 
-        /* CHAT */
+        /* EMOJI AVATAR */
+        .emoji-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+        .emoji-avatar.sm{width:28px;height:28px;font-size:14px;}
+        .emoji-avatar.lg{width:48px;height:48px;font-size:24px;}
+
         .chat-area{flex:1;display:flex;flex-direction:column;}
         .chat-header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
-        .chat-header-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--dm-color),#ff8e53);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;flex-shrink:0;}
         .messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;}
         .message{display:flex;gap:12px;animation:slideIn .3s ease;}
         .message.own{flex-direction:row-reverse;}
         @keyframes slideIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-        .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--text-secondary));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--bg-primary);flex-shrink:0;font-size:15px;}
-        .avatar.dm-av{background:linear-gradient(135deg,var(--dm-color),#ff8e53);}
         .message-content{flex:1;max-width:70%;}
         .message.own .message-content{align-items:flex-end;display:flex;flex-direction:column;}
         .message-header{display:flex;gap:8px;margin-bottom:4px;align-items:center;}
@@ -111,34 +97,24 @@
         .username{font-weight:700;font-size:13px;cursor:pointer;transition:color .2s;}
         .username:hover{color:var(--accent);}
         .timestamp{font-size:11px;color:var(--text-muted);}
-        .msg-level-badge{background:var(--level-color);color:#fff;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:700;}
         .message-text{font-size:13px;line-height:1.5;color:var(--text-secondary);background:var(--bg-tertiary);padding:8px 12px;border-radius:8px;display:inline-block;max-width:100%;}
         .message.own .message-text{background:var(--accent);color:var(--bg-primary);}
         .message-input-container{background:var(--bg-secondary);border-top:1px solid var(--border);padding:16px 20px;position:relative;}
         .input-wrapper{display:flex;gap:8px;align-items:flex-end;}
         .message-input{flex:1;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;resize:none;max-height:100px;overflow-y:auto;}
         .message-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 10px var(--matrix-glow);}
-
-        /* REPLY */
         .reply-preview{background:var(--bg-tertiary);border-left:3px solid var(--accent);padding:8px 12px;margin-bottom:8px;border-radius:4px;display:flex;justify-content:space-between;align-items:center;}
         .reply-preview-close{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px;}
         .reply-reference{background:var(--bg-tertiary);border-left:3px solid var(--accent);padding:6px 10px;margin-bottom:6px;border-radius:4px;font-size:11px;color:var(--text-muted);}
         .reply-reference-user{color:var(--accent);font-weight:600;}
-
-        /* MENTION */
         .mention-dropdown{position:absolute;bottom:100%;left:20px;right:20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:4px;max-height:200px;overflow-y:auto;display:none;z-index:1000;}
         .mention-dropdown.active{display:block;}
         .mention-item{padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;}
         .mention-item:hover,.mention-item.selected{background:var(--bg-tertiary);}
-        .mention-item-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--text-secondary));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--bg-primary);}
         .mention{background:var(--accent);color:var(--bg-primary);padding:2px 4px;border-radius:3px;font-weight:600;}
         .mention-me{background:#ff006e;color:#fff;padding:2px 4px;border-radius:3px;font-weight:600;}
-
-        /* MOBILE */
         .mobile-menu-btn{display:none;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;cursor:pointer;font-size:18px;}
         .sidebar-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:99;}
-
-        /* LOADING */
         .loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;z-index:9999;}
         .loading-screen.hidden{display:none;}
         .spinner{width:50px;height:50px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;}
@@ -152,7 +128,6 @@
         .notif-dot{width:8px;height:8px;background:var(--dm-color);border-radius:50%;display:inline-block;margin-left:4px;animation:pulse 2s infinite;}
         .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--text-muted);gap:12px;padding:40px;text-align:center;}
         .empty-state-icon{font-size:48px;}
-
         @media(max-width:768px){
             .sidebar{position:fixed;left:-260px;top:58px;height:calc(100vh - 58px);z-index:100;transition:left .3s ease;}
             .sidebar.mobile-open{left:0;}
@@ -172,12 +147,7 @@
     </style>
 </head>
 <body>
-    <div class="loading-screen" id="loadingScreen">
-        <div class="spinner"></div>
-        <div>Loading Hive Mind...</div>
-    </div>
-
-    <!-- LEVEL UP TOAST -->
+    <div class="loading-screen" id="loadingScreen"><div class="spinner"></div><div>Loading Hive Mind...</div></div>
     <div class="levelup-toast" id="levelupToast">🎉 Level Up!</div>
 
     <div class="app-container" style="display:none;" id="appContainer">
@@ -186,14 +156,13 @@
             <div class="logo">HIVE MIND</div>
             <div class="user-info">
                 <select id="themeSelector" onchange="changeTheme(this.value)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:5px;color:var(--text-primary);font-family:inherit;font-size:11px;">
-                    <option value="dark">🌑 Dark</option>
-                    <option value="light">☀️ Light</option>
-                    <option value="cyberpunk">💜 Cyberpunk</option>
-                    <option value="ocean">🌊 Ocean</option>
-                    <option value="forest">🌲 Forest</option>
-                    <option value="sunset">🌅 Sunset</option>
+                    <option value="dark">🌑 Dark</option><option value="light">☀️ Light</option>
+                    <option value="cyberpunk">💜 Cyberpunk</option><option value="ocean">🌊 Ocean</option>
+                    <option value="forest">🌲 Forest</option><option value="sunset">🌅 Sunset</option>
                 </select>
-                <button class="btn" onclick="goToProfile()">👤</button>
+                <button class="btn" onclick="goToProfile()">
+                    <span id="headerAvatarEmoji">🐝</span>
+                </button>
                 <span>
                     <span class="status-indicator"></span>
                     <span id="currentUser">...</span>
@@ -213,24 +182,18 @@
                     <div class="sidebar-tab" onclick="switchSidebarTab('friends')" id="tab-friends">👥 Friends</div>
                     <div class="sidebar-tab" onclick="switchSidebarTab('leaderboard')" id="tab-leaderboard">🏆 Buzzers</div>
                 </div>
-
-                <!-- CHANNELS -->
                 <div class="sidebar-panel active" id="panel-channels">
                     <div class="sidebar-section">
                         <div class="section-title">Public Rooms</div>
                         <div id="channelList"></div>
                     </div>
                 </div>
-
-                <!-- DMS -->
                 <div class="sidebar-panel" id="panel-dms">
                     <div style="padding:12px;border-bottom:1px solid var(--border);">
                         <div class="section-title">Direct Messages</div>
                         <div id="dmList"><div style="color:var(--text-muted);font-size:12px;padding:8px 0;">No DMs yet!</div></div>
                     </div>
                 </div>
-
-                <!-- FRIENDS -->
                 <div class="sidebar-panel" id="panel-friends">
                     <div class="add-friend-form">
                         <div class="section-title">Add Friend</div>
@@ -240,8 +203,6 @@
                     <div id="pendingRequests"></div>
                     <div id="friendsList"></div>
                 </div>
-
-                <!-- LEADERBOARD -->
                 <div class="sidebar-panel" id="panel-leaderboard">
                     <div style="padding:12px 14px;border-bottom:1px solid var(--border);">
                         <div class="section-title">🏆 Top Buzzers</div>
@@ -253,8 +214,8 @@
             <div class="chat-area">
                 <div class="chat-header" id="chatHeader">
                     <div>
-                        <div style="font-size:16px;font-weight:600;" id="chatHeaderTitle"># general</div>
-                        <div style="font-size:11px;color:var(--text-muted);" id="chatHeaderSub"></div>
+                        <div style="font-size:16px;font-weight:600;"># general</div>
+                        <div style="font-size:11px;color:var(--text-muted);">Public Room · +5 XP per message</div>
                     </div>
                 </div>
                 <div class="messages" id="messages"></div>
@@ -280,7 +241,8 @@
         let replyingTo = null, channelUsers = [], mentionSelectedIndex = 0;
         let friendsList = [], dmConversations = [];
         let isTabFocused = true;
-        let myLevel = 1, myPoints = 0;
+        let myLevel = 1, myPoints = 0, myEmoji = '🐝', myColor = '#00ff41';
+        let profileCache = {}; // cache user profiles
 
         window.addEventListener('focus', () => { isTabFocused = true; });
         window.addEventListener('blur', () => { isTabFocused = false; });
@@ -291,17 +253,14 @@
             {id:'shipped-today',name:'shipped-today'}
         ];
 
-        // ─── INIT ─────────────────────────────────────────────
         async function init() {
             try {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
                 const { data: { user }, error } = await supabaseClient.auth.getUser();
                 if (error || !user) throw new Error('Not authenticated');
                 currentUser = user;
-
                 const username = user.user_metadata?.username || user.email.split('@')[0];
                 document.getElementById('currentUser').textContent = username;
-
                 await loadMyProfile();
                 renderChannels();
                 await loadMessages('channel', 'general');
@@ -310,43 +269,45 @@
                 await loadFriends();
                 await loadDMList();
                 subscribeToDMs();
-
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('appContainer').style.display = 'flex';
-
                 const savedTheme = localStorage.getItem('theme') || 'dark';
                 document.body.setAttribute('data-theme', savedTheme);
                 document.getElementById('themeSelector').value = savedTheme;
-
-            } catch (e) {
+            } catch(e) {
                 console.error('Init error:', e);
                 alert('⚠️ Not signed in! Redirecting...');
                 window.location.href = 'signin.html';
             }
         }
 
-        // ─── PROFILE / LEVEL ─────────────────────────────────
         async function loadMyProfile() {
             try {
                 const { data } = await supabaseClient.from('profiles')
-                    .select('level, points, username').eq('id', currentUser.id).single();
+                    .select('level, points, avatar_emoji, avatar_color, username').eq('id', currentUser.id).single();
                 if (data) {
                     const prevLevel = myLevel;
                     myLevel = data.level || 1;
                     myPoints = data.points || 0;
-                    updateLevelUI(prevLevel);
+                    myEmoji = data.avatar_emoji || '🐝';
+                    myColor = data.avatar_color || '#00ff41';
+                    profileCache[currentUser.id] = data;
+                    document.getElementById('myLevelBadge').textContent = `Lv.${myLevel}`;
+                    document.getElementById('myXpBar').style.width = `${myPoints % 100}%`;
+                    document.getElementById('headerAvatarEmoji').textContent = myEmoji;
+                    if (prevLevel && myLevel > prevLevel) showLevelUpToast(myLevel);
                 }
-            } catch (e) { console.error('loadMyProfile:', e); }
+            } catch(e) { console.error('loadMyProfile:', e); }
         }
 
-        function updateLevelUI(prevLevel) {
-            document.getElementById('myLevelBadge').textContent = `Lv.${myLevel}`;
-            const xpInLevel = myPoints % 100;
-            document.getElementById('myXpBar').style.width = `${xpInLevel}%`;
-
-            if (prevLevel && myLevel > prevLevel) {
-                showLevelUpToast(myLevel);
-            }
+        async function getProfile(userId) {
+            if (profileCache[userId]) return profileCache[userId];
+            try {
+                const { data } = await supabaseClient.from('profiles')
+                    .select('level, points, avatar_emoji, avatar_color, username').eq('id', userId).single();
+                if (data) profileCache[userId] = data;
+                return data;
+            } catch(e) { return null; }
         }
 
         function showLevelUpToast(level) {
@@ -371,35 +332,29 @@
             return '🌱 Newbie';
         }
 
-        // ─── LEADERBOARD ─────────────────────────────────────
+        function makeAvatar(emoji, color, size='') {
+            return `<div class="emoji-avatar ${size}" style="background:${color||'#00ff41'};">${emoji||'🐝'}</div>`;
+        }
+
         async function loadLeaderboard() {
             try {
                 const { data } = await supabaseClient.from('profiles')
-                    .select('id, username, level, points')
-                    .order('points', { ascending: false })
-                    .limit(20);
-
+                    .select('id, username, level, points, avatar_emoji, avatar_color')
+                    .order('points', { ascending: false }).limit(20);
                 const container = document.getElementById('leaderboardList');
-                if (!data || data.length === 0) {
-                    container.innerHTML = `<div style="padding:16px;color:var(--text-muted);font-size:12px;">No players yet!</div>`;
-                    return;
-                }
-
+                if (!data || data.length === 0) { container.innerHTML = `<div style="padding:16px;color:var(--text-muted);font-size:12px;">No players yet!</div>`; return; }
                 container.innerHTML = data.map((p, i) => {
-                    const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-                    const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
+                    const rankClass = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+                    const rankIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
                     const isMe = p.id === currentUser.id;
-                    const xpInLevel = (p.points || 0) % 100;
+                    const xpInLevel = (p.points||0) % 100;
                     return `
-                        <div class="leaderboard-item" style="${isMe ? 'background:rgba(168,85,247,0.1);border-left:3px solid var(--level-color);' : ''}">
+                        <div class="leaderboard-item" onclick="viewUserProfile('${p.id}')" style="${isMe?'background:rgba(168,85,247,0.1);border-left:3px solid var(--level-color);':''}">
                             <div class="leaderboard-rank ${rankClass}">${rankIcon}</div>
-                            <div class="leaderboard-avatar" style="background:linear-gradient(135deg,${getLevelColor(p.level||1)},#06b6d4);">
-                                ${(p.username||'?').charAt(0).toUpperCase()}
-                            </div>
+                            ${makeAvatar(p.avatar_emoji||'🐝', p.avatar_color||getLevelColor(p.level||1))}
                             <div class="leaderboard-info">
-                                <div class="leaderboard-name">${escapeHtml(p.username||'Unknown')} ${isMe ? '(you)' : ''}</div>
-                                <div class="leaderboard-stats">
-                                    ${getLevelTitle(p.level||1)} &nbsp;·&nbsp; XP: ${xpInLevel}/100
+                                <div class="leaderboard-name">${escapeHtml(p.username||'Unknown')}${isMe?' (you)':''}</div>
+                                <div class="leaderboard-stats">${getLevelTitle(p.level||1)} · XP: ${xpInLevel}/100
                                     <div style="background:var(--bg-tertiary);border-radius:4px;height:4px;width:80px;margin-top:3px;overflow:hidden;">
                                         <div style="height:100%;background:${getLevelColor(p.level||1)};width:${xpInLevel}%;"></div>
                                     </div>
@@ -411,26 +366,18 @@
                             </div>
                         </div>`;
                 }).join('');
-            } catch (e) { console.error('loadLeaderboard:', e); }
+            } catch(e) { console.error('loadLeaderboard:', e); }
         }
 
-        // ─── CHANNELS ─────────────────────────────────────────
         function renderChannels() {
             document.getElementById('channelList').innerHTML = channels.map(ch => `
-                <div class="channel ${ch.id === currentChannel && currentMode === 'channel' ? 'active' : ''}"
-                    onclick="switchChannel('${ch.id}')"># ${ch.name}</div>`).join('');
+                <div class="channel ${ch.id===currentChannel && currentMode==='channel'?'active':''}" onclick="switchChannel('${ch.id}')"># ${ch.name}</div>`).join('');
         }
 
         async function switchChannel(channelId) {
             currentMode = 'channel'; currentChannel = channelId; currentDMUser = null;
             const ch = channels.find(c => c.id === channelId);
-            document.getElementById('chatHeaderTitle').textContent = `# ${ch.name}`;
-            document.getElementById('chatHeaderSub').textContent = '';
-            document.getElementById('chatHeader').innerHTML = `
-                <div>
-                    <div style="font-size:16px;font-weight:600;"># ${ch.name}</div>
-                    <div style="font-size:11px;color:var(--text-muted);">Public Room · +5 XP per message</div>
-                </div>`;
+            document.getElementById('chatHeader').innerHTML = `<div><div style="font-size:16px;font-weight:600;"># ${ch.name}</div><div style="font-size:11px;color:var(--text-muted);">Public Room · +5 XP per message</div></div>`;
             document.getElementById('messageInput').placeholder = `Message #${ch.name}...`;
             renderChannels();
             if (messageSubscription) messageSubscription.unsubscribe();
@@ -444,7 +391,7 @@
         async function loadChannelUsers(channelId) {
             try {
                 const { data } = await supabaseClient.from('messages').select('username, user_id')
-                    .eq('channel_id', channelId).order('created_at', {ascending:false}).limit(100);
+                    .eq('channel_id', channelId).order('created_at',{ascending:false}).limit(100);
                 const seen = new Set();
                 channelUsers = (data||[]).filter(m => { if(seen.has(m.user_id))return false; seen.add(m.user_id); return true; })
                     .map(m => ({username:m.username, user_id:m.user_id}));
@@ -454,42 +401,50 @@
         function subscribeToChannel(channelId) {
             messageSubscription = supabaseClient.channel(`ch:${channelId}`)
                 .on('postgres_changes', {event:'INSERT',schema:'public',table:'messages',filter:`channel_id=eq.${channelId}`}, async (payload) => {
-                    if (currentMode === 'channel' && currentChannel === channelId) {
-                        addMessageToUI(payload.new, 'channel');
+                    if (currentMode==='channel' && currentChannel===channelId) {
+                        await enrichAndAddMessage(payload.new, 'channel');
                         if (!channelUsers.find(u => u.user_id === payload.new.user_id))
                             channelUsers.push({username:payload.new.username, user_id:payload.new.user_id});
                     }
-                    // Refresh my level if it was my message
-                    if (payload.new.user_id === currentUser.id) {
-                        await loadMyProfile();
-                    }
+                    if (payload.new.user_id === currentUser.id) setTimeout(() => loadMyProfile(), 1000);
                 }).subscribe();
         }
 
-        // ─── DMs ──────────────────────────────────────────────
+        async function enrichAndAddMessage(msg, mode) {
+            const profile = await getProfile(mode==='dm' ? msg.sender_id : msg.user_id);
+            if (profile) {
+                msg._emoji = profile.avatar_emoji || '🐝';
+                msg._color = profile.avatar_color || '#1a1a1a';
+            }
+            addMessageToUI(msg, mode);
+        }
+
         function subscribeToDMs() {
             dmSubscription = supabaseClient.channel('dm-realtime')
                 .on('postgres_changes', {event:'INSERT',schema:'public',table:'direct_messages'}, async (payload) => {
                     const msg = payload.new, myId = currentUser.id;
-                    if (msg.sender_id !== myId && msg.recipient_id !== myId) return;
-                    if (currentMode === 'dm' && currentDMUser &&
-                        ((msg.sender_id===myId && msg.recipient_id===currentDMUser.id) ||
-                         (msg.recipient_id===myId && msg.sender_id===currentDMUser.id))) {
-                        addMessageToUI(msg, 'dm');
+                    if (msg.sender_id!==myId && msg.recipient_id!==myId) return;
+                    if (currentMode==='dm' && currentDMUser &&
+                        ((msg.sender_id===myId&&msg.recipient_id===currentDMUser.id)||
+                         (msg.recipient_id===myId&&msg.sender_id===currentDMUser.id))) {
+                        await enrichAndAddMessage(msg, 'dm');
                         await markDMsAsRead(currentDMUser.id);
                     } else if (msg.sender_id !== myId) {
                         document.getElementById('dmNotifDot').style.display = 'inline-block';
                     }
-                    if (msg.sender_id === myId) await loadMyProfile();
+                    if (msg.sender_id === myId) setTimeout(() => loadMyProfile(), 1000);
                     await loadDMList();
                 }).subscribe();
         }
 
         async function openDM(userId, username) {
             currentMode = 'dm'; currentDMUser = {id:userId, username};
+            const profile = await getProfile(userId);
+            const emoji = profile?.avatar_emoji || '🐝';
+            const color = profile?.avatar_color || '#1a1a1a';
             document.getElementById('chatHeader').innerHTML = `
                 <div style="display:flex;align-items:center;gap:12px;">
-                    <div class="chat-header-avatar">${username.charAt(0).toUpperCase()}</div>
+                    ${makeAvatar(emoji, color)}
                     <div>
                         <div style="font-size:15px;font-weight:700;">${escapeHtml(username)}</div>
                         <div style="font-size:11px;color:var(--text-muted);">Direct Message · +5 XP per message</div>
@@ -518,6 +473,14 @@
                         .order('created_at',{ascending:true}).limit(50);
                     data = res.data || [];
                 }
+                // Enrich with profile data
+                const userIds = [...new Set(data.map(m => mode==='dm' ? m.sender_id : m.user_id))];
+                await Promise.all(userIds.map(uid => getProfile(uid)));
+                data.forEach(m => {
+                    const uid = mode==='dm' ? m.sender_id : m.user_id;
+                    const p = profileCache[uid];
+                    if (p) { m._emoji = p.avatar_emoji||'🐝'; m._color = p.avatar_color||'#1a1a1a'; }
+                });
                 renderMessages(data, mode);
             } catch(e) { renderMessages([], mode); }
         }
@@ -542,40 +505,38 @@
                 });
                 dmConversations = Array.from(convMap.values());
                 renderDMList();
-                document.getElementById('dmNotifDot').style.display = dmConversations.some(c=>c.unread>0) ? 'inline-block' : 'none';
+                document.getElementById('dmNotifDot').style.display = dmConversations.some(c=>c.unread>0)?'inline-block':'none';
             } catch(e) { console.error('loadDMList:', e); }
         }
 
         function renderDMList() {
             const container = document.getElementById('dmList');
-            if (dmConversations.length === 0) {
-                container.innerHTML = `<div style="color:var(--text-muted);font-size:12px;padding:8px 0;">No DMs yet. Add friends to start chatting!</div>`;
-                return;
-            }
-            container.innerHTML = dmConversations.map(conv => `
-                <div class="dm-item ${currentMode==='dm' && currentDMUser?.id===conv.id ? 'active' : ''}"
-                    onclick="openDM('${conv.id}','${escapeHtml(conv.username).replace(/'/g,"\\'")}')">
-                    <div class="dm-avatar">${conv.username.charAt(0).toUpperCase()}</div>
-                    <div class="dm-info">
-                        <div class="dm-name">${escapeHtml(conv.username)}</div>
-                        <div class="dm-preview">${escapeHtml(conv.lastMsg||'')}</div>
-                    </div>
-                    ${conv.unread>0 ? `<div class="unread-badge">${conv.unread}</div>` : ''}
-                </div>`).join('');
+            if (dmConversations.length === 0) { container.innerHTML = `<div style="color:var(--text-muted);font-size:12px;padding:8px 0;">No DMs yet!</div>`; return; }
+            container.innerHTML = dmConversations.map(conv => {
+                const p = profileCache[conv.id];
+                const emoji = p?.avatar_emoji || '🐝';
+                const color = p?.avatar_color || '#1a1a1a';
+                return `
+                    <div class="dm-item ${currentMode==='dm'&&currentDMUser?.id===conv.id?'active':''}"
+                        onclick="openDM('${conv.id}','${escapeHtml(conv.username).replace(/'/g,"\\'")}')">
+                        ${makeAvatar(emoji, color, 'sm')}
+                        <div class="dm-info">
+                            <div class="dm-name">${escapeHtml(conv.username)}</div>
+                            <div class="dm-preview">${escapeHtml(conv.lastMsg||'')}</div>
+                        </div>
+                        ${conv.unread>0 ? `<div class="unread-badge">${conv.unread}</div>` : ''}
+                    </div>`;
+            }).join('');
         }
 
-        // ─── FRIENDS ──────────────────────────────────────────
         async function loadFriends() {
             try {
                 const myId = currentUser.id;
-                const {data} = await supabaseClient.from('friends').select('*')
-                    .or(`user_id.eq.${myId},friend_id.eq.${myId}`);
+                const {data} = await supabaseClient.from('friends').select('*').or(`user_id.eq.${myId},friend_id.eq.${myId}`);
                 friendsList = (data||[]).map(f => ({
-                    id: f.id,
-                    userId: f.user_id===myId ? f.friend_id : f.user_id,
-                    username: f.user_id===myId ? f.friend_username : f.username,
-                    status: f.status,
-                    isSender: f.user_id===myId
+                    id:f.id, userId:f.user_id===myId?f.friend_id:f.user_id,
+                    username:f.user_id===myId?f.friend_username:f.username,
+                    status:f.status, isSender:f.user_id===myId
                 }));
                 renderFriends();
             } catch(e) { console.error('loadFriends:', e); }
@@ -583,51 +544,45 @@
 
         function renderFriends() {
             const accepted = friendsList.filter(f=>f.status==='accepted');
-            const pending = friendsList.filter(f=>f.status==='pending' && !f.isSender);
-            const sent = friendsList.filter(f=>f.status==='pending' && f.isSender);
+            const pending = friendsList.filter(f=>f.status==='pending'&&!f.isSender);
+            const sent = friendsList.filter(f=>f.status==='pending'&&f.isSender);
 
-            document.getElementById('pendingRequests').innerHTML = pending.length > 0 ? `
+            document.getElementById('pendingRequests').innerHTML = pending.length>0 ? `
                 <div style="padding:12px;border-bottom:1px solid var(--border);">
                     <div class="section-title">Pending (${pending.length})</div>
-                    ${pending.map(f=>`
-                        <div class="friend-item">
-                            <div class="friend-avatar">${f.username.charAt(0).toUpperCase()}</div>
-                            <div class="friend-info">
-                                <div class="friend-name">${escapeHtml(f.username)}</div>
-                                <div class="friend-status">Wants to be friends</div>
-                            </div>
+                    ${pending.map(f => {
+                        const p = profileCache[f.userId];
+                        return `<div class="friend-item">
+                            ${makeAvatar(p?.avatar_emoji||'🐝', p?.avatar_color||'#1a1a1a', 'sm')}
+                            <div class="friend-info"><div class="friend-name">${escapeHtml(f.username)}</div><div class="friend-status">Wants to be friends</div></div>
                             <div class="friend-actions">
                                 <button class="friend-btn accept" onclick="respondFriendRequest('${f.id}','accepted')">✓</button>
                                 <button class="friend-btn reject" onclick="respondFriendRequest('${f.id}','rejected')">✗</button>
                             </div>
-                        </div>`).join('')}
+                        </div>`;
+                    }).join('')}
                 </div>` : '';
 
-            document.getElementById('friendsList').innerHTML = accepted.length===0 && sent.length===0
+            document.getElementById('friendsList').innerHTML = accepted.length===0&&sent.length===0
                 ? `<div style="padding:16px;color:var(--text-muted);font-size:12px;">No friends yet. Add someone!</div>`
                 : `<div style="padding:12px;">
-                    ${accepted.length>0 ? `<div class="section-title">Friends (${accepted.length})</div>` : ''}
-                    ${accepted.map(f=>`
-                        <div class="friend-item">
-                            <div class="friend-avatar">${f.username.charAt(0).toUpperCase()}</div>
-                            <div class="friend-info">
-                                <div class="friend-name">${escapeHtml(f.username)}</div>
-                                <div class="friend-status">Friend</div>
-                            </div>
+                    ${accepted.length>0?`<div class="section-title">Friends (${accepted.length})</div>`:''}
+                    ${accepted.map(f => {
+                        const p = profileCache[f.userId];
+                        return `<div class="friend-item">
+                            ${makeAvatar(p?.avatar_emoji||'🐝', p?.avatar_color||'#1a1a1a', 'sm')}
+                            <div class="friend-info"><div class="friend-name">${escapeHtml(f.username)}</div><div class="friend-status">Friend</div></div>
                             <div class="friend-actions">
                                 <button class="friend-btn dm" onclick="openDM('${f.userId}','${escapeHtml(f.username).replace(/'/g,"\\'")}');switchSidebarTab('dms')">✉️</button>
+                                <button class="friend-btn" onclick="viewUserProfile('${f.userId}')">👤</button>
                             </div>
-                        </div>`).join('')}
-                    ${sent.length>0 ? `
-                        <div class="section-title" style="margin-top:12px;">Sent</div>
-                        ${sent.map(f=>`
-                            <div class="friend-item">
-                                <div class="friend-avatar" style="opacity:.6;">${f.username.charAt(0).toUpperCase()}</div>
-                                <div class="friend-info">
-                                    <div class="friend-name">${escapeHtml(f.username)}</div>
-                                    <div class="friend-status">Pending...</div>
-                                </div>
-                            </div>`).join('')}` : ''}
+                        </div>`;
+                    }).join('')}
+                    ${sent.length>0?`<div class="section-title" style="margin-top:12px;">Sent</div>${sent.map(f=>`
+                        <div class="friend-item">
+                            ${makeAvatar('🐝','#1a1a1a','sm')}
+                            <div class="friend-info"><div class="friend-name">${escapeHtml(f.username)}</div><div class="friend-status">Pending...</div></div>
+                        </div>`).join('')}`:''}
                 </div>`;
         }
 
@@ -636,22 +591,20 @@
             const targetUsername = input.value.trim();
             if (!targetUsername) return;
             const myUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-            if (targetUsername.toLowerCase() === myUsername.toLowerCase()) { alert("You can't add yourself!"); return; }
+            if (targetUsername.toLowerCase()===myUsername.toLowerCase()) { alert("You can't add yourself!"); return; }
             try {
-                const {data:userData} = await supabaseClient.from('messages')
-                    .select('user_id, username').eq('username', targetUsername).limit(1);
-                if (!userData || userData.length===0) { alert(`User "${targetUsername}" not found.`); return; }
+                const {data:userData} = await supabaseClient.from('messages').select('user_id, username').eq('username', targetUsername).limit(1);
+                if (!userData||userData.length===0) { alert(`User "${targetUsername}" not found.`); return; }
                 const targetId = userData[0].user_id;
                 if (friendsList.find(f=>f.userId===targetId)) { alert('Already friends or pending!'); return; }
                 const {error} = await supabaseClient.from('friends').insert({
-                    user_id:currentUser.id, friend_id:targetId,
-                    username:myUsername, friend_username:targetUsername, status:'pending'
+                    user_id:currentUser.id, friend_id:targetId, username:myUsername, friend_username:targetUsername, status:'pending'
                 });
                 if (error) throw error;
                 input.value = '';
                 alert(`Friend request sent to ${targetUsername}! ✅`);
                 await loadFriends();
-            } catch(e) { alert('Error: ' + e.message); }
+            } catch(e) { alert('Error: '+e.message); }
         }
 
         async function respondFriendRequest(id, status) {
@@ -659,10 +612,9 @@
                 const {error} = await supabaseClient.from('friends').update({status}).eq('id',id);
                 if (error) throw error;
                 await loadFriends();
-            } catch(e) { alert('Error: ' + e.message); }
+            } catch(e) { alert('Error: '+e.message); }
         }
 
-        // ─── MESSAGES ─────────────────────────────────────────
         function renderMessages(messages, mode) {
             const container = document.getElementById('messages');
             if (messages.length===0) {
@@ -686,15 +638,13 @@
             const senderUsername = mode==='dm' ? msg.sender_username : msg.username;
             const senderId = mode==='dm' ? msg.sender_id : msg.user_id;
             const isOwn = senderId === currentUser.id;
-            const initial = (senderUsername||'?').charAt(0).toUpperCase();
             const editedLabel = msg.edited ? '<span style="font-size:10px;color:var(--text-muted);"> (edited)</span>' : '';
-            const msgLevel = msg.user_level || 1;
+            const emoji = isOwn ? myEmoji : (msg._emoji || '🐝');
+            const color = isOwn ? myColor : (msg._color || '#1a1a1a');
 
             let replyHTML = '';
             if (msg.reply_to_username && msg.reply_to_content) {
-                replyHTML = `<div class="reply-reference">
-                    <span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0,60))}${msg.reply_to_content.length>60?'...':''}
-                </div>`;
+                replyHTML = `<div class="reply-reference"><span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0,60))}${msg.reply_to_content.length>60?'...':''}</div>`;
             }
 
             const contentText = mode==='dm'
@@ -704,29 +654,27 @@
             const actionsMenu = `
                 <div class="message-actions" style="display:none;position:absolute;top:4px;${isOwn?'left':'right'}:4px;z-index:10;white-space:nowrap;">
                     <button onclick="replyToMessage('${msg.id}','${escapeHtml(senderUsername).replace(/'/g,"\\'")}',\`${escapeHtml(msg.content||'').replace(/`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">💬</button>
-                    ${isOwn && mode!=='dm' ? `<button onclick="editMessage('${msg.id}',\`${escapeHtml(msg.content||'').replace(/`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">✏️</button>` : ''}
-                    ${isOwn ? `<button onclick="deleteMessage('${msg.id}','${mode}',event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;cursor:pointer;color:#ff006e;font-size:10px;font-family:inherit;">🗑️</button>` : ''}
+                    ${isOwn&&mode!=='dm'?`<button onclick="editMessage('${msg.id}',\`${escapeHtml(msg.content||'').replace(/`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">✏️</button>`:''}
+                    ${isOwn?`<button onclick="deleteMessage('${msg.id}','${mode}',event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;cursor:pointer;color:#ff006e;font-size:10px;font-family:inherit;">🗑️</button>`:''}
                 </div>`;
 
             return `
                 <div class="message ${isOwn?'own':''}" data-message-id="${msg.id}" style="position:relative;"
                     onmouseenter="this.querySelector('.message-actions')?.style.setProperty('display','flex')"
                     onmouseleave="this.querySelector('.message-actions')?.style.setProperty('display','none')">
-                    ${!isOwn ? `<div class="avatar ${mode==='dm'?'dm-av':''}">${initial}</div>` : ''}
+                    ${!isOwn?`<div class="emoji-avatar" style="background:${color};cursor:pointer;" onclick="viewUserProfile('${senderId}')" title="${escapeHtml(senderUsername)}">${emoji}</div>`:''}
                     <div class="message-content">
                         <div class="message-header">
                             <span class="username" onclick="viewUserProfile('${senderId}')">${escapeHtml(senderUsername)}</span>
                             <span class="timestamp">${time}${editedLabel}</span>
                         </div>
-                        ${replyHTML}
-                        ${contentText}
+                        ${replyHTML}${contentText}
                     </div>
-                    ${isOwn ? `<div class="avatar ${mode==='dm'?'dm-av':''}">${initial}</div>` : ''}
+                    ${isOwn?`<div class="emoji-avatar" style="background:${color};">${emoji}</div>`:''}
                     ${actionsMenu}
                 </div>`;
         }
 
-        // ─── SEND ──────────────────────────────────────────────
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const content = input.value.trim();
@@ -736,57 +684,43 @@
             try {
                 const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
                 if (currentMode==='dm' && currentDMUser) {
-                    const msgData = {
-                        sender_id:currentUser.id, sender_username:username,
-                        recipient_id:currentDMUser.id, recipient_username:currentDMUser.username, content
-                    };
+                    const msgData = {sender_id:currentUser.id, sender_username:username, recipient_id:currentDMUser.id, recipient_username:currentDMUser.username, content};
                     if (replyingTo) { msgData.reply_to_username=replyingTo.username; msgData.reply_to_content=replyingTo.content; }
                     const {error} = await supabaseClient.from('direct_messages').insert(msgData);
                     if (error) throw error;
-                    addMessageToUI({...msgData, id:Date.now(), created_at:new Date().toISOString()}, 'dm');
+                    addMessageToUI({...msgData, id:Date.now(), created_at:new Date().toISOString(), _emoji:myEmoji, _color:myColor}, 'dm');
                 } else {
                     const msgData = {channel_id:currentChannel, user_id:currentUser.id, username, content, type:'text'};
                     if (replyingTo) { msgData.reply_to_username=replyingTo.username; msgData.reply_to_content=replyingTo.content; }
                     const {error} = await supabaseClient.from('messages').insert(msgData);
                     if (error) throw error;
                 }
-                input.value = '';
-                cancelReply();
-                // Refresh XP after a short delay
-                setTimeout(() => loadMyProfile(), 1000);
-            } catch(e) { alert('Failed to send: ' + e.message); }
+                input.value = ''; cancelReply();
+                setTimeout(() => loadMyProfile(), 1200);
+            } catch(e) { alert('Failed to send: '+e.message); }
             finally { btn.disabled = false; }
         }
 
-        // ─── REPLY ─────────────────────────────────────────────
         function replyToMessage(id, username, content, event) {
             event.stopPropagation();
             replyingTo = {id, username, content};
-            const truncated = content.length>50 ? content.substring(0,50)+'...' : content;
+            const truncated = content.length>50?content.substring(0,50)+'...':content;
             document.getElementById('replyPreview').innerHTML = `
                 <div class="reply-preview">
-                    <div style="flex:1;">
-                        <div style="font-size:11px;color:var(--accent);margin-bottom:4px;">Replying to @${escapeHtml(username)}</div>
-                        <div style="font-size:12px;color:var(--text-muted);">${escapeHtml(truncated)}</div>
-                    </div>
+                    <div style="flex:1;"><div style="font-size:11px;color:var(--accent);margin-bottom:4px;">Replying to @${escapeHtml(username)}</div><div style="font-size:12px;color:var(--text-muted);">${escapeHtml(truncated)}</div></div>
                     <button class="reply-preview-close" onclick="cancelReply()">×</button>
                 </div>`;
             document.getElementById('messageInput').focus();
         }
 
-        function cancelReply() {
-            replyingTo = null;
-            document.getElementById('replyPreview').innerHTML = '';
-        }
+        function cancelReply() { replyingTo = null; document.getElementById('replyPreview').innerHTML = ''; }
 
-        // ─── EDIT / DELETE ─────────────────────────────────────
         async function editMessage(messageId, currentContent, event) {
             event.stopPropagation();
             const newContent = prompt('Edit message:', currentContent);
-            if (!newContent || newContent===currentContent) return;
+            if (!newContent||newContent===currentContent) return;
             try {
-                const {error} = await supabaseClient.from('messages')
-                    .update({content:newContent, edited:true, edited_at:new Date().toISOString()}).eq('id',messageId);
+                const {error} = await supabaseClient.from('messages').update({content:newContent, edited:true, edited_at:new Date().toISOString()}).eq('id',messageId);
                 if (error) throw error;
                 const el = document.querySelector(`[data-message-id="${messageId}"] .message-text`);
                 if (el) { const u=currentUser.user_metadata?.username||currentUser.email.split('@')[0]; el.innerHTML=highlightMentions(escapeHtml(newContent),u); }
@@ -797,15 +731,13 @@
             event.stopPropagation();
             if (!confirm('Delete this message?')) return;
             try {
-                const table = mode==='dm' ? 'direct_messages' : 'messages';
-                const {error} = await supabaseClient.from(table).delete().eq('id',messageId);
+                const {error} = await supabaseClient.from(mode==='dm'?'direct_messages':'messages').delete().eq('id',messageId);
                 if (error) throw error;
                 const el = document.querySelector(`[data-message-id="${messageId}"]`);
                 if (el) { el.style.opacity='0'; setTimeout(()=>el.remove(),300); }
             } catch(e) { alert('Error: '+e.message); }
         }
 
-        // ─── MENTIONS ──────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('messageInput');
             if (input) { input.addEventListener('input', handleMentionInput); input.addEventListener('keydown', handleMentionKeydown); }
@@ -828,15 +760,12 @@
 
         function handleMentionKeydown(e) {
             const dropdown = document.getElementById('mentionDropdown');
-            if (!dropdown.classList.contains('active')) {
-                if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-                return;
-            }
+            if (!dropdown.classList.contains('active')) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} return; }
             const items = dropdown.querySelectorAll('.mention-item');
-            if (e.key==='ArrowDown') { e.preventDefault(); mentionSelectedIndex=Math.min(mentionSelectedIndex+1,items.length-1); updateMentionSelection(items); }
-            else if (e.key==='ArrowUp') { e.preventDefault(); mentionSelectedIndex=Math.max(mentionSelectedIndex-1,0); updateMentionSelection(items); }
-            else if (e.key==='Enter'||e.key==='Tab') { e.preventDefault(); if(items[mentionSelectedIndex]) items[mentionSelectedIndex].click(); }
-            else if (e.key==='Escape') { e.preventDefault(); hideMentionDropdown(); }
+            if (e.key==='ArrowDown'){e.preventDefault();mentionSelectedIndex=Math.min(mentionSelectedIndex+1,items.length-1);updateMentionSelection(items);}
+            else if(e.key==='ArrowUp'){e.preventDefault();mentionSelectedIndex=Math.max(mentionSelectedIndex-1,0);updateMentionSelection(items);}
+            else if(e.key==='Enter'||e.key==='Tab'){e.preventDefault();if(items[mentionSelectedIndex])items[mentionSelectedIndex].click();}
+            else if(e.key==='Escape'){e.preventDefault();hideMentionDropdown();}
         }
 
         function showMentionDropdown(users) {
@@ -844,7 +773,7 @@
             mentionSelectedIndex = 0;
             dropdown.innerHTML = users.map((u,i)=>`
                 <div class="mention-item ${i===0?'selected':''}" onclick="insertMention('${u.username}')">
-                    <div class="mention-item-avatar">${u.username.charAt(0).toUpperCase()}</div>
+                    <div style="width:24px;height:24px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:13px;">${profileCache[u.user_id]?.avatar_emoji||'🐝'}</div>
                     <div>${escapeHtml(u.username)}</div>
                 </div>`).join('');
             dropdown.classList.add('active');
@@ -864,7 +793,6 @@
             hideMentionDropdown(); input.focus();
         }
 
-        // ─── SIDEBAR TABS ──────────────────────────────────────
         function switchSidebarTab(tab) {
             ['channels','dms','friends','leaderboard'].forEach(t => {
                 document.getElementById(`tab-${t}`).classList.toggle('active', t===tab);
@@ -875,7 +803,6 @@
             if (tab==='leaderboard') loadLeaderboard();
         }
 
-        // ─── HELPERS ───────────────────────────────────────────
         function scrollToBottom() { const c=document.getElementById('messages'); c.scrollTop=c.scrollHeight; }
         function escapeHtml(text) { if(!text)return''; const d=document.createElement('div'); d.textContent=text; return d.innerHTML; }
         function highlightMentions(text, currentUsername) {
