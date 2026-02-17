@@ -617,6 +617,7 @@
             border-radius: 4px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .voice-note-progress {
@@ -1088,15 +1089,22 @@
 
             let contentHTML = '';
             if (msg.type === 'voice' && msg.audio_url) {
+                const audioId = `audio-${msg.id}`;
                 contentHTML = `
                     <div class="voice-note-player">
-                        <button class="voice-note-play-btn" onclick="playVoiceNote(this, '${msg.audio_url}')" data-playing="false">
+                        <audio id="${audioId}" preload="metadata" style="display:none;">
+                            <source src="${msg.audio_url}" type="audio/mpeg">
+                            <source src="${msg.audio_url}" type="audio/mp4">
+                            <source src="${msg.audio_url}" type="audio/webm">
+                            <source src="${msg.audio_url}" type="audio/ogg">
+                        </audio>
+                        <button class="voice-note-play-btn" onclick="playVoiceNote(this, '${audioId}')" data-playing="false">
                             ▶
                         </button>
-                        <div class="voice-note-waveform">
-                            <div class="voice-note-progress" data-audio-url="${msg.audio_url}"></div>
+                        <div class="voice-note-waveform" onclick="seekAudio('${audioId}', event)">
+                            <div class="voice-note-progress" id="progress-${msg.id}"></div>
                         </div>
-                        <span class="voice-note-duration">--:--</span>
+                        <span class="voice-note-duration" id="duration-${msg.id}">--:--</span>
                     </div>
                 `;
             } else if (msg.content) {
@@ -1130,73 +1138,105 @@
             `;
         }
 
-        const audioPlayers = new Map();
-
-        async function playVoiceNote(btn, audioUrl) {
-            const isPlaying = btn.getAttribute('data-playing') === 'true';
+        function seekAudio(audioId, event) {
+            const audio = document.getElementById(audioId);
+            if (!audio || !audio.duration) return;
             
-            if (isPlaying) {
-                const audio = audioPlayers.get(audioUrl);
-                if (audio) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                }
-                btn.textContent = '▶';
-                btn.setAttribute('data-playing', 'false');
+            const waveform = event.currentTarget;
+            const rect = waveform.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            
+            audio.currentTime = audio.duration * percentage;
+        }
+
+        async function playVoiceNote(btn, audioId) {
+            const audio = document.getElementById(audioId);
+            const progressBar = document.getElementById('progress-' + audioId.replace('audio-', ''));
+            const durationSpan = document.getElementById('duration-' + audioId.replace('audio-', ''));
+            
+            if (!audio) {
+                console.error('Audio element not found:', audioId);
                 return;
             }
 
-            audioPlayers.forEach((audio, url) => {
-                if (url !== audioUrl) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    const otherBtn = document.querySelector(`[onclick*="${url}"]`);
+            const isPlaying = btn.getAttribute('data-playing') === 'true';
+            
+            document.querySelectorAll('audio').forEach(a => {
+                if (a.id !== audioId && !a.paused) {
+                    a.pause();
+                    a.currentTime = 0;
+                    const otherBtn = document.querySelector(`[onclick*="${a.id}"]`);
                     if (otherBtn) {
                         otherBtn.textContent = '▶';
                         otherBtn.setAttribute('data-playing', 'false');
                     }
                 }
             });
+            
+            if (isPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                btn.textContent = '▶';
+                btn.setAttribute('data-playing', 'false');
+                if (progressBar) progressBar.style.width = '0%';
+                return;
+            }
 
-            let audio = audioPlayers.get(audioUrl);
-            if (!audio) {
-                audio = new Audio(audioUrl);
-                audioPlayers.set(audioUrl, audio);
-
-                audio.addEventListener('ended', () => {
-                    btn.textContent = '▶';
-                    btn.setAttribute('data-playing', 'false');
-                    const progress = document.querySelector(`[data-audio-url="${audioUrl}"]`);
-                    if (progress) progress.style.width = '0%';
-                });
-
-                audio.addEventListener('timeupdate', () => {
-                    const progress = (audio.currentTime / audio.duration) * 100;
-                    const progressBar = document.querySelector(`[data-audio-url="${audioUrl}"]`);
-                    if (progressBar) progressBar.style.width = progress + '%';
-                    
-                    const durationSpan = btn.parentElement.querySelector('.voice-note-duration');
-                    if (durationSpan) {
-                        const remaining = audio.duration - audio.currentTime;
-                        const mins = Math.floor(remaining / 60);
-                        const secs = Math.floor(remaining % 60);
-                        durationSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-                    }
-                });
-
+            if (!audio.hasAttribute('data-listeners-added')) {
                 audio.addEventListener('loadedmetadata', () => {
-                    const durationSpan = btn.parentElement.querySelector('.voice-note-duration');
-                    if (durationSpan) {
+                    if (durationSpan && audio.duration) {
                         const mins = Math.floor(audio.duration / 60);
                         const secs = Math.floor(audio.duration % 60);
                         durationSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
                     }
                 });
+
+                audio.addEventListener('timeupdate', () => {
+                    if (audio.duration) {
+                        const progress = (audio.currentTime / audio.duration) * 100;
+                        if (progressBar) progressBar.style.width = progress + '%';
+                        
+                        if (durationSpan) {
+                            const remaining = audio.duration - audio.currentTime;
+                            const mins = Math.floor(remaining / 60);
+                            const secs = Math.floor(remaining % 60);
+                            durationSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                        }
+                    }
+                });
+
+                audio.addEventListener('ended', () => {
+                    btn.textContent = '▶';
+                    btn.setAttribute('data-playing', 'false');
+                    if (progressBar) progressBar.style.width = '0%';
+                    if (audio.duration && durationSpan) {
+                        const mins = Math.floor(audio.duration / 60);
+                        const secs = Math.floor(audio.duration % 60);
+                        durationSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                    }
+                });
+
+                audio.addEventListener('error', (e) => {
+                    console.error('Audio playback error:', e);
+                    alert('Unable to play voice note. The audio format may not be supported on this device.');
+                    btn.textContent = '▶';
+                    btn.setAttribute('data-playing', 'false');
+                });
+
+                audio.setAttribute('data-listeners-added', 'true');
             }
 
-            audio.play();
-            btn.textContent = '⏸';
-            btn.setAttribute('data-playing', 'true');
+            try {
+                await audio.play();
+                btn.textContent = '⏸';
+                btn.setAttribute('data-playing', 'true');
+            } catch (error) {
+                console.error('Play error:', error);
+                alert('Could not play audio. Please try again.');
+                btn.textContent = '▶';
+                btn.setAttribute('data-playing', 'false');
+            }
         }
 
         async function toggleVoiceRecording() {
@@ -1224,10 +1264,10 @@
 
                 const options = { mimeType: '' };
                 
-                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
-                    options.mimeType = 'audio/webm;codecs=opus';
-                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                if (MediaRecorder.isTypeSupported('audio/mp4')) {
                     options.mimeType = 'audio/mp4';
+                } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                    options.mimeType = 'audio/webm;codecs=opus';
                 } else if (MediaRecorder.isTypeSupported('audio/webm')) {
                     options.mimeType = 'audio/webm';
                 } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
