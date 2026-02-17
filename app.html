@@ -223,14 +223,8 @@
         }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .avatar {
@@ -284,6 +278,7 @@
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
             padding: 16px 20px;
+            position: relative;
         }
 
         .input-wrapper {
@@ -359,10 +354,8 @@
 
         .loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: var(--bg-primary);
             display: flex;
             align-items: center;
@@ -372,9 +365,7 @@
             z-index: 9999;
         }
 
-        .loading-screen.hidden {
-            display: none;
-        }
+        .loading-screen.hidden { display: none; }
 
         .spinner {
             width: 50px;
@@ -385,31 +376,16 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         .status-indicator {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background: var(--accent);
             border-radius: 50%;
             margin-right: 8px;
@@ -462,11 +438,9 @@
         .sidebar-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
             z-index: 99;
         }
 
@@ -481,9 +455,7 @@
             align-items: center;
         }
 
-        .reply-preview-content {
-            flex: 1;
-        }
+        .reply-preview-content { flex: 1; }
 
         .reply-preview-header {
             font-size: 11px;
@@ -508,9 +480,7 @@
             padding: 4px;
         }
 
-        .reply-preview-close:hover {
-            color: var(--accent);
-        }
+        .reply-preview-close:hover { color: var(--accent); }
 
         .reply-reference {
             background: var(--bg-tertiary);
@@ -541,9 +511,7 @@
             z-index: 1000;
         }
 
-        .mention-dropdown.active {
-            display: block;
-        }
+        .mention-dropdown.active { display: block; }
 
         .mention-item {
             padding: 10px 12px;
@@ -554,9 +522,7 @@
             gap: 10px;
         }
 
-        .mention-item:hover {
-            background: var(--bg-tertiary);
-        }
+        .mention-item:hover { background: var(--bg-tertiary); }
 
         .mention-item.selected {
             background: var(--bg-tertiary);
@@ -564,8 +530,7 @@
         }
 
         .mention-item-avatar {
-            width: 24px;
-            height: 24px;
+            width: 24px; height: 24px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent), var(--text-secondary));
             display: flex;
@@ -576,10 +541,9 @@
             color: var(--bg-primary);
         }
 
-        .mention-item-username {
-            font-size: 13px;
-        }
+        .mention-item-username { font-size: 13px; }
 
+        /* Desktop voice note player */
         .voice-note-player {
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
@@ -633,6 +597,31 @@
             flex-shrink: 0;
         }
 
+        /* Mobile native audio player */
+        .mobile-voice-player {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 100%;
+        }
+
+        .mobile-voice-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .mobile-voice-player audio {
+            width: 100%;
+            max-width: 280px;
+            height: 40px;
+            border-radius: 4px;
+            outline: none;
+        }
+
         .recording-timer {
             background: var(--bg-tertiary);
             padding: 8px 16px;
@@ -648,8 +637,7 @@
         }
 
         .recording-dot {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background: #ff006e;
             border-radius: 50%;
             animation: pulse-record 1.5s infinite;
@@ -665,35 +653,14 @@
                 transition: left 0.3s ease;
             }
 
-            .sidebar.mobile-open {
-                left: 0;
-            }
+            .sidebar.mobile-open { left: 0; }
+            .sidebar-overlay.active { display: block; }
+            .mobile-menu-btn { display: block !important; }
 
-            .sidebar-overlay.active {
-                display: block;
-            }
-
-            .mobile-menu-btn {
-                display: block !important;
-            }
-
-            .header {
-                padding: 12px 16px;
-            }
-
-            .logo {
-                font-size: 14px;
-            }
-
-            .user-info {
-                font-size: 11px;
-                gap: 8px;
-            }
-
-            .sign-out-btn {
-                padding: 4px 8px;
-                font-size: 11px;
-            }
+            .header { padding: 12px 16px; }
+            .logo { font-size: 14px; }
+            .user-info { font-size: 11px; gap: 8px; }
+            .sign-out-btn { padding: 4px 8px; font-size: 11px; }
 
             .messages {
                 padding: 12px;
@@ -702,18 +669,14 @@
 
             .message-input-container {
                 position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
+                bottom: 0; left: 0; right: 0;
                 padding: 12px;
                 background: var(--bg-secondary);
                 border-top: 2px solid var(--border);
                 z-index: 50;
             }
 
-            .input-wrapper {
-                gap: 8px;
-            }
+            .input-wrapper { gap: 8px; }
 
             .message-input {
                 font-size: 16px;
@@ -728,9 +691,7 @@
                 min-height: 48px;
             }
 
-            .voice-btn {
-                padding: 14px 18px;
-            }
+            .voice-btn { padding: 14px 18px; }
 
             .recording-timer {
                 margin-bottom: 12px;
@@ -738,64 +699,23 @@
                 padding: 12px;
             }
 
-            .chat-header h2 {
-                font-size: 14px;
-            }
+            .chat-header h2 { font-size: 14px; }
+            .message { gap: 8px; }
+            .avatar { width: 32px; height: 32px; font-size: 14px; }
+            .username { font-size: 12px; }
+            .message-text { font-size: 13px; }
+            .timestamp { font-size: 10px; }
+            .mention-dropdown { left: 12px; right: 12px; }
 
-            .message {
-                gap: 8px;
-            }
-
-            .avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
-            }
-
-            .username {
-                font-size: 12px;
-            }
-
-            .message-text {
-                font-size: 13px;
-            }
-
-            .timestamp {
-                font-size: 10px;
-            }
-
-            .mention-dropdown {
-                left: 12px;
-                right: 12px;
-            }
-
-            .voice-note-player {
-                max-width: 100%;
-            }
-
-            .voice-note-play-btn {
-                width: 44px;
-                height: 44px;
-                font-size: 16px;
-            }
+            .voice-note-player { max-width: 100%; }
+            .voice-note-play-btn { width: 44px; height: 44px; font-size: 16px; }
         }
 
         @media (max-width: 400px) {
-            .logo {
-                font-size: 12px;
-            }
-
-            .messages {
-                padding: 8px;
-            }
-
-            .message-input-container {
-                padding: 8px;
-            }
-
-            .send-btn, .voice-btn {
-                padding: 10px 12px;
-            }
+            .logo { font-size: 12px; }
+            .messages { padding: 8px; }
+            .message-input-container { padding: 8px; }
+            .send-btn, .voice-btn { padding: 10px 12px; }
         }
     </style>
 </head>
@@ -878,6 +798,8 @@
         let recordingStartTime = null;
         let recordingTimer = null;
 
+        const isMobileDevice = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
         const channels = [
             { id: 'general', name: 'general', topic: 'Welcome to BuilderHub' },
             { id: 'random', name: 'random', topic: 'Off-topic vibes' },
@@ -892,13 +814,9 @@
                 supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
                 const { data: { user }, error } = await supabaseClient.auth.getUser();
-
-                if (error || !user) {
-                    throw new Error('Not authenticated');
-                }
+                if (error || !user) throw new Error('Not authenticated');
 
                 currentUser = user;
-
                 const username = user.user_metadata?.username || user.email.split('@')[0];
                 document.getElementById('currentUser').textContent = username;
 
@@ -929,26 +847,20 @@
 
         async function switchChannel(channelId) {
             currentChannel = channelId;
-            
             const channel = channels.find(c => c.id === channelId);
             document.getElementById('currentChannelName').textContent = `# ${channel.name}`;
             document.getElementById('messageInput').placeholder = `Message #${channel.name}...`;
-            
             renderChannels();
-            
-            if (messageSubscription) {
-                messageSubscription.unsubscribe();
-            }
+
+            if (messageSubscription) messageSubscription.unsubscribe();
             
             await loadMessages(channelId);
             await loadChannelUsers(channelId);
             subscribeToMessages(channelId);
             
             if (window.innerWidth <= 768) {
-                const sidebar = document.querySelector('.sidebar');
-                const overlay = document.querySelector('.sidebar-overlay');
-                sidebar.classList.remove('mobile-open');
-                overlay.classList.remove('active');
+                document.querySelector('.sidebar').classList.remove('mobile-open');
+                document.querySelector('.sidebar-overlay').classList.remove('active');
             }
         }
 
@@ -965,17 +877,12 @@
 
                 const uniqueUsers = [];
                 const seenUserIds = new Set();
-
                 data.forEach(msg => {
                     if (!seenUserIds.has(msg.user_id)) {
                         seenUserIds.add(msg.user_id);
-                        uniqueUsers.push({
-                            username: msg.username,
-                            user_id: msg.user_id
-                        });
+                        uniqueUsers.push({ username: msg.username, user_id: msg.user_id });
                     }
                 });
-
                 channelUsers = uniqueUsers;
             } catch (error) {
                 console.error('Load users error:', error);
@@ -993,7 +900,6 @@
                     .limit(50);
 
                 if (error) throw error;
-
                 renderMessages(data || []);
             } catch (error) {
                 console.error('Load messages error:', error);
@@ -1004,70 +910,49 @@
         function subscribeToMessages(channelId) {
             messageSubscription = supabaseClient
                 .channel(`messages:${channelId}`)
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'INSERT',
-                        schema: 'public',
-                        table: 'messages',
-                        filter: `channel_id=eq.${channelId}`
-                    },
-                    (payload) => {
-                        const msg = payload.new;
-                        addMessageToUI(msg);
-                        
-                        if (!channelUsers.find(u => u.user_id === msg.user_id)) {
-                            channelUsers.push({
-                                username: msg.username,
-                                user_id: msg.user_id
-                            });
-                        }
-                        
-                        if (msg.user_id !== currentUser.id) {
-                            const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-                            const isMentioned = checkForMentions(msg.content || '', currentUsername);
-                            
-                            if (isMentioned) {
-                                showNotification(
-                                    `${msg.username} mentioned you in #${currentChannel}`,
-                                    msg.content
-                                );
-                            } else if (!isTabFocused) {
-                                const notifBody = msg.type === 'voice' ? '🎤 Voice note' : msg.content;
-                                showNotification(
-                                    `${msg.username} in #${currentChannel}`,
-                                    notifBody
-                                );
-                            }
+                .on('postgres_changes', {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'messages',
+                    filter: `channel_id=eq.${channelId}`
+                }, (payload) => {
+                    const msg = payload.new;
+                    addMessageToUI(msg);
+
+                    if (!channelUsers.find(u => u.user_id === msg.user_id)) {
+                        channelUsers.push({ username: msg.username, user_id: msg.user_id });
+                    }
+
+                    if (msg.user_id !== currentUser.id) {
+                        const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+                        const isMentioned = checkForMentions(msg.content || '', currentUsername);
+                        if (isMentioned) {
+                            showNotification(`${msg.username} mentioned you in #${currentChannel}`, msg.content);
+                        } else if (!isTabFocused) {
+                            const notifBody = msg.type === 'voice' ? '🎤 Voice note' : msg.content;
+                            showNotification(`${msg.username} in #${currentChannel}`, notifBody);
                         }
                     }
-                )
+                })
                 .subscribe();
         }
 
         function renderMessages(messages) {
             const container = document.getElementById('messages');
-            
             if (messages.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; color: var(--text-muted); padding: 40px;">
                         No messages yet. Be the first to say something! 👋
-                    </div>
-                `;
+                    </div>`;
                 return;
             }
-
             container.innerHTML = messages.map(msg => createMessageHTML(msg)).join('');
             scrollToBottom();
         }
 
         function addMessageToUI(message) {
             const container = document.getElementById('messages');
-            
-            if (container.innerHTML.includes('No messages yet')) {
-                container.innerHTML = '';
-            }
-            
+            if (container.innerHTML.includes('No messages yet')) container.innerHTML = '';
             container.innerHTML += createMessageHTML(message);
             scrollToBottom();
         }
@@ -1077,36 +962,47 @@
             const initial = msg.username.charAt(0).toUpperCase();
             const isOwnMessage = msg.user_id === currentUser.id;
             const editedLabel = msg.edited ? '<span style="font-size: 10px; color: var(--text-muted);"> (edited)</span>' : '';
-            
+
             let replyHTML = '';
             if (msg.reply_to_username && msg.reply_to_content) {
                 replyHTML = `
                     <div class="reply-reference">
                         <span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0, 50))}${msg.reply_to_content.length > 50 ? '...' : ''}
-                    </div>
-                `;
+                    </div>`;
             }
 
             let contentHTML = '';
             if (msg.type === 'voice' && msg.audio_url) {
-                const audioId = `audio-${msg.id}`;
-                contentHTML = `
-                    <div class="voice-note-player">
-                        <audio id="${audioId}" preload="metadata" style="display:none;">
-                            <source src="${msg.audio_url}" type="audio/mpeg">
-                            <source src="${msg.audio_url}" type="audio/mp4">
-                            <source src="${msg.audio_url}" type="audio/webm">
-                            <source src="${msg.audio_url}" type="audio/ogg">
-                        </audio>
-                        <button class="voice-note-play-btn" onclick="playVoiceNote(this, '${audioId}')" data-playing="false">
-                            ▶
-                        </button>
-                        <div class="voice-note-waveform" onclick="seekAudio('${audioId}', event)">
-                            <div class="voice-note-progress" id="progress-${msg.id}"></div>
-                        </div>
-                        <span class="voice-note-duration" id="duration-${msg.id}">--:--</span>
-                    </div>
-                `;
+                if (isMobileDevice) {
+                    // ✅ Native audio player for mobile - always works
+                    contentHTML = `
+                        <div class="mobile-voice-player">
+                            <div class="mobile-voice-label">🎤 Voice note</div>
+                            <audio controls preload="metadata" playsinline>
+                                <source src="${msg.audio_url}" type="audio/mp4">
+                                <source src="${msg.audio_url}" type="audio/webm">
+                                <source src="${msg.audio_url}" type="audio/ogg">
+                                <source src="${msg.audio_url}" type="audio/mpeg">
+                            </audio>
+                        </div>`;
+                } else {
+                    // Custom player for desktop
+                    const audioId = `audio-${msg.id}`;
+                    contentHTML = `
+                        <div class="voice-note-player">
+                            <audio id="${audioId}" preload="metadata" style="display:none;">
+                                <source src="${msg.audio_url}" type="audio/mpeg">
+                                <source src="${msg.audio_url}" type="audio/mp4">
+                                <source src="${msg.audio_url}" type="audio/webm">
+                                <source src="${msg.audio_url}" type="audio/ogg">
+                            </audio>
+                            <button class="voice-note-play-btn" onclick="playVoiceNote(this, '${audioId}')" data-playing="false">▶</button>
+                            <div class="voice-note-waveform" onclick="seekAudio('${audioId}', event)">
+                                <div class="voice-note-progress" id="progress-${msg.id}"></div>
+                            </div>
+                            <span class="voice-note-duration" id="duration-${msg.id}">--:--</span>
+                        </div>`;
+                }
             } else if (msg.content) {
                 const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
                 contentHTML = `<div class="message-text">${highlightMentions(escapeHtml(msg.content), currentUsername)}</div>`;
@@ -1115,53 +1011,46 @@
             const actionsMenu = `
                 <div class="message-actions" style="display: none; position: absolute; top: 8px; right: 8px;">
                     ${msg.type !== 'voice' ? `<button onclick="replyToMessage('${msg.id}', '${escapeHtml(msg.username).replace(/'/g, "\\'")}', \`${escapeHtml(msg.content || '').replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">💬 Reply</button>` : ''}
-                    ${isOwnMessage && msg.type !== 'voice' ? `
-                        <button onclick="editMessage('${msg.id}', \`${escapeHtml(msg.content || '').replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">✏️ Edit</button>
-                    ` : ''}
+                    ${isOwnMessage && msg.type !== 'voice' ? `<button onclick="editMessage('${msg.id}', \`${escapeHtml(msg.content || '').replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">✏️ Edit</button>` : ''}
                     ${isOwnMessage ? `<button onclick="deleteMessage('${msg.id}', event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; color: #ff006e; font-size: 11px;">🗑️ Delete</button>` : ''}
-                </div>
-            `;
-            
+                </div>`;
+
             return `
-                <div class="message" data-message-id="${msg.id}" style="position: relative;" onmouseenter="this.querySelector('.message-actions')?.style.setProperty('display', 'block')" onmouseleave="this.querySelector('.message-actions')?.style.setProperty('display', 'none')">
+                <div class="message" data-message-id="${msg.id}" style="position: relative;"
+                    onmouseenter="this.querySelector('.message-actions')?.style.setProperty('display', 'block')"
+                    onmouseleave="this.querySelector('.message-actions')?.style.setProperty('display', 'none')">
                     <div class="avatar">${initial}</div>
                     <div class="message-content">
                         <div class="message-header">
-                            <span class="username" onclick="viewUserProfile('${msg.user_id}')" title="View profile">${escapeHtml(msg.username)}</span>
+                            <span class="username" onclick="viewUserProfile('${msg.user_id}')">${escapeHtml(msg.username)}</span>
                             <span class="timestamp">${time}${editedLabel}</span>
                         </div>
                         ${replyHTML}
                         ${contentHTML}
                     </div>
                     ${actionsMenu}
-                </div>
-            `;
+                </div>`;
         }
 
         function seekAudio(audioId, event) {
             const audio = document.getElementById(audioId);
             if (!audio || !audio.duration) return;
-            
-            const waveform = event.currentTarget;
-            const rect = waveform.getBoundingClientRect();
+            const rect = event.currentTarget.getBoundingClientRect();
             const clickX = event.clientX - rect.left;
-            const percentage = clickX / rect.width;
-            
-            audio.currentTime = audio.duration * percentage;
+            audio.currentTime = audio.duration * (clickX / rect.width);
         }
 
         async function playVoiceNote(btn, audioId) {
             const audio = document.getElementById(audioId);
-            const progressBar = document.getElementById('progress-' + audioId.replace('audio-', ''));
-            const durationSpan = document.getElementById('duration-' + audioId.replace('audio-', ''));
-            
-            if (!audio) {
-                console.error('Audio element not found:', audioId);
-                return;
-            }
+            const msgId = audioId.replace('audio-', '');
+            const progressBar = document.getElementById('progress-' + msgId);
+            const durationSpan = document.getElementById('duration-' + msgId);
+
+            if (!audio) return;
 
             const isPlaying = btn.getAttribute('data-playing') === 'true';
-            
+
+            // Stop all other audio
             document.querySelectorAll('audio').forEach(a => {
                 if (a.id !== audioId && !a.paused) {
                     a.pause();
@@ -1173,7 +1062,7 @@
                     }
                 }
             });
-            
+
             if (isPlaying) {
                 audio.pause();
                 audio.currentTime = 0;
@@ -1194,9 +1083,7 @@
 
                 audio.addEventListener('timeupdate', () => {
                     if (audio.duration) {
-                        const progress = (audio.currentTime / audio.duration) * 100;
-                        if (progressBar) progressBar.style.width = progress + '%';
-                        
+                        if (progressBar) progressBar.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
                         if (durationSpan) {
                             const remaining = audio.duration - audio.currentTime;
                             const mins = Math.floor(remaining / 60);
@@ -1210,16 +1097,10 @@
                     btn.textContent = '▶';
                     btn.setAttribute('data-playing', 'false');
                     if (progressBar) progressBar.style.width = '0%';
-                    if (audio.duration && durationSpan) {
-                        const mins = Math.floor(audio.duration / 60);
-                        const secs = Math.floor(audio.duration % 60);
-                        durationSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-                    }
                 });
 
-                audio.addEventListener('error', (e) => {
-                    console.error('Audio playback error:', e);
-                    alert('Unable to play voice note. The audio format may not be supported on this device.');
+                audio.addEventListener('error', () => {
+                    alert('Unable to play voice note on this device.');
                     btn.textContent = '▶';
                     btn.setAttribute('data-playing', 'false');
                 });
@@ -1233,7 +1114,6 @@
                 btn.setAttribute('data-playing', 'true');
             } catch (error) {
                 console.error('Play error:', error);
-                alert('Could not play audio. Please try again.');
                 btn.textContent = '▶';
                 btn.setAttribute('data-playing', 'false');
             }
@@ -1250,20 +1130,17 @@
         async function startRecording() {
             try {
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    alert('Your browser does not support audio recording. Please use a modern browser like Chrome or Safari.');
+                    alert('Your browser does not support audio recording. Please use Chrome or Safari.');
                     return;
                 }
 
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: {
-                        echoCancellation: true,
-                        noiseSuppression: true,
-                        sampleRate: 44100
-                    } 
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 44100 }
                 });
 
-                const options = { mimeType: '' };
-                
+                const options = {};
+
+                // Prioritize MP4 for iOS compatibility
                 if (MediaRecorder.isTypeSupported('audio/mp4')) {
                     options.mimeType = 'audio/mp4';
                 } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
@@ -1272,28 +1149,27 @@
                     options.mimeType = 'audio/webm';
                 } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
                     options.mimeType = 'audio/ogg;codecs=opus';
-                } else {
-                    options.mimeType = 'audio/webm';
                 }
 
-                mediaRecorder = new MediaRecorder(stream, options);
+                mediaRecorder = options.mimeType 
+                    ? new MediaRecorder(stream, options) 
+                    : new MediaRecorder(stream);
+                    
                 audioChunks = [];
 
                 mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        audioChunks.push(event.data);
-                    }
+                    if (event.data.size > 0) audioChunks.push(event.data);
                 };
 
                 mediaRecorder.onstop = async () => {
                     const mimeType = mediaRecorder.mimeType || 'audio/webm';
                     const audioBlob = new Blob(audioChunks, { type: mimeType });
                     await sendVoiceNote(audioBlob, mimeType);
-                    
                     stream.getTracks().forEach(track => track.stop());
                 };
 
-                mediaRecorder.start();
+                // Record in 1-second chunks for better mobile compatibility
+                mediaRecorder.start(1000);
                 isRecording = true;
                 recordingStartTime = Date.now();
 
@@ -1306,13 +1182,12 @@
 
             } catch (error) {
                 console.error('Recording error:', error);
-                
                 if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-                    alert('🎤 Microphone access denied. Please allow microphone access in your browser settings and try again.');
+                    alert('🎤 Microphone access denied. Please allow microphone access in your browser settings.');
                 } else if (error.name === 'NotFoundError') {
                     alert('🎤 No microphone found. Please connect a microphone and try again.');
                 } else {
-                    alert('Could not start recording. Error: ' + error.message);
+                    alert('Could not start recording: ' + error.message);
                 }
             }
         }
@@ -1321,7 +1196,7 @@
             if (mediaRecorder && isRecording) {
                 mediaRecorder.stop();
                 isRecording = false;
-                
+
                 const voiceBtn = document.getElementById('voiceBtn');
                 voiceBtn.classList.remove('recording');
                 voiceBtn.textContent = '🎤';
@@ -1337,53 +1212,40 @@
 
         function updateRecordingTimer() {
             const timerDiv = document.getElementById('recordingTimer');
-            
             recordingTimer = setInterval(() => {
                 const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
                 const mins = Math.floor(elapsed / 60);
                 const secs = elapsed % 60;
-                
                 timerDiv.innerHTML = `
                     <div class="recording-timer">
                         <div class="recording-dot"></div>
                         Recording ${mins}:${secs.toString().padStart(2, '0')}
-                    </div>
-                `;
-
-                if (elapsed >= 120) {
-                    stopRecording();
-                }
+                    </div>`;
+                // Auto-stop after 60 seconds
+                if (elapsed >= 60) stopRecording();
             }, 100);
         }
 
         async function sendVoiceNote(audioBlob, mimeType) {
             try {
-                const btn = document.getElementById('sendBtn');
-                const voiceBtn = document.getElementById('voiceBtn');
-                btn.disabled = true;
-                voiceBtn.disabled = true;
+                document.getElementById('sendBtn').disabled = true;
+                document.getElementById('voiceBtn').disabled = true;
 
                 const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-                
+
                 let fileExt = 'webm';
-                if (mimeType.includes('mp4')) {
-                    fileExt = 'mp4';
-                } else if (mimeType.includes('ogg')) {
-                    fileExt = 'ogg';
-                }
-                
+                if (mimeType.includes('mp4')) fileExt = 'mp4';
+                else if (mimeType.includes('ogg')) fileExt = 'ogg';
+
                 const fileName = `voice-${Date.now()}.${fileExt}`;
                 const filePath = `${currentUser.id}/${fileName}`;
 
-                const timerDiv = document.getElementById('recordingTimer');
-                timerDiv.innerHTML = '<div class="recording-timer">Uploading voice note...</div>';
+                document.getElementById('recordingTimer').innerHTML = 
+                    '<div class="recording-timer">⬆️ Uploading voice note...</div>';
 
-                const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                const { error: uploadError } = await supabaseClient.storage
                     .from('voice-notes')
-                    .upload(filePath, audioBlob, {
-                        contentType: mimeType,
-                        upsert: false
-                    });
+                    .upload(filePath, audioBlob, { contentType: mimeType, upsert: false });
 
                 if (uploadError) throw uploadError;
 
@@ -1404,14 +1266,11 @@
                     messageData.reply_to_content = replyingTo.content;
                 }
 
-                const { error } = await supabaseClient
-                    .from('messages')
-                    .insert(messageData);
-
+                const { error } = await supabaseClient.from('messages').insert(messageData);
                 if (error) throw error;
 
                 cancelReply();
-                timerDiv.innerHTML = '';
+                document.getElementById('recordingTimer').innerHTML = '';
 
             } catch (error) {
                 console.error('Send voice note error:', error);
@@ -1425,34 +1284,24 @@
 
         function replyToMessage(messageId, username, content, event) {
             event.stopPropagation();
-            
-            replyingTo = {
-                id: messageId,
-                username: username,
-                content: content
-            };
-            
+            replyingTo = { id: messageId, username, content };
             showReplyPreview();
             document.getElementById('messageInput').focus();
         }
 
         function showReplyPreview() {
             if (!replyingTo) return;
-            
-            const preview = document.getElementById('replyPreview');
-            const truncated = replyingTo.content.length > 50 
-                ? replyingTo.content.substring(0, 50) + '...' 
+            const truncated = replyingTo.content.length > 50
+                ? replyingTo.content.substring(0, 50) + '...'
                 : replyingTo.content;
-            
-            preview.innerHTML = `
+            document.getElementById('replyPreview').innerHTML = `
                 <div class="reply-preview">
                     <div class="reply-preview-content">
                         <div class="reply-preview-header">Replying to @${escapeHtml(replyingTo.username)}</div>
                         <div class="reply-preview-text">${escapeHtml(truncated)}</div>
                     </div>
                     <button class="reply-preview-close" onclick="cancelReply()">×</button>
-                </div>
-            `;
+                </div>`;
         }
 
         function cancelReply() {
@@ -1467,7 +1316,6 @@
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const content = input.value.trim();
-            
             if (!content) return;
 
             const btn = document.getElementById('sendBtn');
@@ -1475,12 +1323,11 @@
 
             try {
                 const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-
                 const messageData = {
                     channel_id: currentChannel,
                     user_id: currentUser.id,
-                    username: username,
-                    content: content,
+                    username,
+                    content,
                     type: 'text'
                 };
 
@@ -1489,21 +1336,13 @@
                     messageData.reply_to_content = replyingTo.content;
                 }
 
-                const { data, error } = await supabaseClient
-                    .from('messages')
-                    .insert(messageData)
-                    .select();
-
-                if (error) {
-                    console.error('❌ INSERT ERROR:', error);
-                    throw error;
-                }
+                const { error } = await supabaseClient.from('messages').insert(messageData).select();
+                if (error) throw error;
 
                 input.value = '';
                 cancelReply();
-                
             } catch (error) {
-                console.error('❌ CATCH BLOCK ERROR:', error);
+                console.error('Send error:', error);
                 alert('Failed to send message: ' + error.message);
             } finally {
                 btn.disabled = false;
@@ -1512,7 +1351,6 @@
 
         async function signOut() {
             if (!confirm('Sign out of Hive Mind?')) return;
-
             try {
                 await supabaseClient.auth.signOut();
                 window.location.href = 'signin.html';
@@ -1542,34 +1380,26 @@
 
         function handleMentionInput(e) {
             const input = e.target;
-            const value = input.value;
-            const cursorPos = input.selectionStart;
-            
-            const textBeforeCursor = value.substring(0, cursorPos);
+            const textBeforeCursor = input.value.substring(0, input.selectionStart);
             const lastAtIndex = textBeforeCursor.lastIndexOf('@');
-            
+
             if (lastAtIndex !== -1) {
                 const afterAt = textBeforeCursor.substring(lastAtIndex + 1);
-                
                 if (!afterAt.includes(' ')) {
-                    const query = afterAt.toLowerCase();
-                    const matches = channelUsers.filter(u => 
-                        u.username.toLowerCase().startsWith(query)
+                    const matches = channelUsers.filter(u =>
+                        u.username.toLowerCase().startsWith(afterAt.toLowerCase())
                     );
-                    
                     if (matches.length > 0) {
                         showMentionDropdown(matches);
                         return;
                     }
                 }
             }
-            
             hideMentionDropdown();
         }
 
         function handleMentionKeydown(e) {
             const dropdown = document.getElementById('mentionDropdown');
-            
             if (!dropdown.classList.contains('active')) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -1577,9 +1407,8 @@
                 }
                 return;
             }
-            
+
             const items = dropdown.querySelectorAll('.mention-item');
-            
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 mentionSelectedIndex = Math.min(mentionSelectedIndex + 1, items.length - 1);
@@ -1590,9 +1419,7 @@
                 updateMentionSelection(items);
             } else if (e.key === 'Enter' || e.key === 'Tab') {
                 e.preventDefault();
-                if (items[mentionSelectedIndex]) {
-                    items[mentionSelectedIndex].click();
-                }
+                if (items[mentionSelectedIndex]) items[mentionSelectedIndex].click();
             } else if (e.key === 'Escape') {
                 e.preventDefault();
                 hideMentionDropdown();
@@ -1602,27 +1429,17 @@
         function showMentionDropdown(users) {
             const dropdown = document.getElementById('mentionDropdown');
             mentionSelectedIndex = 0;
-            
-            dropdown.innerHTML = users.map((user, index) => {
-                const initial = user.username.charAt(0).toUpperCase();
-                return `
-                    <div class="mention-item ${index === 0 ? 'selected' : ''}" onclick="insertMention('${user.username}')">
-                        <div class="mention-item-avatar">${initial}</div>
-                        <div class="mention-item-username">${escapeHtml(user.username)}</div>
-                    </div>
-                `;
-            }).join('');
-            
+            dropdown.innerHTML = users.map((user, index) => `
+                <div class="mention-item ${index === 0 ? 'selected' : ''}" onclick="insertMention('${user.username}')">
+                    <div class="mention-item-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                    <div class="mention-item-username">${escapeHtml(user.username)}</div>
+                </div>`).join('');
             dropdown.classList.add('active');
         }
 
         function updateMentionSelection(items) {
             items.forEach((item, index) => {
-                if (index === mentionSelectedIndex) {
-                    item.classList.add('selected');
-                } else {
-                    item.classList.remove('selected');
-                }
+                item.classList.toggle('selected', index === mentionSelectedIndex);
             });
         }
 
@@ -1635,19 +1452,13 @@
 
         function insertMention(username) {
             const input = document.getElementById('messageInput');
-            const value = input.value;
             const cursorPos = input.selectionStart;
-            
-            const textBeforeCursor = value.substring(0, cursorPos);
-            const textAfterCursor = value.substring(cursorPos);
+            const textBeforeCursor = input.value.substring(0, cursorPos);
             const lastAtIndex = textBeforeCursor.lastIndexOf('@');
-            
-            const newValue = value.substring(0, lastAtIndex) + '@' + username + ' ' + textAfterCursor;
+            const newValue = input.value.substring(0, lastAtIndex) + '@' + username + ' ' + input.value.substring(cursorPos);
             input.value = newValue;
-            
             const newCursorPos = lastAtIndex + username.length + 2;
             input.setSelectionRange(newCursorPos, newCursorPos);
-            
             hideMentionDropdown();
             input.focus();
         }
@@ -1670,22 +1481,17 @@
 
         async function editMessage(messageId, currentContent, event) {
             event.stopPropagation();
-            
             const newContent = prompt('Edit message:', currentContent);
             if (!newContent || newContent === currentContent) return;
-            
+
             try {
                 const { error } = await supabaseClient
                     .from('messages')
-                    .update({
-                        content: newContent,
-                        edited: true,
-                        edited_at: new Date().toISOString()
-                    })
+                    .update({ content: newContent, edited: true, edited_at: new Date().toISOString() })
                     .eq('id', messageId);
-                
+
                 if (error) throw error;
-                
+
                 const messageEl = document.querySelector(`[data-message-id="${messageId}"] .message-text`);
                 if (messageEl) {
                     const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
@@ -1702,17 +1508,12 @@
 
         async function deleteMessage(messageId, event) {
             event.stopPropagation();
-            
             if (!confirm('Delete this message?')) return;
-            
+
             try {
-                const { error } = await supabaseClient
-                    .from('messages')
-                    .delete()
-                    .eq('id', messageId);
-                
+                const { error } = await supabaseClient.from('messages').delete().eq('id', messageId);
                 if (error) throw error;
-                
+
                 const messageEl = document.querySelector(`[data-message-id="${messageId}"]`);
                 if (messageEl) {
                     messageEl.style.opacity = '0';
@@ -1725,71 +1526,51 @@
 
         let notificationPermission = 'default';
         let isTabFocused = true;
-
         window.addEventListener('focus', () => { isTabFocused = true; });
         window.addEventListener('blur', () => { isTabFocused = false; });
 
         async function requestNotificationPermission() {
             if ('Notification' in window && Notification.permission === 'default') {
                 notificationPermission = await Notification.requestPermission();
-                if (notificationPermission === 'granted') {
-                    showNotification('Notifications enabled!', 'You\'ll be notified of new messages and @mentions');
-                }
             } else {
                 notificationPermission = Notification.permission;
             }
         }
 
-        function showNotification(title, body, icon = '') {
+        function showNotification(title, body) {
             if (!('Notification' in window)) return;
             if (Notification.permission !== 'granted') return;
             if (isTabFocused) return;
 
             const notification = new Notification(title, {
-                body: body,
-                icon: icon || 'https://api.dicebear.com/7.x/shapes/svg?seed=hivemind',
-                badge: 'https://api.dicebear.com/7.x/shapes/svg?seed=hive',
+                body,
+                icon: 'https://api.dicebear.com/7.x/shapes/svg?seed=hivemind',
                 tag: 'hive-mind-notification'
             });
-
-            notification.onclick = () => {
-                window.focus();
-                notification.close();
-            };
-
+            notification.onclick = () => { window.focus(); notification.close(); };
             playNotificationSound();
         }
 
         function playNotificationSound() {
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-
-                oscillator.frequency.value = 800;
-                oscillator.type = 'sine';
-
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.3);
-            } catch (e) {
-                // Sound failed, ignore
-            }
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {}
         }
 
         function checkForMentions(message, currentUsername) {
-            const mentionRegex = /@(\w+)/g;
-            const mentions = message.match(mentionRegex);
-            
+            const mentions = message.match(/@(\w+)/g);
             if (mentions) {
-                return mentions.some(mention => 
-                    mention.toLowerCase() === `@${currentUsername.toLowerCase()}`
-                );
+                return mentions.some(m => m.toLowerCase() === `@${currentUsername.toLowerCase()}`);
             }
             return false;
         }
@@ -1797,18 +1578,15 @@
         function highlightMentions(text, currentUsername) {
             return text.replace(/@(\w+)/g, (match, username) => {
                 const isMentioningMe = username.toLowerCase() === currentUsername.toLowerCase();
-                const className = isMentioningMe ? 'mention-me' : 'mention';
-                return `<span class="${className}">${match}</span>`;
+                return `<span class="${isMentioningMe ? 'mention-me' : 'mention'}">${match}</span>`;
             });
         }
 
         function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.toggle('mobile-open');
-            overlay.classList.toggle('active');
+            document.querySelector('.sidebar').classList.toggle('mobile-open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
         }
-        
+
         init();
     </script>
 </body>
