@@ -580,7 +580,6 @@
             font-size: 13px;
         }
 
-        /* Voice note player */
         .voice-note-player {
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
@@ -697,7 +696,7 @@
 
             .messages {
                 padding: 12px;
-                padding-bottom: 140px;
+                padding-bottom: 180px;
             }
 
             .message-input-container {
@@ -711,15 +710,31 @@
                 z-index: 50;
             }
 
+            .input-wrapper {
+                gap: 8px;
+            }
+
             .message-input {
                 font-size: 16px;
                 padding: 12px;
-                min-height: 44px;
+                min-height: 48px;
             }
 
             .send-btn, .voice-btn {
-                padding: 12px 16px;
-                font-size: 14px;
+                padding: 14px;
+                font-size: 18px;
+                min-width: 48px;
+                min-height: 48px;
+            }
+
+            .voice-btn {
+                padding: 14px 18px;
+            }
+
+            .recording-timer {
+                margin-bottom: 12px;
+                font-size: 16px;
+                padding: 12px;
             }
 
             .chat-header h2 {
@@ -755,6 +770,12 @@
 
             .voice-note-player {
                 max-width: 100%;
+            }
+
+            .voice-note-play-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 16px;
             }
         }
 
@@ -850,7 +871,6 @@
         let channelUsers = [];
         let mentionSelectedIndex = 0;
 
-        // Voice recording variables
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
@@ -1110,7 +1130,6 @@
             `;
         }
 
-        // Voice note playback
         const audioPlayers = new Map();
 
         async function playVoiceNote(btn, audioUrl) {
@@ -1127,7 +1146,6 @@
                 return;
             }
 
-            // Stop all other playing audio
             audioPlayers.forEach((audio, url) => {
                 if (url !== audioUrl) {
                     audio.pause();
@@ -1181,7 +1199,6 @@
             btn.setAttribute('data-playing', 'true');
         }
 
-        // Voice recording functions
         async function toggleVoiceRecording() {
             if (isRecording) {
                 stopRecording();
@@ -1192,17 +1209,46 @@
 
         async function startRecording() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    alert('Your browser does not support audio recording. Please use a modern browser like Chrome or Safari.');
+                    return;
+                }
+
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 44100
+                    } 
+                });
+
+                const options = { mimeType: '' };
+                
+                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                    options.mimeType = 'audio/webm;codecs=opus';
+                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                    options.mimeType = 'audio/mp4';
+                } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+                    options.mimeType = 'audio/webm';
+                } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+                    options.mimeType = 'audio/ogg;codecs=opus';
+                } else {
+                    options.mimeType = 'audio/webm';
+                }
+
+                mediaRecorder = new MediaRecorder(stream, options);
                 audioChunks = [];
 
                 mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
                 };
 
                 mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    await sendVoiceNote(audioBlob);
+                    const mimeType = mediaRecorder.mimeType || 'audio/webm';
+                    const audioBlob = new Blob(audioChunks, { type: mimeType });
+                    await sendVoiceNote(audioBlob, mimeType);
                     
                     stream.getTracks().forEach(track => track.stop());
                 };
@@ -1214,12 +1260,20 @@
                 const voiceBtn = document.getElementById('voiceBtn');
                 voiceBtn.classList.add('recording');
                 voiceBtn.textContent = '⏹';
+                voiceBtn.title = 'Stop recording';
 
                 updateRecordingTimer();
 
             } catch (error) {
                 console.error('Recording error:', error);
-                alert('Could not access microphone. Please check permissions.');
+                
+                if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                    alert('🎤 Microphone access denied. Please allow microphone access in your browser settings and try again.');
+                } else if (error.name === 'NotFoundError') {
+                    alert('🎤 No microphone found. Please connect a microphone and try again.');
+                } else {
+                    alert('Could not start recording. Error: ' + error.message);
+                }
             }
         }
 
@@ -1231,6 +1285,7 @@
                 const voiceBtn = document.getElementById('voiceBtn');
                 voiceBtn.classList.remove('recording');
                 voiceBtn.textContent = '🎤';
+                voiceBtn.title = 'Record voice note';
 
                 document.getElementById('recordingTimer').innerHTML = '';
                 if (recordingTimer) {
@@ -1255,38 +1310,47 @@
                     </div>
                 `;
 
-                // Auto-stop after 2 minutes
                 if (elapsed >= 120) {
                     stopRecording();
                 }
             }, 100);
         }
 
-        async function sendVoiceNote(audioBlob) {
+        async function sendVoiceNote(audioBlob, mimeType) {
             try {
                 const btn = document.getElementById('sendBtn');
+                const voiceBtn = document.getElementById('voiceBtn');
                 btn.disabled = true;
+                voiceBtn.disabled = true;
 
                 const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-                const fileName = `voice-${Date.now()}.webm`;
+                
+                let fileExt = 'webm';
+                if (mimeType.includes('mp4')) {
+                    fileExt = 'mp4';
+                } else if (mimeType.includes('ogg')) {
+                    fileExt = 'ogg';
+                }
+                
+                const fileName = `voice-${Date.now()}.${fileExt}`;
                 const filePath = `${currentUser.id}/${fileName}`;
 
-                // Upload to Supabase Storage
+                const timerDiv = document.getElementById('recordingTimer');
+                timerDiv.innerHTML = '<div class="recording-timer">Uploading voice note...</div>';
+
                 const { data: uploadData, error: uploadError } = await supabaseClient.storage
                     .from('voice-notes')
                     .upload(filePath, audioBlob, {
-                        contentType: 'audio/webm',
+                        contentType: mimeType,
                         upsert: false
                     });
 
                 if (uploadError) throw uploadError;
 
-                // Get public URL
                 const { data: { publicUrl } } = supabaseClient.storage
                     .from('voice-notes')
                     .getPublicUrl(filePath);
 
-                // Save message to database
                 const messageData = {
                     channel_id: currentChannel,
                     user_id: currentUser.id,
@@ -1307,12 +1371,15 @@
                 if (error) throw error;
 
                 cancelReply();
+                timerDiv.innerHTML = '';
 
             } catch (error) {
                 console.error('Send voice note error:', error);
                 alert('Failed to send voice note: ' + error.message);
+                document.getElementById('recordingTimer').innerHTML = '';
             } finally {
                 document.getElementById('sendBtn').disabled = false;
+                document.getElementById('voiceBtn').disabled = false;
             }
         }
 
