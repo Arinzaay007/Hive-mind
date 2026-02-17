@@ -289,7 +289,7 @@
         .input-wrapper {
             display: flex;
             gap: 8px;
-            flex-direction: column;
+            align-items: flex-end;
         }
 
         .message-input {
@@ -311,7 +311,7 @@
             box-shadow: 0 0 10px var(--matrix-glow);
         }
 
-        .send-btn {
+        .send-btn, .voice-btn {
             background: var(--accent);
             border: none;
             padding: 10px 20px;
@@ -321,14 +321,38 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            align-self: flex-end;
+        }
+
+        .voice-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            font-size: 16px;
+        }
+
+        .voice-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .voice-btn.recording {
+            background: #ff006e;
+            border-color: #ff006e;
+            color: white;
+            animation: pulse-record 1.5s infinite;
+        }
+
+        @keyframes pulse-record {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .send-btn:hover {
             box-shadow: 0 0 20px var(--matrix-glow);
         }
 
-        .send-btn:disabled {
+        .send-btn:disabled, .voice-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -446,7 +470,6 @@
             z-index: 99;
         }
 
-        /* Reply UI */
         .reply-preview {
             background: var(--bg-tertiary);
             border-left: 3px solid var(--accent);
@@ -504,7 +527,6 @@
             font-weight: 600;
         }
 
-        /* Mention autocomplete */
         .mention-dropdown {
             position: absolute;
             bottom: 100%;
@@ -556,6 +578,81 @@
 
         .mention-item-username {
             font-size: 13px;
+        }
+
+        /* Voice note player */
+        .voice-note-player {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 300px;
+        }
+
+        .voice-note-play-btn {
+            background: var(--accent);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--bg-primary);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .voice-note-play-btn:hover {
+            box-shadow: 0 0 10px var(--matrix-glow);
+        }
+
+        .voice-note-waveform {
+            flex: 1;
+            height: 30px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-note-progress {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .voice-note-duration {
+            font-size: 11px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .recording-timer {
+            background: var(--bg-tertiary);
+            padding: 8px 16px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+            color: #ff006e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .recording-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff006e;
+            border-radius: 50%;
+            animation: pulse-record 1.5s infinite;
         }
 
         @media (max-width: 768px) {
@@ -620,10 +717,9 @@
                 min-height: 44px;
             }
 
-            .send-btn {
+            .send-btn, .voice-btn {
                 padding: 12px 16px;
                 font-size: 14px;
-                min-width: 70px;
             }
 
             .chat-header h2 {
@@ -656,6 +752,10 @@
                 left: 12px;
                 right: 12px;
             }
+
+            .voice-note-player {
+                max-width: 100%;
+            }
         }
 
         @media (max-width: 400px) {
@@ -671,9 +771,8 @@
                 padding: 8px;
             }
 
-            .send-btn {
+            .send-btn, .voice-btn {
                 padding: 10px 12px;
-                min-width: 60px;
             }
         }
     </style>
@@ -723,6 +822,7 @@
                 <div class="message-input-container">
                     <div class="mention-dropdown" id="mentionDropdown"></div>
                     <div id="replyPreview"></div>
+                    <div id="recordingTimer"></div>
                     <div class="input-wrapper">
                         <textarea 
                             class="message-input" 
@@ -730,6 +830,7 @@
                             placeholder="Message #general..."
                             rows="1"
                         ></textarea>
+                        <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceRecording()" title="Record voice note">🎤</button>
                         <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
                     </div>
                 </div>
@@ -748,6 +849,13 @@
         let replyingTo = null;
         let channelUsers = [];
         let mentionSelectedIndex = 0;
+
+        // Voice recording variables
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+        let recordingStartTime = null;
+        let recordingTimer = null;
 
         const channels = [
             { id: 'general', name: 'general', topic: 'Welcome to BuilderHub' },
@@ -896,7 +1004,7 @@
                         
                         if (msg.user_id !== currentUser.id) {
                             const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-                            const isMentioned = checkForMentions(msg.content, currentUsername);
+                            const isMentioned = checkForMentions(msg.content || '', currentUsername);
                             
                             if (isMentioned) {
                                 showNotification(
@@ -904,9 +1012,10 @@
                                     msg.content
                                 );
                             } else if (!isTabFocused) {
+                                const notifBody = msg.type === 'voice' ? '🎤 Voice note' : msg.content;
                                 showNotification(
                                     `${msg.username} in #${currentChannel}`,
-                                    msg.content
+                                    notifBody
                                 );
                             }
                         }
@@ -957,13 +1066,31 @@
                 `;
             }
 
+            let contentHTML = '';
+            if (msg.type === 'voice' && msg.audio_url) {
+                contentHTML = `
+                    <div class="voice-note-player">
+                        <button class="voice-note-play-btn" onclick="playVoiceNote(this, '${msg.audio_url}')" data-playing="false">
+                            ▶
+                        </button>
+                        <div class="voice-note-waveform">
+                            <div class="voice-note-progress" data-audio-url="${msg.audio_url}"></div>
+                        </div>
+                        <span class="voice-note-duration">--:--</span>
+                    </div>
+                `;
+            } else if (msg.content) {
+                const currentUsername = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+                contentHTML = `<div class="message-text">${highlightMentions(escapeHtml(msg.content), currentUsername)}</div>`;
+            }
+
             const actionsMenu = `
                 <div class="message-actions" style="display: none; position: absolute; top: 8px; right: 8px;">
-                    <button onclick="replyToMessage('${msg.id}', '${escapeHtml(msg.username).replace(/'/g, "\\'")}', \`${escapeHtml(msg.content).replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">💬 Reply</button>
-                    ${isOwnMessage ? `
-                        <button onclick="editMessage('${msg.id}', \`${escapeHtml(msg.content).replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">✏️ Edit</button>
-                        <button onclick="deleteMessage('${msg.id}', event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; color: #ff006e; font-size: 11px;">🗑️ Delete</button>
+                    ${msg.type !== 'voice' ? `<button onclick="replyToMessage('${msg.id}', '${escapeHtml(msg.username).replace(/'/g, "\\'")}', \`${escapeHtml(msg.content || '').replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">💬 Reply</button>` : ''}
+                    ${isOwnMessage && msg.type !== 'voice' ? `
+                        <button onclick="editMessage('${msg.id}', \`${escapeHtml(msg.content || '').replace(/`/g, '\\`')}\`, event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; margin-right: 4px; cursor: pointer; color: var(--text-primary); font-size: 11px;">✏️ Edit</button>
                     ` : ''}
+                    ${isOwnMessage ? `<button onclick="deleteMessage('${msg.id}', event)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; color: #ff006e; font-size: 11px;">🗑️ Delete</button>` : ''}
                 </div>
             `;
             
@@ -976,11 +1103,217 @@
                             <span class="timestamp">${time}${editedLabel}</span>
                         </div>
                         ${replyHTML}
-                        <div class="message-text">${highlightMentions(escapeHtml(msg.content), currentUser.user_metadata?.username || currentUser.email.split('@')[0])}</div>
+                        ${contentHTML}
                     </div>
                     ${actionsMenu}
                 </div>
             `;
+        }
+
+        // Voice note playback
+        const audioPlayers = new Map();
+
+        async function playVoiceNote(btn, audioUrl) {
+            const isPlaying = btn.getAttribute('data-playing') === 'true';
+            
+            if (isPlaying) {
+                const audio = audioPlayers.get(audioUrl);
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+                btn.textContent = '▶';
+                btn.setAttribute('data-playing', 'false');
+                return;
+            }
+
+            // Stop all other playing audio
+            audioPlayers.forEach((audio, url) => {
+                if (url !== audioUrl) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    const otherBtn = document.querySelector(`[onclick*="${url}"]`);
+                    if (otherBtn) {
+                        otherBtn.textContent = '▶';
+                        otherBtn.setAttribute('data-playing', 'false');
+                    }
+                }
+            });
+
+            let audio = audioPlayers.get(audioUrl);
+            if (!audio) {
+                audio = new Audio(audioUrl);
+                audioPlayers.set(audioUrl, audio);
+
+                audio.addEventListener('ended', () => {
+                    btn.textContent = '▶';
+                    btn.setAttribute('data-playing', 'false');
+                    const progress = document.querySelector(`[data-audio-url="${audioUrl}"]`);
+                    if (progress) progress.style.width = '0%';
+                });
+
+                audio.addEventListener('timeupdate', () => {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    const progressBar = document.querySelector(`[data-audio-url="${audioUrl}"]`);
+                    if (progressBar) progressBar.style.width = progress + '%';
+                    
+                    const durationSpan = btn.parentElement.querySelector('.voice-note-duration');
+                    if (durationSpan) {
+                        const remaining = audio.duration - audio.currentTime;
+                        const mins = Math.floor(remaining / 60);
+                        const secs = Math.floor(remaining % 60);
+                        durationSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                    }
+                });
+
+                audio.addEventListener('loadedmetadata', () => {
+                    const durationSpan = btn.parentElement.querySelector('.voice-note-duration');
+                    if (durationSpan) {
+                        const mins = Math.floor(audio.duration / 60);
+                        const secs = Math.floor(audio.duration % 60);
+                        durationSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                    }
+                });
+            }
+
+            audio.play();
+            btn.textContent = '⏸';
+            btn.setAttribute('data-playing', 'true');
+        }
+
+        // Voice recording functions
+        async function toggleVoiceRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                await startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await sendVoiceNote(audioBlob);
+                    
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                recordingStartTime = Date.now();
+
+                const voiceBtn = document.getElementById('voiceBtn');
+                voiceBtn.classList.add('recording');
+                voiceBtn.textContent = '⏹';
+
+                updateRecordingTimer();
+
+            } catch (error) {
+                console.error('Recording error:', error);
+                alert('Could not access microphone. Please check permissions.');
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                const voiceBtn = document.getElementById('voiceBtn');
+                voiceBtn.classList.remove('recording');
+                voiceBtn.textContent = '🎤';
+
+                document.getElementById('recordingTimer').innerHTML = '';
+                if (recordingTimer) {
+                    clearInterval(recordingTimer);
+                    recordingTimer = null;
+                }
+            }
+        }
+
+        function updateRecordingTimer() {
+            const timerDiv = document.getElementById('recordingTimer');
+            
+            recordingTimer = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+                const mins = Math.floor(elapsed / 60);
+                const secs = elapsed % 60;
+                
+                timerDiv.innerHTML = `
+                    <div class="recording-timer">
+                        <div class="recording-dot"></div>
+                        Recording ${mins}:${secs.toString().padStart(2, '0')}
+                    </div>
+                `;
+
+                // Auto-stop after 2 minutes
+                if (elapsed >= 120) {
+                    stopRecording();
+                }
+            }, 100);
+        }
+
+        async function sendVoiceNote(audioBlob) {
+            try {
+                const btn = document.getElementById('sendBtn');
+                btn.disabled = true;
+
+                const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+                const fileName = `voice-${Date.now()}.webm`;
+                const filePath = `${currentUser.id}/${fileName}`;
+
+                // Upload to Supabase Storage
+                const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                    .from('voice-notes')
+                    .upload(filePath, audioBlob, {
+                        contentType: 'audio/webm',
+                        upsert: false
+                    });
+
+                if (uploadError) throw uploadError;
+
+                // Get public URL
+                const { data: { publicUrl } } = supabaseClient.storage
+                    .from('voice-notes')
+                    .getPublicUrl(filePath);
+
+                // Save message to database
+                const messageData = {
+                    channel_id: currentChannel,
+                    user_id: currentUser.id,
+                    username: username,
+                    type: 'voice',
+                    audio_url: publicUrl
+                };
+
+                if (replyingTo) {
+                    messageData.reply_to_username = replyingTo.username;
+                    messageData.reply_to_content = replyingTo.content;
+                }
+
+                const { error } = await supabaseClient
+                    .from('messages')
+                    .insert(messageData);
+
+                if (error) throw error;
+
+                cancelReply();
+
+            } catch (error) {
+                console.error('Send voice note error:', error);
+                alert('Failed to send voice note: ' + error.message);
+            } finally {
+                document.getElementById('sendBtn').disabled = false;
+            }
         }
 
         function replyToMessage(messageId, username, content, event) {
@@ -1092,7 +1425,6 @@
             return div.innerHTML;
         }
 
-        // Mention autocomplete
         document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('messageInput');
             if (input) {
