@@ -417,6 +417,35 @@
             50% { opacity: 0.7; }
         }
 
+        /* Mobile menu button (hidden by default) */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .mobile-menu-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Sidebar overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 99;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -429,6 +458,10 @@
 
             .sidebar.mobile-open {
                 left: 0;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
             }
 
             .mobile-menu-btn {
@@ -455,7 +488,7 @@
 
             .messages {
                 padding: 12px;
-                padding-bottom: 100px;
+                padding-bottom: 120px; /* Extra space for fixed input */
             }
 
             .message-input-container {
@@ -543,6 +576,7 @@
 
     <div class="app-container" style="display: none;" id="appContainer">
         <div class="header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
             <div class="logo">HIVE MIND</div>
             <div class="user-info">
                 <select id="themeSelector" onchange="changeTheme(this.value)" style="background: var(--bg-tertiary); border: 1px solid var(--border); padding: 6px; color: var(--text-primary); margin-right: 8px; font-family: inherit; font-size: 12px;">
@@ -560,6 +594,8 @@
         </div>
 
         <div class="main-content">
+            <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+            
             <div class="sidebar">
                 <div class="sidebar-section">
                     <div class="section-title">Text Channels</div>
@@ -661,6 +697,14 @@
             
             await loadMessages(channelId);
             subscribeToMessages(channelId);
+            
+            // Close sidebar on mobile after selecting channel
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                const overlay = document.querySelector('.sidebar-overlay');
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+            }
         }
 
         async function loadMessages(channelId) {
@@ -1013,6 +1057,14 @@
                 const className = isMentioningMe ? 'mention-me' : 'mention';
                 return `<span class="${className}">${match}</span>`;
             });
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
         }
         
         init();
