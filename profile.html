@@ -7,353 +7,310 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root {
-            --bg-primary:#0a0a0a;--bg-secondary:#111111;--bg-tertiary:#1a1a1a;
-            --text-primary:#00ff41;--text-secondary:#00cc33;--text-muted:#666666;
-            --border:#222222;--accent:#00ff41;--matrix-glow:rgba(0,255,65,0.3);
-            --level-color:#a855f7;
-        }
+        :root{--bg-primary:#0a0a0a;--bg-secondary:#111111;--bg-tertiary:#1a1a1a;--text-primary:#00ff41;--text-secondary:#00cc33;--text-muted:#666666;--border:#222222;--accent:#f5c518;--matrix-glow:rgba(245,197,24,0.3);--honey:#f5c518;}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'IBM Plex Mono',monospace;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;}
-
         .header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;}
         .logo{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;letter-spacing:2px;}
-        .logo::before{content:'> ';color:var(--accent);}
+        .logo::before{content:'⬡ ';color:var(--honey);}
         .btn{background:transparent;border:1px solid var(--border);padding:8px 16px;color:var(--text-primary);cursor:pointer;font-family:inherit;font-size:12px;transition:all .2s;}
-        .btn:hover{border-color:var(--accent);color:var(--accent);}
-        .btn-accent{background:var(--accent);color:var(--bg-primary);font-weight:700;border:none;}
+        .btn:hover{border-color:var(--honey);color:var(--honey);}
+        .btn-accent{background:var(--honey);color:#1a0a00;font-weight:700;border:none;}
         .btn-accent:hover{box-shadow:0 0 20px var(--matrix-glow);}
         .btn-danger{border-color:#ff006e;color:#ff006e;}
         .btn-danger:hover{background:#ff006e;color:#fff;}
-
-        .page{max-width:640px;margin:0 auto;padding:24px 16px 60px;}
-
-        /* PROFILE CARD */
+        .page{max-width:640px;margin:0 auto;padding:24px 16px 80px;}
         .profile-card{background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:20px;}
 
-        .avatar-section{display:flex;flex-direction:column;align-items:center;margin-bottom:24px;}
-        .big-avatar{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;border:3px solid var(--border);cursor:pointer;transition:all .3s;position:relative;}
-        .big-avatar:hover{border-color:var(--accent);box-shadow:0 0 20px var(--matrix-glow);}
+        /* ── AVATAR ── */
+        .avatar-section{display:flex;flex-direction:column;align-items:center;margin-bottom:20px;}
+        .big-avatar{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;cursor:pointer;transition:all .3s;position:relative;}
+        .big-avatar:hover{filter:brightness(1.1);}
         .avatar-edit-hint{font-size:11px;color:var(--text-muted);margin-top:8px;}
 
-        /* EMOJI PICKER */
+        /* ── BEE RANK DISPLAY ── */
+        .bee-rank-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+        .rank-hivemind{animation:hivePulse 2s ease-in-out infinite;}
+        @keyframes hivePulse{0%,100%{box-shadow:0 0 8px rgba(0,255,255,0.5);}50%{box-shadow:0 0 20px rgba(0,255,255,0.9);}}
+        .rank-queen{animation:queenPulse 2.5s ease-in-out infinite;}
+        @keyframes queenPulse{0%,100%{box-shadow:0 0 6px rgba(255,110,180,0.4);}50%{box-shadow:0 0 16px rgba(255,110,180,0.8);}}
+        .rank-royal{animation:royalPulse 3s ease-in-out infinite;}
+        @keyframes royalPulse{0%,100%{box-shadow:0 0 6px rgba(168,85,247,0.4);}50%{box-shadow:0 0 16px rgba(168,85,247,0.8);}}
+
+        /* ── RANK CARD ── */
+        .rank-card{border-radius:10px;padding:16px;margin-bottom:16px;border:1px solid;position:relative;overflow:hidden;}
+        .rank-card-title{font-size:22px;font-weight:700;margin-bottom:2px;display:flex;align-items:center;gap:10px;}
+        .rank-card-label{font-size:12px;opacity:.7;margin-bottom:12px;}
+        .rank-bar-bg{background:rgba(0,0,0,.3);border-radius:6px;height:10px;overflow:hidden;margin-bottom:6px;}
+        .rank-bar-fill{height:100%;border-radius:6px;transition:width .8s ease;}
+        .rank-next{font-size:11px;opacity:.7;text-align:right;}
+
+        /* ── RANK LADDER ── */
+        .rank-ladder{margin-bottom:16px;}
+        .rank-ladder-title{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+        .rank-ladder-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;margin-bottom:4px;border:1px solid transparent;transition:all .2s;font-size:12px;}
+        .rank-ladder-item.current{border-width:1px;border-style:solid;font-weight:700;}
+        .rank-ladder-item.achieved{opacity:.7;}
+        .rank-ladder-item.locked{opacity:.35;}
+        .rank-ladder-range{margin-left:auto;font-size:10px;opacity:.6;}
+
+        /* ── STATS ── */
+        .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+        .stat-box{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
+        .stat-value{font-size:22px;font-weight:700;}
+        .stat-label{font-size:11px;color:var(--text-muted);margin-top:4px;}
+
+        /* ── EMOJI PICKER ── */
         .emoji-picker{display:none;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:12px;width:100%;}
         .emoji-picker.open{display:block;}
         .emoji-picker-title{font-size:11px;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
         .emoji-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
         .emoji-option{font-size:28px;cursor:pointer;padding:6px;border-radius:8px;border:2px solid transparent;transition:all .2s;line-height:1;}
-        .emoji-option:hover{background:var(--bg-secondary);border-color:var(--border);}
-        .emoji-option.selected{border-color:var(--accent);background:var(--bg-secondary);}
-
-        /* COLOR PICKER */
+        .emoji-option:hover{background:var(--bg-secondary);}
+        .emoji-option.selected{border-color:var(--honey);background:var(--bg-secondary);}
         .color-picker-title{font-size:11px;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
         .color-grid{display:flex;flex-wrap:wrap;gap:8px;}
         .color-option{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;}
         .color-option:hover{transform:scale(1.15);}
         .color-option.selected{border-color:#fff;transform:scale(1.15);}
 
-        /* STATS */
-        .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
-        .stat-box{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
-        .stat-value{font-size:22px;font-weight:700;color:var(--accent);}
-        .stat-label{font-size:11px;color:var(--text-muted);margin-top:4px;}
-
-        /* LEVEL BAR */
-        .level-section{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px;}
-        .level-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-        .level-badge{background:var(--level-color);color:#fff;padding:4px 12px;border-radius:12px;font-size:13px;font-weight:700;}
-        .level-title{font-size:13px;color:var(--text-muted);}
-        .xp-bar-bg{background:var(--bg-secondary);border-radius:6px;height:10px;overflow:hidden;}
-        .xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--level-color),#06b6d4);border-radius:6px;transition:width .6s ease;}
-        .xp-label{font-size:11px;color:var(--text-muted);margin-top:6px;text-align:right;}
-
-        /* FORM */
+        /* ── FORM ── */
         .form-group{margin-bottom:16px;}
         .form-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:block;}
         .form-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;border-radius:4px;}
-        .form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 10px var(--matrix-glow);}
+        .form-input:focus{outline:none;border-color:var(--honey);box-shadow:0 0 10px var(--matrix-glow);}
         .form-input[disabled]{opacity:.5;cursor:not-allowed;}
         textarea.form-input{resize:vertical;min-height:80px;}
-
         .save-row{display:flex;gap:12px;justify-content:flex-end;margin-top:20px;}
 
-        /* SUCCESS TOAST */
-        .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--bg-primary);padding:12px 24px;border-radius:8px;font-weight:700;font-size:13px;z-index:9999;display:none;animation:slideUp .3s ease;}
+        /* ── TOAST ── */
+        .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-weight:700;font-size:13px;z-index:9999;display:none;animation:slideUp .3s ease;border:1px solid;}
         .toast.show{display:block;}
         @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 
-        /* LOADING */
         .loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;z-index:9999;}
         .loading-screen.hidden{display:none;}
-        .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;}
+        .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--honey);border-radius:50%;animation:spin 1s linear infinite;}
         @keyframes spin{to{transform:rotate(360deg);}}
-
-        ::-webkit-scrollbar{width:6px;}
-        ::-webkit-scrollbar-track{background:var(--bg-secondary);}
-        ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+        ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg-secondary);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
     </style>
 </head>
 <body>
-    <div class="loading-screen" id="loadingScreen"><div class="spinner"></div><div>Loading profile...</div></div>
-    <div class="toast" id="toast">✅ Profile saved!</div>
+<div class="loading-screen" id="loadingScreen"><div class="spinner"></div><div style="color:var(--honey);">Loading your hive profile...</div></div>
+<div class="toast" id="toast">✅ Saved!</div>
 
-    <div class="header">
-        <div class="logo">HIVE MIND</div>
-        <div style="display:flex;gap:10px;">
-            <button class="btn" onclick="window.location.href='app.html'">← Back to Chat</button>
-            <button class="btn btn-danger" onclick="signOut()">Sign Out</button>
-        </div>
+<div class="header">
+    <div class="logo">HIVE MIND</div>
+    <div style="display:flex;gap:10px;">
+        <button class="btn" onclick="window.location.href='app.html'">← Back to Hive</button>
+        <button class="btn btn-danger" onclick="signOut()">Sign Out</button>
     </div>
+</div>
 
-    <div class="page">
-        <!-- AVATAR + EMOJI PICKER -->
-        <div class="profile-card">
-            <div class="avatar-section">
-                <div class="big-avatar" id="bigAvatar" onclick="toggleEmojiPicker()" title="Click to change avatar">🐝</div>
-                <div class="avatar-edit-hint">Tap to change avatar</div>
-
-                <div class="emoji-picker" id="emojiPicker">
-                    <div class="emoji-picker-title">Choose your emoji</div>
-                    <div class="emoji-grid" id="emojiGrid"></div>
-                    <div class="color-picker-title">Choose background color</div>
-                    <div class="color-grid" id="colorGrid"></div>
-                </div>
-            </div>
-
-            <!-- LEVEL -->
-            <div class="level-section">
-                <div class="level-header">
-                    <div>
-                        <span class="level-badge" id="levelBadge">Lv.1</span>
-                        <span class="level-title" id="levelTitle" style="margin-left:10px;">🌱 Newbie</span>
-                    </div>
-                    <div style="font-size:12px;color:var(--text-muted);" id="pointsLabel">0 pts total</div>
-                </div>
-                <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
-                <div class="xp-label" id="xpLabel">0 / 100 XP to next level</div>
-            </div>
-
-            <!-- STATS -->
-            <div class="stats-row">
-                <div class="stat-box">
-                    <div class="stat-value" id="statMessages">0</div>
-                    <div class="stat-label">Messages</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statFriends">0</div>
-                    <div class="stat-label">Friends</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statLevel">1</div>
-                    <div class="stat-label">Level</div>
-                </div>
-            </div>
-
-            <!-- FORM -->
-            <div class="form-group">
-                <label class="form-label">Username</label>
-                <input class="form-input" id="usernameInput" disabled />
-            </div>
-            <div class="form-group">
-                <label class="form-label">Bio</label>
-                <textarea class="form-input" id="bioInput" placeholder="Tell the hive about yourself..."></textarea>
-            </div>
-
-            <div class="save-row">
-                <button class="btn btn-accent" onclick="saveProfile()">💾 Save Profile</button>
+<div class="page">
+    <div class="profile-card">
+        <!-- AVATAR -->
+        <div class="avatar-section">
+            <div class="big-avatar" id="bigAvatar" onclick="toggleEmojiPicker()">🐝</div>
+            <div id="avatarRankBadge" style="margin-top:10px;"></div>
+            <div class="avatar-edit-hint">Tap avatar to change</div>
+            <div class="emoji-picker" id="emojiPicker">
+                <div class="emoji-picker-title">Choose your bee</div>
+                <div class="emoji-grid" id="emojiGrid"></div>
+                <div class="color-picker-title">Choose hive color</div>
+                <div class="color-grid" id="colorGrid"></div>
             </div>
         </div>
+
+        <!-- RANK CARD -->
+        <div class="rank-card" id="rankCard">
+            <div class="rank-card-title" id="rankCardTitle">🥚 Egg</div>
+            <div class="rank-card-label" id="rankCardLabel">Just hatched</div>
+            <div class="rank-bar-bg"><div class="rank-bar-fill" id="rankBarFill" style="width:0%"></div></div>
+            <div class="rank-next" id="rankNext"></div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-value" id="statMessages">0</div>
+                <div class="stat-label">Messages</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="statFriends">0</div>
+                <div class="stat-label">Hive Members</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="statPoints">0</div>
+                <div class="stat-label">Total XP</div>
+            </div>
+        </div>
+
+        <!-- RANK LADDER -->
+        <div class="rank-ladder">
+            <div class="rank-ladder-title">⬡ Rank Ladder</div>
+            <div id="rankLadder"></div>
+        </div>
+
+        <!-- FORM -->
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input class="form-input" id="usernameInput" disabled />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Bio</label>
+            <textarea class="form-input" id="bioInput" placeholder="Tell the hive about yourself..."></textarea>
+        </div>
+        <div class="save-row">
+            <button class="btn btn-accent" onclick="saveProfile()">💾 Save Profile</button>
+        </div>
     </div>
+</div>
 
-    <script>
-        const SUPABASE_URL = 'https://cwoaqiwnpcpawignecsb.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
+<script>
+const BEE_RANKS=[
+    {min:0,   max:99,       name:'Egg',        emoji:'🥚',color:'#9ca3af',glow:'rgba(156,163,175,0.4)',label:'Just hatched'},
+    {min:100, max:299,      name:'Larva',       emoji:'🐛',color:'#84cc16',glow:'rgba(132,204,22,0.4)', label:'Growing fast'},
+    {min:300, max:599,      name:'Worker Bee',  emoji:'🐝',color:'#f5c518',glow:'rgba(245,197,24,0.5)', label:'On the grind'},
+    {min:600, max:999,      name:'Honey Bee',   emoji:'🍯',color:'#e8820c',glow:'rgba(232,130,12,0.5)', label:'Making honey'},
+    {min:1000,max:1999,     name:'Golden Bee',  emoji:'✨',color:'#ffd700',glow:'rgba(255,215,0,0.6)',  label:'Pure gold'},
+    {min:2000,max:3999,     name:'Queen Bee',   emoji:'👑',color:'#ff6eb4',glow:'rgba(255,110,180,0.6)',label:'Runs the hive'},
+    {min:4000,max:7999,     name:'Royal Jelly', emoji:'🔱',color:'#a855f7',glow:'rgba(168,85,247,0.65)',label:'Elite caste'},
+    {min:8000,max:Infinity, name:'Hive Mind',   emoji:'⬡', color:'#00ffff',glow:'rgba(0,255,255,0.7)', label:'One with the hive'},
+];
+function getBeeRank(p){return BEE_RANKS.find(r=>p>=r.min&&p<=r.max)||BEE_RANKS[0];}
+function getBeeProgress(p){const r=getBeeRank(p);if(r.max===Infinity)return 100;return Math.min(100,Math.floor(((p-r.min)/(r.max-r.min+1))*100));}
+function getNextRank(p){const i=BEE_RANKS.findIndex(r=>p>=r.min&&p<=r.max);return BEE_RANKS[i+1]||null;}
 
-        let supabaseClient, currentUser;
-        let selectedEmoji = '🐝';
-        let selectedColor = '#1a1a1a';
+const SUPABASE_URL='https://cwoaqiwnpcpawignecsb.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
+let supabaseClient,currentUser,selectedEmoji='🐝',selectedColor='#1a1a1a',currentPoints=0;
 
-        const EMOJIS = [
-            '🐝','🦊','🐺','🦁','🐯','🐻','🐼','🐨','🦄','🐸',
-            '🐙','🦋','🦅','🦉','🐬','🦈','🐲','👾','🤖','👻',
-            '💀','🔥','⚡','🌈','🌙','⭐','💎','🎮','🎯','🚀',
-            '💜','❤️','💚','💙','🧡','🖤','🤍','🎭','🎪','🏆'
-        ];
+const EMOJIS=['🐝','🦊','🐺','🦁','🐯','🐻','🐼','🐨','🦄','🐸','🐙','🦋','🦅','🦉','🐬','🦈','🐲','👾','🤖','👻','💀','🔥','⚡','🌈','🌙','⭐','💎','🎮','🎯','🚀','💜','❤️','💚','💙','🧡','🖤','🤍','🎭','🎪','🏆'];
+const COLORS=['#1a1a1a','#0a2a0a','#0a0a2a','#2a0a0a','#1a0a2a','#f5c518','#a855f7','#ff6b6b','#ffd93d','#06b6d4','#ff006e','#00ccff','#ff8800','#44ff00','#ff44ff','#1e3a5f','#3a1e5f','#5f1e1e','#1e5f3a','#2d2d2d'];
 
-        const COLORS = [
-            '#1a1a1a','#0a2a0a','#0a0a2a','#2a0a0a','#1a0a2a',
-            '#00ff41','#a855f7','#ff6b6b','#ffd93d','#06b6d4',
-            '#ff006e','#00ccff','#ff8800','#44ff00','#ff44ff',
-            '#1e3a5f','#3a1e5f','#5f1e1e','#1e5f3a','#2d2d2d'
-        ];
+async function init(){
+    try{
+        supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+        const{data:{user},error}=await supabaseClient.auth.getUser();
+        if(error||!user){window.location.href='signin.html';return;}
+        currentUser=user;
+        renderEmojiPicker();renderColorPicker();
+        await loadProfile();
+        document.getElementById('loadingScreen').classList.add('hidden');
+    }catch(e){console.error(e);window.location.href='signin.html';}
+}
 
-        async function init() {
-            try {
-                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-                const { data: { user }, error } = await supabaseClient.auth.getUser();
-                if (error || !user) { window.location.href = 'signin.html'; return; }
-                currentUser = user;
-
-                renderEmojiPicker();
-                renderColorPicker();
-                await loadProfile();
-
-                document.getElementById('loadingScreen').classList.add('hidden');
-            } catch(e) {
-                console.error('Init error:', e);
-                window.location.href = 'signin.html';
-            }
+async function loadProfile(){
+    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    document.getElementById('usernameInput').value=username;
+    try{
+        const{data}=await supabaseClient.from('profiles').select('*').eq('id',currentUser.id).single();
+        if(data){
+            selectedEmoji=data.avatar_emoji||'🐝';
+            selectedColor=data.avatar_color||'#1a1a1a';
+            currentPoints=data.points||0;
+            document.getElementById('bioInput').value=data.bio||'';
+            updateAvatarPreview();updateRankUI(currentPoints);
+            updateEmojiSelection();updateColorSelection();
         }
+        const{count:msgCount}=await supabaseClient.from('messages').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id);
+        document.getElementById('statMessages').textContent=msgCount||0;
+        const{count:friendCount}=await supabaseClient.from('friends').select('*',{count:'exact',head:true}).or(`user_id.eq.${currentUser.id},friend_id.eq.${currentUser.id}`).eq('status','accepted');
+        document.getElementById('statFriends').textContent=friendCount||0;
+    }catch(e){console.error(e);}
+}
 
-        async function loadProfile() {
-            const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
-            document.getElementById('usernameInput').value = username;
+function updateRankUI(points){
+    const r=getBeeRank(points);
+    const pct=getBeeProgress(points);
+    const next=getNextRank(points);
+    const animClass=r.name==='Hive Mind'?'rank-hivemind':r.name==='Queen Bee'?'rank-queen':r.name==='Royal Jelly'?'rank-royal':'';
 
-            try {
-                const { data } = await supabaseClient.from('profiles')
-                    .select('*').eq('id', currentUser.id).single();
+    // Avatar ring
+    const av=document.getElementById('bigAvatar');
+    av.style.border=`3px solid ${r.color}`;
+    av.style.boxShadow=`0 0 16px ${r.glow}, 0 0 32px ${r.glow}55`;
 
-                if (data) {
-                    selectedEmoji = data.avatar_emoji || '🐝';
-                    selectedColor = data.avatar_color || '#1a1a1a';
-                    document.getElementById('bioInput').value = data.bio || '';
-                    updateAvatarPreview();
-                    updateLevelUI(data.level || 1, data.points || 0);
-                    updateEmojiSelection();
-                    updateColorSelection();
-                }
+    // Badge above name
+    document.getElementById('avatarRankBadge').innerHTML=
+        `<span class="bee-rank-badge ${animClass}" style="background:${r.color}22;border:1px solid ${r.color};color:${r.color};box-shadow:0 0 8px ${r.glow};">${r.emoji} ${r.name} · ${r.label}</span>`;
 
-                // Load message count
-                const { count: msgCount } = await supabaseClient.from('messages')
-                    .select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
-                document.getElementById('statMessages').textContent = msgCount || 0;
+    // Rank card
+    const card=document.getElementById('rankCard');
+    card.style.background=`${r.color}11`;
+    card.style.borderColor=r.color;
+    card.style.color=r.color;
+    document.getElementById('rankCardTitle').innerHTML=`${r.emoji} ${r.name}`;
+    document.getElementById('rankCardLabel').textContent=`${r.label} · ${points} XP total`;
+    document.getElementById('rankBarFill').style.width=pct+'%';
+    document.getElementById('rankBarFill').style.background=`linear-gradient(90deg,${r.color},${r.glow})`;
+    document.getElementById('rankNext').textContent=next?`→ ${next.emoji} ${next.name} at ${next.min} pts (${next.min-points} to go)`:'✦ Max rank achieved!';
 
-                // Load friends count
-                const { count: friendCount } = await supabaseClient.from('friends')
-                    .select('*', { count: 'exact', head: true })
-                    .or(`user_id.eq.${currentUser.id},friend_id.eq.${currentUser.id}`)
-                    .eq('status', 'accepted');
-                document.getElementById('statFriends').textContent = friendCount || 0;
+    document.getElementById('statPoints').textContent=points;
+    document.getElementById('statPoints').style.color=r.color;
 
-            } catch(e) { console.error('loadProfile:', e); }
-        }
+    // Rank ladder
+    const currentIdx=BEE_RANKS.findIndex(rank=>rank.name===r.name);
+    document.getElementById('rankLadder').innerHTML=BEE_RANKS.map((rank,i)=>{
+        const isCurrent=i===currentIdx;
+        const isAchieved=i<currentIdx;
+        const isLocked=i>currentIdx;
+        const cls=isCurrent?'current':isAchieved?'achieved':'locked';
+        const rangeTxt=rank.max===Infinity?`${rank.min}+`:`${rank.min}–${rank.max}`;
+        return `<div class="rank-ladder-item ${cls}" style="${isCurrent?`background:${rank.color}15;border-color:${rank.color};color:${rank.color};`:''}${isAchieved?`color:${rank.color};`:''}">
+            <span style="font-size:18px;">${rank.emoji}</span>
+            <span style="font-weight:${isCurrent?'700':'400'};">${rank.name}</span>
+            <span style="font-size:10px;opacity:.6;">${rank.label}</span>
+            ${isCurrent?`<span style="font-size:10px;margin-left:auto;opacity:.8;">← YOU ARE HERE</span>`:
+              isAchieved?`<span style="font-size:10px;margin-left:auto;">✓</span>`:
+              `<span class="rank-ladder-range">${rangeTxt} pts</span>`}
+        </div>`;
+    }).join('');
+}
 
-        function updateLevelUI(level, points) {
-            const xpInLevel = points % 100;
-            const levelColor = getLevelColor(level);
-            const title = getLevelTitle(level);
+function updateAvatarPreview(){
+    const av=document.getElementById('bigAvatar');
+    av.textContent=selectedEmoji;av.style.background=selectedColor;
+    const r=getBeeRank(currentPoints);
+    av.style.border=`3px solid ${r.color}`;
+    av.style.boxShadow=`0 0 16px ${r.glow}`;
+}
 
-            document.getElementById('levelBadge').textContent = `Lv.${level}`;
-            document.getElementById('levelBadge').style.background = levelColor;
-            document.getElementById('levelTitle').textContent = title;
-            document.getElementById('pointsLabel').textContent = `${points} pts total`;
-            document.getElementById('xpBarFill').style.width = `${xpInLevel}%`;
-            document.getElementById('xpBarFill').style.background = `linear-gradient(90deg, ${levelColor}, #06b6d4)`;
-            document.getElementById('xpLabel').textContent = `${xpInLevel} / 100 XP to next level`;
-            document.getElementById('statLevel').textContent = level;
-            document.getElementById('statLevel').style.color = levelColor;
-        }
+function renderEmojiPicker(){
+    document.getElementById('emojiGrid').innerHTML=EMOJIS.map(e=>`<div class="emoji-option ${e===selectedEmoji?'selected':''}" onclick="selectEmoji('${e}')">${e}</div>`).join('');
+}
+function renderColorPicker(){
+    document.getElementById('colorGrid').innerHTML=COLORS.map(c=>`<div class="color-option ${c===selectedColor?'selected':''}" style="background:${c};" onclick="selectColor('${c}')"></div>`).join('');
+}
+function selectEmoji(e){selectedEmoji=e;updateAvatarPreview();updateEmojiSelection();}
+function selectColor(c){selectedColor=c;updateAvatarPreview();updateColorSelection();}
+function updateEmojiSelection(){document.querySelectorAll('.emoji-option').forEach(el=>el.classList.toggle('selected',el.textContent===selectedEmoji));}
+function updateColorSelection(){document.querySelectorAll('.color-option').forEach(el=>el.classList.toggle('selected',el.getAttribute('onclick')?.includes(selectedColor)));}
+function toggleEmojiPicker(){document.getElementById('emojiPicker').classList.toggle('open');}
 
-        function getLevelColor(level) {
-            if (level >= 20) return '#ff6b6b';
-            if (level >= 10) return '#ffd93d';
-            if (level >= 5) return '#a855f7';
-            return '#00ff41';
-        }
+async function saveProfile(){
+    try{
+        const bio=document.getElementById('bioInput').value.trim();
+        const{error}=await supabaseClient.from('profiles').update({bio,avatar_emoji:selectedEmoji,avatar_color:selectedColor}).eq('id',currentUser.id);
+        if(error)throw error;
+        document.getElementById('emojiPicker').classList.remove('open');
+        showToast('✅ Profile saved!');
+    }catch(e){showToast('❌ Error: '+e.message,true);}
+}
 
-        function getLevelTitle(level) {
-            if (level >= 20) return '👑 Legend';
-            if (level >= 15) return '⚡ Elite';
-            if (level >= 10) return '🔥 Pro';
-            if (level >= 5) return '⭐ Regular';
-            return '🌱 Newbie';
-        }
-
-        function renderEmojiPicker() {
-            document.getElementById('emojiGrid').innerHTML = EMOJIS.map(e => `
-                <div class="emoji-option ${e === selectedEmoji ? 'selected' : ''}"
-                    onclick="selectEmoji('${e}')">${e}</div>`).join('');
-        }
-
-        function renderColorPicker() {
-            document.getElementById('colorGrid').innerHTML = COLORS.map(c => `
-                <div class="color-option ${c === selectedColor ? 'selected' : ''}"
-                    style="background:${c};border-color:${c === selectedColor ? '#fff' : 'transparent'};"
-                    onclick="selectColor('${c}')"></div>`).join('');
-        }
-
-        function selectEmoji(emoji) {
-            selectedEmoji = emoji;
-            updateAvatarPreview();
-            updateEmojiSelection();
-        }
-
-        function selectColor(color) {
-            selectedColor = color;
-            updateAvatarPreview();
-            updateColorSelection();
-        }
-
-        function updateAvatarPreview() {
-            const av = document.getElementById('bigAvatar');
-            av.textContent = selectedEmoji;
-            av.style.background = selectedColor;
-        }
-
-        function updateEmojiSelection() {
-            document.querySelectorAll('.emoji-option').forEach(el => {
-                el.classList.toggle('selected', el.textContent === selectedEmoji);
-            });
-        }
-
-        function updateColorSelection() {
-            document.querySelectorAll('.color-option').forEach(el => {
-                const isSelected = el.style.background === selectedColor ||
-                    el.style.background.replace(/\s/g,'') === selectedColor;
-                el.classList.toggle('selected', el.getAttribute('onclick')?.includes(selectedColor));
-                el.style.borderColor = el.getAttribute('onclick')?.includes(selectedColor) ? '#fff' : 'transparent';
-            });
-        }
-
-        function toggleEmojiPicker() {
-            document.getElementById('emojiPicker').classList.toggle('open');
-        }
-
-        async function saveProfile() {
-            try {
-                const bio = document.getElementById('bioInput').value.trim();
-                const { error } = await supabaseClient.from('profiles').update({
-                    bio,
-                    avatar_emoji: selectedEmoji,
-                    avatar_color: selectedColor
-                }).eq('id', currentUser.id);
-
-                if (error) throw error;
-
-                // Close picker
-                document.getElementById('emojiPicker').classList.remove('open');
-                showToast('✅ Profile saved!');
-            } catch(e) {
-                showToast('❌ Error: ' + e.message, true);
-            }
-        }
-
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.style.background = isError ? '#ff006e' : 'var(--accent)';
-            toast.style.color = isError ? '#fff' : 'var(--bg-primary)';
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        async function signOut() {
-            if (!confirm('Sign out?')) return;
-            await supabaseClient.auth.signOut();
-            window.location.href = 'signin.html';
-        }
-
-        init();
-    </script>
+function showToast(msg,isError=false){
+    const t=document.getElementById('toast');
+    const r=getBeeRank(currentPoints);
+    t.textContent=msg;
+    t.style.background=isError?'#ff006e22':`${r.color}22`;
+    t.style.borderColor=isError?'#ff006e':r.color;
+    t.style.color=isError?'#ff006e':r.color;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),3000);
+}
+async function signOut(){if(!confirm('Sign out?'))return;await supabaseClient.auth.signOut();window.location.href='signin.html';}
+init();
+</script>
 </body>
 </html>
