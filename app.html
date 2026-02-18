@@ -19,6 +19,13 @@
         [data-theme="ocean"]{--bg-primary:#001a1f;--bg-secondary:#002633;--bg-tertiary:#003d4d;--text-primary:#00d9ff;--text-secondary:#00b8d4;--text-muted:#5591a3;--border:#004d5c;--accent:#00ffff;--matrix-glow:rgba(0,255,255,.3);}
         [data-theme="forest"]{--bg-primary:#0a1f0a;--bg-secondary:#153315;--bg-tertiary:#1f4d1f;--text-primary:#00ff00;--text-secondary:#00cc00;--text-muted:#669966;--border:#2d662d;--accent:#00ff00;--matrix-glow:rgba(0,255,0,.3);}
         [data-theme="sunset"]{--bg-primary:#1f0a0a;--bg-secondary:#331515;--bg-tertiary:#4d1f1f;--text-primary:#ff6600;--text-secondary:#ff8833;--text-muted:#b36644;--border:#662d1f;--accent:#ff6600;--matrix-glow:rgba(255,102,0,.3);}
+        [data-theme="bumblebee"]{--bg-primary:#0d0d00;--bg-secondary:#1a1a00;--bg-tertiary:#2a2a00;--text-primary:#ffe600;--text-secondary:#ffd000;--text-muted:#8a8a00;--border:#3a3a00;--accent:#ffe600;--matrix-glow:rgba(255,230,0,.4);--honey:#ffe600;--honey-glow:rgba(255,230,0,.3);}
+        [data-theme="goldenrod"]{--bg-primary:#1a0f00;--bg-secondary:#2a1a00;--bg-tertiary:#3d2600;--text-primary:#ffc107;--text-secondary:#ffb300;--text-muted:#a07020;--border:#4d3000;--accent:#ffc107;--matrix-glow:rgba(255,193,7,.4);--honey:#ffc107;--honey-glow:rgba(255,193,7,.3);}
+        [data-theme="neon-yellow"]{--bg-primary:#000000;--bg-secondary:#0a0a00;--bg-tertiary:#111100;--text-primary:#f5ff00;--text-secondary:#ccff00;--text-muted:#606600;--border:#2a2a00;--accent:#f5ff00;--matrix-glow:rgba(245,255,0,.5);--honey:#f5ff00;--honey-glow:rgba(245,255,0,.4);}
+        [data-theme="amber"]{--bg-primary:#0f0800;--bg-secondary:#1f1000;--bg-tertiary:#2e1800;--text-primary:#ffb000;--text-secondary:#ff9500;--text-muted:#996600;--border:#3d2200;--accent:#ffb000;--matrix-glow:rgba(255,176,0,.4);--honey:#ffb000;--honey-glow:rgba(255,176,0,.3);}
+        [data-theme="midnight"]{--bg-primary:#000010;--bg-secondary:#00001a;--bg-tertiary:#00002a;--text-primary:#7b7bff;--text-secondary:#5555ff;--text-muted:#333380;--border:#00003d;--accent:#7b7bff;--matrix-glow:rgba(123,123,255,.4);}
+        [data-theme="rose"]{--bg-primary:#100008;--bg-secondary:#1f0010;--bg-tertiary:#2e0018;--text-primary:#ff69b4;--text-secondary:#ff4499;--text-muted:#992255;--border:#3d0022;--accent:#ff69b4;--matrix-glow:rgba(255,105,180,.4);}
+        [data-theme="ice"]{--bg-primary:#f0f8ff;--bg-secondary:#e0f0ff;--bg-tertiary:#c8e4ff;--text-primary:#003366;--text-secondary:#004d99;--text-muted:#6699cc;--border:#99ccff;--accent:#0066cc;--matrix-glow:rgba(0,102,204,.2);}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'IBM Plex Mono',monospace;background:var(--bg-primary);color:var(--text-primary);overflow:hidden;transition:background .3s,color .3s;}
         .bee-rank-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;letter-spacing:.3px;transition:all .3s;}
@@ -317,6 +324,10 @@
         <option value="dark">🌑 Dark</option><option value="light">🍯 Honey</option>
         <option value="cyberpunk">💜 Cyberpunk</option><option value="ocean">🌊 Ocean</option>
         <option value="forest">🌲 Forest</option><option value="sunset">🌅 Sunset</option>
+        <option value="bumblebee">🐝 Bumblebee</option><option value="goldenrod">🌻 Goldenrod</option>
+        <option value="neon-yellow">⚡ Neon Yellow</option><option value="amber">🍂 Amber</option>
+        <option value="midnight">🌌 Midnight</option><option value="rose">🌹 Rose</option>
+        <option value="ice">🧊 Ice</option>
       </select>
       <button class="btn" onclick="goToProfile()"><span id="headerAvatarEmoji">🐝</span></button>
       <div class="header-rank">
