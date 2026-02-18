@@ -181,6 +181,12 @@
         .timestamp{font-size:11px;color:var(--text-muted);}
         /* Inline mini rank badge in message header */
         .msg-rank{font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700;white-space:nowrap;}
+        /* Status message under username in chat */
+        .msg-status{font-size:11px;color:var(--text-muted);font-style:italic;margin-top:1px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+        /* Status in user modal / profile view */
+        .status-line{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-muted);font-style:italic;padding:3px 10px;background:var(--bg-tertiary);border-radius:20px;margin-bottom:10px;}
+        /* Quick status pill in DM/friend list */
+        .status-pill{font-size:10px;color:var(--text-muted);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
         .message-text{font-size:13px;line-height:1.5;color:var(--text-secondary);background:var(--bg-tertiary);padding:8px 12px;border-radius:8px;display:inline-block;max-width:100%;}
         .message.own .message-text{background:var(--honey);color:#1a0a00;}
         .message-input-container{background:var(--bg-secondary);border-top:1px solid var(--border);padding:12px 16px;flex-shrink:0;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));}
@@ -435,7 +441,7 @@ let currentMode='channel',currentDMUser=null;
 let messageSubscription,dmSubscription;
 let replyingTo=null,channelUsers=[],mentionSelectedIndex=0;
 let friendsList=[],dmConversations=[];
-let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a';
+let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='';
 let profileCache={};
 let searchTimeout=null;
 
@@ -476,11 +482,12 @@ async function init(){
 async function loadMyProfile(){
     try{
         const{data}=await supabaseClient.from('profiles')
-            .select('level,points,avatar_emoji,avatar_color').eq('id',currentUser.id).single();
+            .select('level,points,avatar_emoji,avatar_color,status_message').eq('id',currentUser.id).single();
         if(data){
             const prevPoints=myPoints;
             myLevel=data.level||1;myPoints=data.points||0;
             myEmoji=data.avatar_emoji||'🐝';myColor=data.avatar_color||'#1a1a1a';
+            myStatus=data.status_message||'';
             profileCache[currentUser.id]=data;
             updateHeaderRank();
             const prevRank=getBeeRank(prevPoints);
@@ -514,7 +521,7 @@ async function getProfile(userId){
     if(profileCache[userId])return profileCache[userId];
     try{
         const{data}=await supabaseClient.from('profiles')
-            .select('level,points,avatar_emoji,avatar_color,username,bio').eq('id',userId).single();
+            .select('level,points,avatar_emoji,avatar_color,username,bio,status_message').eq('id',userId).single();
         if(data)profileCache[userId]=data;
         return data;
     }catch(e){return null;}
@@ -550,7 +557,8 @@ async function showUserModal(userId){
         av.style.width='80px';av.style.height='80px';av.style.fontSize='42px';
 
         document.getElementById('modalUsername').textContent=profile.username||'Unknown';
-        document.getElementById('modalRankRow').innerHTML=rankBadgeHTML(points,` <span style="opacity:.6;font-size:10px;">· ${rank.label}</span>`);
+        document.getElementById('modalRankRow').innerHTML=rankBadgeHTML(points,` <span style="opacity:.6;font-size:10px;">· ${rank.label}</span>`)
+            +(profile.status_message?`<div class="status-line">💬 ${escapeHtml(profile.status_message)}</div>`:'');
         document.getElementById('modalBio').textContent=profile.bio?`"${profile.bio}"`:'No bio yet.';
         document.getElementById('modalRankProgress').innerHTML=rankProgressHTML(points);
 
@@ -638,7 +646,7 @@ function handleSearch(query){
 async function searchUsers(query){
     try{
         const{data}=await supabaseClient.from('profiles')
-            .select('id,username,level,points,avatar_emoji,avatar_color,bio')
+            .select('id,username,level,points,avatar_emoji,avatar_color,bio,status_message')
             .ilike('username',`%${query}%`).neq('id',currentUser.id)
             .order('points',{ascending:false}).limit(20);
         const container=document.getElementById('searchResults');
@@ -654,6 +662,7 @@ async function searchUsers(query){
                     <div class="search-result-name">${escapeHtml(user.username)}</div>
                     <div class="search-result-meta">
                         ${rankBadgeHTML(user.points||0)}
+                        ${user.status_message?`<div class="status-pill">💬 ${escapeHtml(user.status_message.substring(0,40))}${user.status_message.length>40?'...':''}</div>`:''}
                         ${user.bio?`<em style="margin-left:4px;">${escapeHtml(user.bio.substring(0,28))}${user.bio.length>28?'...':''}</em>`:''}
                     </div>
                 </div>
@@ -721,7 +730,7 @@ function subscribeToChannel(channelId){
 
 async function enrichAndAddMessage(msg,mode){
     const profile=await getProfile(mode==='dm'?msg.sender_id:msg.user_id);
-    if(profile){msg._emoji=profile.avatar_emoji||'🐝';msg._color=profile.avatar_color||'#1a1a1a';msg._points=profile.points||0;}
+    if(profile){msg._emoji=profile.avatar_emoji||'🐝';msg._color=profile.avatar_color||'#1a1a1a';msg._points=profile.points||0;msg._status=profile.status_message||'';}
     addMessageToUI(msg,mode);
 }
 
@@ -750,7 +759,7 @@ async function openDM(userId,username){
             ${makeAvatar(emoji,color,'',pts)}
             <div>
                 <div style="font-size:15px;font-weight:700;">${escapeHtml(username)}</div>
-                <div style="font-size:11px;">${rankBadgeHTML(pts)}</div>
+                <div style="font-size:11px;">${rankBadgeHTML(pts)}${profile?.status_message?` <span class="status-pill">💬 ${escapeHtml(profile.status_message)}</span>`:''}</div>
             </div>
         </div>`;
     document.getElementById('messageInput').placeholder=`Message ${username}...`;
@@ -777,7 +786,7 @@ async function loadMessages(mode,id){
         }
         const userIds=[...new Set(data.map(m=>mode==='dm'?m.sender_id:m.user_id))];
         await Promise.all(userIds.map(uid=>getProfile(uid)));
-        data.forEach(m=>{const uid=mode==='dm'?m.sender_id:m.user_id;const p=profileCache[uid];if(p){m._emoji=p.avatar_emoji||'🐝';m._color=p.avatar_color||'#1a1a1a';m._points=p.points||0;}});
+        data.forEach(m=>{const uid=mode==='dm'?m.sender_id:m.user_id;const p=profileCache[uid];if(p){m._emoji=p.avatar_emoji||'🐝';m._color=p.avatar_color||'#1a1a1a';m._points=p.points||0;m._status=p.status_message||'';}});
         renderMessages(data,mode);
     }catch(e){renderMessages([],mode);}
 }
@@ -835,7 +844,7 @@ function renderFriends(){
             ${pending.map(f=>{const p=profileCache[f.userId];return`<div class="friend-item">
                 ${makeAvatar(p?.avatar_emoji||'🐝',p?.avatar_color||'#1a1a1a','sm',p?.points||0)}
                 <div class="friend-info"><div class="friend-name">${escapeHtml(f.username)}</div>
-                <div class="friend-status">${rankBadgeHTML(p?.points||0)}</div></div>
+                <div class="friend-status">${rankBadgeHTML(p?.points||0)}${p?.status_message?`<div class="status-pill" style="margin-top:2px;">💬 ${escapeHtml(p.status_message)}</div>`:''}</div></div>
                 <div class="friend-actions">
                     <button class="friend-btn accept" onclick="respondFriendRequest('${f.id}','accepted')">✓</button>
                     <button class="friend-btn reject" onclick="respondFriendRequest('${f.id}','rejected')">✗</button>
@@ -849,7 +858,7 @@ function renderFriends(){
             ${accepted.map(f=>{const p=profileCache[f.userId];return`<div class="friend-item">
                 ${makeAvatar(p?.avatar_emoji||'🐝',p?.avatar_color||'#1a1a1a','sm',p?.points||0)}
                 <div class="friend-info"><div class="friend-name">${escapeHtml(f.username)}</div>
-                <div class="friend-status">${rankBadgeHTML(p?.points||0)}</div></div>
+                <div class="friend-status">${rankBadgeHTML(p?.points||0)}${p?.status_message?`<div class="status-pill" style="margin-top:2px;">💬 ${escapeHtml(p.status_message)}</div>`:''}</div></div>
                 <div class="friend-actions">
                     <button class="friend-btn dm-btn" onclick="openDM('${f.userId}','${escapeHtml(f.username).replace(/'/g,"\\'")}');switchSidebarTab('dms')">✉️</button>
                     <button class="friend-btn" onclick="showUserModal('${f.userId}')">👤</button>
@@ -906,6 +915,7 @@ function createMessageHTML(msg,mode){
     const emoji=isOwn?myEmoji:(msg._emoji||'🐝');
     const color=isOwn?myColor:(msg._color||'#1a1a1a');
     const pts=isOwn?myPoints:(msg._points||0);
+    const status=isOwn?myStatus:(msg._status||'');
     const rank=getBeeRank(pts);
     let replyHTML='';
     if(msg.reply_to_username&&msg.reply_to_content)replyHTML=`<div class="reply-reference"><span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0,60))}${msg.reply_to_content.length>60?'...':''}</div>`;
@@ -928,6 +938,7 @@ function createMessageHTML(msg,mode){
                 <span class="msg-rank" style="background:${rank.color}22;border:1px solid ${rank.color}55;color:${rank.color};">${rank.emoji}</span>
                 <span class="timestamp">${time}${editedLabel}</span>
             </div>
+            ${status?`<div class="msg-status">${escapeHtml(status)}</div>`:''}
             ${replyHTML}${contentText}
         </div>
         ${isOwn?`<div class="emoji-avatar" style="background:${color};${ringStyle};flex-shrink:0;">${emoji}</div>`:''}
@@ -946,7 +957,7 @@ async function sendMessage(){
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
             const{error}=await supabaseClient.from('direct_messages').insert(msgData);
             if(error)throw error;
-            addMessageToUI({...msgData,id:Date.now(),created_at:new Date().toISOString(),_emoji:myEmoji,_color:myColor,_points:myPoints},'dm');
+            addMessageToUI({...msgData,id:Date.now(),created_at:new Date().toISOString(),_emoji:myEmoji,_color:myColor,_points:myPoints,_status:myStatus},'dm');
         }else{
             const msgData={channel_id:currentChannel,user_id:currentUser.id,username,content,type:'text'};
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
