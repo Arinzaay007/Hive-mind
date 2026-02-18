@@ -309,6 +309,11 @@
             .msg-rank{display:none;}
         }
         @media(max-width:380px){.message-content{max-width:90%;}.logo{font-size:12px;}}
+
+        /* ── LOAD MORE ── */
+        .load-more-btn{display:none;width:100%;padding:8px;background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:inherit;font-size:11px;cursor:pointer;transition:all .2s;margin-bottom:8px;}
+        .load-more-btn:hover{border-color:var(--honey);color:var(--honey);}
+        .load-more-btn.visible{display:block;}
     </style>
 </head>
 <body>
@@ -571,6 +576,12 @@ let replyingTo=null,channelUsers=[],mentionSelectedIndex=0;
 let friendsList=[],dmConversations=[];
 let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='';
 let selectedFile=null, selectedFileUrl=null, selectedFileType=null;
+
+// Pagination
+const PAGE_SIZE=50;
+let msgPage={channel:{},dm:{}};
+let msgHasMore={channel:{},dm:{}};
+let isLoadingMore=false;
 let profileCache={};
 let searchTimeout=null;
 
@@ -1172,23 +1183,73 @@ async function openDM(userId,username){
 }
 
 async function loadMessages(mode,id){
+    msgPage[mode][id]=null;
+    msgHasMore[mode][id]=false;
     try{
         let data;
         if(mode==='channel'){
-            const res=await supabaseClient.from('messages').select('*').eq('channel_id',id).order('created_at',{ascending:false}).limit(100);
+            const res=await supabaseClient.from('messages').select('*')
+                .eq('channel_id',id).order('created_at',{ascending:false}).limit(PAGE_SIZE);
             data=(res.data||[]).reverse();
+            msgHasMore.channel[id]=res.data?.length===PAGE_SIZE;
+            if(data.length)msgPage.channel[id]=data[0].created_at;
         }else{
             const myId=currentUser.id;
             const res=await supabaseClient.from('direct_messages').select('*')
                 .or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`)
-                .order('created_at',{ascending:false}).limit(100);
+                .order('created_at',{ascending:false}).limit(PAGE_SIZE);
             data=(res.data||[]).reverse();
+            msgHasMore.dm[id]=res.data?.length===PAGE_SIZE;
+            if(data.length)msgPage.dm[id]=data[0].created_at;
         }
         const userIds=[...new Set(data.map(m=>mode==='dm'?m.sender_id:m.user_id))];
         await Promise.all(userIds.map(uid=>getProfile(uid)));
         data.forEach(m=>{const uid=mode==='dm'?m.sender_id:m.user_id;const p=profileCache[uid];if(p){m._emoji=p.avatar_emoji||'🐝';m._color=p.avatar_color||'#1a1a1a';m._points=p.points||0;m._status=p.status_message||'';}});
         renderMessages(data,mode);
     }catch(e){renderMessages([],mode);}
+}
+
+async function loadMoreMessages(){
+    if(isLoadingMore)return;
+    const mode=currentMode==='dm'?'dm':'channel';
+    const id=currentMode==='dm'?currentDMUser?.id:currentChannel;
+    if(!id||!msgHasMore[mode][id])return;
+    isLoadingMore=true;
+    const btn=document.getElementById('loadMoreBtn');
+    if(btn){btn.textContent='⏳ Loading...';btn.disabled=true;}
+    try{
+        const cursor=msgPage[mode][id];
+        let data;
+        if(mode==='channel'){
+            const res=await supabaseClient.from('messages').select('*')
+                .eq('channel_id',id).lt('created_at',cursor)
+                .order('created_at',{ascending:false}).limit(PAGE_SIZE);
+            data=(res.data||[]).reverse();
+            msgHasMore.channel[id]=res.data?.length===PAGE_SIZE;
+            if(data.length)msgPage.channel[id]=data[0].created_at;
+        }else{
+            const myId=currentUser.id;
+            const res=await supabaseClient.from('direct_messages').select('*')
+                .or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`)
+                .lt('created_at',cursor).order('created_at',{ascending:false}).limit(PAGE_SIZE);
+            data=(res.data||[]).reverse();
+            msgHasMore.dm[id]=res.data?.length===PAGE_SIZE;
+            if(data.length)msgPage.dm[id]=data[0].created_at;
+        }
+        const userIds=[...new Set(data.map(m=>mode==='dm'?m.sender_id:m.user_id))];
+        await Promise.all(userIds.map(uid=>getProfile(uid)));
+        data.forEach(m=>{const uid=mode==='dm'?m.sender_id:m.user_id;const p=profileCache[uid];if(p){m._emoji=p.avatar_emoji||'🐝';m._color=p.avatar_color||'#1a1a1a';m._points=p.points||0;m._status=p.status_message||'';}});
+        const container=document.getElementById('messages');
+        const prevHeight=container.scrollHeight;
+        const newHTML=data.map(msg=>createMessageHTML(msg,mode)).join('');
+        const firstMsg=container.querySelector('.message');
+        if(firstMsg)firstMsg.insertAdjacentHTML('beforebegin',newHTML);
+        else container.innerHTML=newHTML+container.innerHTML;
+        container.scrollTop=container.scrollHeight-prevHeight;
+        const hasMore=msgHasMore[mode][id];
+        if(btn){btn.className='load-more-btn'+(hasMore?' visible':'');btn.textContent='⬆ Load older messages';btn.disabled=false;}
+    }catch(e){console.error('loadMore:',e);}
+    finally{isLoadingMore=false;}
 }
 
 async function markDMsAsRead(senderId){
@@ -1293,8 +1354,16 @@ async function respondFriendRequest(id,status){
 // ─── MESSAGES ────────────────────────────
 function renderMessages(messages,mode){
     const container=document.getElementById('messages');
-    if(messages.length===0){container.innerHTML=`<div class="empty-state"><div class="empty-state-icon">${mode==='dm'?'✉️':'🍯'}</div><div>${mode==='dm'?'Start the conversation!':'No buzz yet!'}</div></div>`;return;}
-    container.innerHTML=messages.map(msg=>createMessageHTML(msg,mode)).join('');
+    const modeKey=mode==='dm'?'dm':'channel';
+    const id=mode==='dm'?currentDMUser?.id:currentChannel;
+    const hasMore=msgHasMore[modeKey]?.[id];
+    if(messages.length===0&&!hasMore){
+        container.innerHTML=`<div class="empty-state"><div class="empty-state-icon">${mode==='dm'?'✉️':'🍯'}</div><div>${mode==='dm'?'Start the conversation!':'No buzz yet!'}</div></div>`;
+        return;
+    }
+    container.innerHTML=
+        `<button id="loadMoreBtn" class="load-more-btn${hasMore?' visible':''}" onclick="loadMoreMessages()">⬆ Load older messages</button>`
+        +messages.map(msg=>createMessageHTML(msg,mode)).join('');
     scrollToBottom();
 }
 
