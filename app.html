@@ -1352,15 +1352,16 @@ function handleMentionKeydown(e){
 function showMentionDropdown(users){
     const dropdown=document.getElementById('mentionDropdown');mentionSelectedIndex=0;
     dropdown.innerHTML=users.map((u,i)=>{
-        if(u._isBot){
-            return`<div class="mention-item ${i===0?'selected':''}" onclick="insertMention('${u.username}')">
+        const isBot=u._isBot===true;
+        if(isBot){
+            return `<div class="mention-item ${i===0?'selected':''}" onclick="insertMention('${BOT_NAME}')">
                 <div style="width:24px;height:24px;border-radius:50%;background:${BOT_COLOR};display:flex;align-items:center;justify-content:center;font-size:13px;border:1px solid #00ffff;box-shadow:0 0 6px rgba(0,255,255,0.5);">${BOT_EMOJI}</div>
-                <div style="color:#00ffff;font-weight:700;">${escapeHtml(u.username)}</div>
+                <div style="color:#00ffff;font-weight:700;">${BOT_NAME}</div>
                 <div style="font-size:10px;color:#00ffff;">AI Bot</div>
             </div>`;
         }
         const p=profileCache[u.user_id];const r=getBeeRank(p?.points||0);
-        return`<div class="mention-item ${i===0?'selected':''}" onclick="insertMention('${u.username}')">
+        return `<div class="mention-item ${i===0?'selected':''}" onclick="insertMention('${escapeHtml(u.username).replace(/'/g,"\\'")}')">
             <div style="width:24px;height:24px;border-radius:50%;background:${p?.avatar_color||'#1a1a1a'};display:flex;align-items:center;justify-content:center;font-size:13px;border:1px solid ${r.color};">${p?.avatar_emoji||'🐝'}</div>
             <div>${escapeHtml(u.username)}</div>
             <div style="font-size:10px;color:${r.color};">${r.emoji}</div>
@@ -1489,27 +1490,44 @@ function renderBotMessage(content, channelId){
 }
 
 async function triggerBotReply(msg, channelId){
-    // Strip @HiveBot from the message for cleaner context
     const cleanContent = (msg.content || '').replace(/@HiveBot/gi, '').trim();
     if(!cleanContent) return;
 
-    // Add user message to memory
-    addToBotMemory(channelId, 'user', `${msg.username}: ${cleanContent}`);
+    // Get API key — stored in localStorage so user only needs to enter once
+    let apiKey = localStorage.getItem('hivebot_api_key');
+    if(!apiKey){
+        apiKey = prompt('🤖 Enter your Anthropic API key to activate HiveBot:\n(Get one at console.anthropic.com)');
+        if(!apiKey) return;
+        localStorage.setItem('hivebot_api_key', apiKey.trim());
+    }
 
+    addToBotMemory(channelId, 'user', `${msg.username}: ${cleanContent}`);
     showBotTyping(channelId);
 
     try{
         const memory = getBotMemory(channelId);
         const response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
+                'anthropic-version': '2023-06-01',
+                'anthropic-dangerous-direct-browser-access': 'true'
+            },
             body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 1000,
-                system: `You are HiveBot, the AI assistant of Hive Mind — a honeybee-themed chat app. You are helpful, witty, and occasionally use bee puns. You're embedded in the chat and users talk to you naturally. Keep replies concise (1-3 sentences usually) unless asked for something detailed. The current channel is: ${channelId}. You have memory of recent messages for context. Never break character or mention being Claude/Anthropic.`,
+                model: 'claude-haiku-4-5-20251001',
+                max_tokens: 500,
+                system: `You are HiveBot, the AI assistant of Hive Mind — a honeybee-themed chat app. You are helpful, witty, and occasionally use bee puns. Keep replies concise (1-3 sentences usually) unless asked for something detailed. Current channel: ${channelId}.`,
                 messages: memory.map(m => ({role: m.role === 'user' ? 'user' : 'assistant', content: m.content}))
             })
         });
+
+        if(response.status === 401){
+            localStorage.removeItem('hivebot_api_key');
+            hideBotTyping(channelId);
+            renderBotMessage('🔑 Invalid API key! @mention me again to re-enter it.', channelId);
+            return;
+        }
 
         const data = await response.json();
         const reply = data.content?.[0]?.text || 'Bzz... something went wrong in the hive! 🐝';
