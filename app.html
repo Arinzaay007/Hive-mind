@@ -1127,7 +1127,13 @@ async function loadMessages(mode,id){
     try{
         let data;
         if(mode==='channel'){
-            const res=await supabaseClient.from('messages').select('*').eq('channel_id',id).order('created_at',{ascending:false}).limit(100);
+            const res=await supabaseClient.from('messages').select('*').eq('channel_id',id).order('created_at',{ascending:false});
+            data=(res.data||[]).reverse();
+        }else{
+            const myId=currentUser.id;
+            const res=await supabaseClient.from('direct_messages').select('*')
+                .or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`)
+                .order('created_at',{ascending:false});
             data=(res.data||[]).reverse();
         }else{
             const myId=currentUser.id;
