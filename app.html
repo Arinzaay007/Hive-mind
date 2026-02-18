@@ -21,45 +21,19 @@
         [data-theme="sunset"]{--bg-primary:#1f0a0a;--bg-secondary:#331515;--bg-tertiary:#4d1f1f;--text-primary:#ff6600;--text-secondary:#ff8833;--text-muted:#b36644;--border:#662d1f;--accent:#ff6600;--matrix-glow:rgba(255,102,0,.3);}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'IBM Plex Mono',monospace;background:var(--bg-primary);color:var(--text-primary);overflow:hidden;transition:background .3s,color .3s;}
-
-        /* ─── BEE RANK BADGE ─────────────────────── */
-        .bee-rank-badge{
-            display:inline-flex;align-items:center;gap:4px;
-            padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;
-            white-space:nowrap;letter-spacing:.3px;transition:all .3s;
-        }
+        .bee-rank-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;letter-spacing:.3px;transition:all .3s;}
         .bee-rank-badge:hover{filter:brightness(1.2);}
-
-        /* Animated shimmer on Hive Mind rank */
-        .rank-hivemind{
-            animation:hivePulse 2s ease-in-out infinite;
-        }
-        @keyframes hivePulse{
-            0%,100%{box-shadow:0 0 8px rgba(0,255,255,0.5),0 0 16px rgba(0,255,255,0.2);}
-            50%{box-shadow:0 0 16px rgba(0,255,255,0.9),0 0 32px rgba(0,255,255,0.4);}
-        }
+        .rank-hivemind{animation:hivePulse 2s ease-in-out infinite;}
+        @keyframes hivePulse{0%,100%{box-shadow:0 0 8px rgba(0,255,255,0.5),0 0 16px rgba(0,255,255,0.2);}50%{box-shadow:0 0 16px rgba(0,255,255,0.9),0 0 32px rgba(0,255,255,0.4);}}
         .rank-queen{animation:queenPulse 2.5s ease-in-out infinite;}
-        @keyframes queenPulse{
-            0%,100%{box-shadow:0 0 6px rgba(255,110,180,0.4);}
-            50%{box-shadow:0 0 14px rgba(255,110,180,0.8);}
-        }
+        @keyframes queenPulse{0%,100%{box-shadow:0 0 6px rgba(255,110,180,0.4);}50%{box-shadow:0 0 14px rgba(255,110,180,0.8);}}
         .rank-royal{animation:royalPulse 3s ease-in-out infinite;}
-        @keyframes royalPulse{
-            0%,100%{box-shadow:0 0 6px rgba(181,106,255,0.4);}
-            50%{box-shadow:0 0 14px rgba(181,106,255,0.8);}
-        }
-
-        /* ─── RANK PROGRESSION BAR ───────────────── */
-        .rank-progress-container{
-            background:var(--bg-tertiary);border-radius:8px;padding:10px 12px;
-            border:1px solid var(--border);margin-bottom:6px;
-        }
+        @keyframes royalPulse{0%,100%{box-shadow:0 0 6px rgba(181,106,255,0.4);}50%{box-shadow:0 0 14px rgba(181,106,255,0.8);}}
+        .rank-progress-container{background:var(--bg-tertiary);border-radius:8px;padding:10px 12px;border:1px solid var(--border);margin-bottom:6px;}
         .rank-progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
         .rank-progress-bar-bg{background:var(--bg-secondary);border-radius:6px;height:8px;overflow:hidden;}
         .rank-progress-bar-fill{height:100%;border-radius:6px;transition:width .6s ease;}
         .rank-next-label{font-size:10px;color:var(--text-muted);margin-top:4px;text-align:right;}
-
-        /* ─── FILE UPLOAD ─────────────────────────── */
         .attach-btn{background:transparent;border:1px solid var(--border);padding:0 12px;color:var(--text-muted);cursor:pointer;font-size:18px;transition:all .2s;min-height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
         .attach-btn:hover{border-color:var(--honey);color:var(--honey);}
         .file-preview-bar{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;align-items:center;gap:10px;}
@@ -85,8 +59,6 @@
         .lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;object-fit:contain;}
         .lightbox-close{position:absolute;top:16px;right:20px;background:transparent;border:none;color:#fff;font-size:32px;cursor:pointer;opacity:.6;line-height:1;}
         .lightbox-close:hover{opacity:1;}
-
-        /* ─── LAYOUT ─────────────────────────────── */
         .app-container{display:flex;height:100vh;height:100dvh;flex-direction:column;overflow:hidden;}
         .header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-shrink:0;}
         .logo{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;letter-spacing:2px;white-space:nowrap;}
@@ -97,14 +69,10 @@
         .btn-accent{background:var(--accent);color:var(--bg-primary);font-weight:700;border:none;padding:10px 20px;}
         .btn-accent:hover{box-shadow:0 0 20px var(--matrix-glow);color:var(--bg-primary);}
         .main-content{display:flex;flex:1;overflow:hidden;min-height:0;}
-
-        /* ─── HONEYCOMB HEADER ACCENT ────────────── */
         .header-rank{display:flex;align-items:center;gap:6px;}
         .header-xp{font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:4px;}
         .header-xp-bar{width:50px;height:4px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden;}
         .header-xp-fill{height:100%;border-radius:4px;transition:width .4s;}
-
-        /* ─── SIDEBAR ────────────────────────────── */
         .sidebar{width:260px;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
         .sidebar-tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;}
         .sidebar-tab{flex:1;padding:9px 4px;text-align:center;cursor:pointer;font-size:10px;transition:all .2s;border-bottom:2px solid transparent;white-space:nowrap;}
@@ -117,8 +85,6 @@
         .channel{padding:8px 12px;font-size:13px;cursor:pointer;border-left:2px solid transparent;transition:all .2s;margin-bottom:2px;}
         .channel:hover{background:var(--bg-tertiary);}
         .channel.active{background:var(--bg-tertiary);border-left-color:var(--honey);color:var(--honey);}
-
-        /* ── ROOM ITEMS ── */
         .room-item{padding:8px 12px;cursor:pointer;border-left:2px solid transparent;transition:all .2s;margin-bottom:3px;border-radius:0 4px 4px 0;}
         .room-item:hover{background:var(--bg-tertiary);}
         .room-item.active{background:var(--bg-tertiary);border-left-color:var(--honey);}
@@ -133,19 +99,13 @@
         .room-lock{font-size:10px;color:var(--text-muted);}
         .room-queen-badge{font-size:10px;color:var(--honey);font-weight:700;}
         .pending-access{font-size:10px;color:#f5c518;background:#f5c51822;padding:1px 6px;border-radius:8px;border:1px solid #f5c51844;}
-
-        /* ── JOIN REQUEST ITEM ── */
         .join-req-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
         .join-req-item:last-child{border-bottom:none;}
         .join-req-info{flex:1;font-size:12px;}
         .join-req-name{font-weight:700;}
         .join-req-room{font-size:11px;color:var(--text-muted);}
         .join-req-actions{display:flex;gap:4px;}
-
-        /* ── ROOM HEADER ── */
         .room-header-queen{font-size:11px;color:var(--honey);display:flex;align-items:center;gap:4px;}
-
-        /* ─── DM ─────────────────────────────────── */
         .dm-item{padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;border-left:2px solid transparent;}
         .dm-item:hover{background:var(--bg-tertiary);}
         .dm-item.active{background:var(--bg-tertiary);border-left-color:var(--dm-color);}
@@ -153,8 +113,6 @@
         .dm-name{font-size:13px;font-weight:600;}
         .dm-preview{font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
         .unread-badge{background:var(--dm-color);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-
-        /* ─── FRIENDS ────────────────────────────── */
         .friend-item{padding:10px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
         .friend-info{flex:1;}
         .friend-name{font-size:13px;font-weight:600;}
@@ -168,8 +126,6 @@
         .add-friend-form{padding:12px;border-bottom:1px solid var(--border);}
         .add-friend-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:8px;color:var(--text-primary);font-family:inherit;font-size:12px;margin-bottom:8px;}
         .add-friend-input:focus{outline:none;border-color:var(--accent);}
-
-        /* ─── LEADERBOARD ────────────────────────── */
         .leaderboard-item{padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);transition:background .2s;cursor:pointer;}
         .leaderboard-item:hover{background:var(--bg-tertiary);}
         .leaderboard-rank{font-size:14px;font-weight:700;width:22px;text-align:center;flex-shrink:0;}
@@ -180,8 +136,6 @@
         .leaderboard-name{font-size:12px;font-weight:600;}
         .leaderboard-stats{font-size:10px;color:var(--text-muted);}
         .leaderboard-points{font-size:12px;font-weight:700;text-align:right;}
-
-        /* ─── SEARCH ─────────────────────────────── */
         .search-box{padding:12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-secondary);z-index:10;}
         .search-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;border-radius:6px;}
         .search-input:focus{outline:none;border-color:var(--honey);box-shadow:0 0 8px var(--honey-glow);}
@@ -193,12 +147,9 @@
         .search-result-actions{display:flex;gap:6px;flex-shrink:0;}
         .search-empty{padding:32px;text-align:center;color:var(--text-muted);font-size:13px;}
         .search-hint{padding:20px;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.8;}
-
-        /* ─── MODAL ──────────────────────────────── */
         .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:1000;align-items:center;justify-content:center;}
         .modal-overlay.open{display:flex;}
         .modal{background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:28px;width:90%;max-width:380px;position:relative;overflow:hidden;}
-        /* Honeycomb pattern top bar */
         .modal::before{content:'⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡';position:absolute;top:0;left:0;right:0;padding:6px 12px;font-size:10px;letter-spacing:2px;opacity:.15;overflow:hidden;pointer-events:none;}
         .modal-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;z-index:2;}
         .modal-close:hover{color:var(--honey);}
@@ -214,12 +165,8 @@
         .modal-stat-label{font-size:10px;color:var(--text-muted);}
         .modal-actions{display:flex;gap:10px;}
         .modal-actions .btn{flex:1;text-align:center;padding:10px;}
-
-        /* ─── EMOJI AVATAR ───────────────────────── */
         .emoji-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:box-shadow .3s;}
         .emoji-avatar.sm{width:28px;height:28px;font-size:14px;}
-
-        /* ─── CHAT ───────────────────────────────── */
         .chat-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;position:relative;}
         .chat-header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
         .messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;min-height:0;}
@@ -233,13 +180,9 @@
         .username{font-weight:700;font-size:13px;cursor:pointer;transition:color .2s;}
         .username:hover{color:var(--honey);}
         .timestamp{font-size:11px;color:var(--text-muted);}
-        /* Inline mini rank badge in message header */
         .msg-rank{font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700;white-space:nowrap;}
-        /* Status message under username in chat */
         .msg-status{font-size:11px;color:var(--text-muted);font-style:italic;margin-top:1px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
-        /* Status in user modal / profile view */
         .status-line{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-muted);font-style:italic;padding:3px 10px;background:var(--bg-tertiary);border-radius:20px;margin-bottom:10px;}
-        /* Quick status pill in DM/friend list */
         .status-pill{font-size:10px;color:var(--text-muted);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
         .message-text{font-size:13px;line-height:1.5;color:var(--text-secondary);background:var(--bg-tertiary);padding:8px 12px;border-radius:8px;display:inline-block;max-width:100%;}
         .message.own .message-text{background:var(--honey);color:#1a0a00;}
@@ -272,23 +215,12 @@
         .notif-dot{width:8px;height:8px;background:var(--dm-color);border-radius:50%;display:inline-block;margin-left:4px;animation:pulse 2s infinite;}
         .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--text-muted);gap:12px;padding:40px;text-align:center;}
         .empty-state-icon{font-size:48px;}
-
-        /* ─── RANK SHOWCASE PANEL (leaderboard top) ── */
-        .rank-tiers-header{
-            padding:12px 14px;border-bottom:1px solid var(--border);
-        }
-        .rank-tier-row{
-            display:flex;align-items:center;gap:8px;padding:7px 14px;
-            border-bottom:1px solid var(--border)22;font-size:11px;
-        }
+        .rank-tiers-header{padding:12px 14px;border-bottom:1px solid var(--border);}
+        .rank-tier-row{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid var(--border)22;font-size:11px;}
         .rank-tier-range{color:var(--text-muted);font-size:10px;margin-left:auto;white-space:nowrap;}
-
-        /* ─── LEVEL UP TOAST ─────────────────────── */
         .levelup-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:14px 28px;border-radius:10px;font-weight:700;font-size:14px;z-index:9999;animation:toastIn .4s ease;display:none;border:1px solid;text-align:center;}
         .levelup-toast.show{display:block;}
         @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-24px) scale(.9);}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}}
-
-        /* ─── MOBILE ─────────────────────────────── */
         @media(max-width:768px){
             .sidebar{position:fixed;left:-260px;top:0;height:100%;height:100dvh;z-index:100;transition:left .3s ease;}
             .sidebar.mobile-open{left:0;}
@@ -309,8 +241,6 @@
             .msg-rank{display:none;}
         }
         @media(max-width:380px){.message-content{max-width:90%;}.logo{font-size:12px;}}
-
-        /* ── LOAD MORE ── */
         .load-more-btn{display:none;width:100%;padding:8px;background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:inherit;font-size:11px;cursor:pointer;transition:all .2s;margin-bottom:8px;}
         .load-more-btn:hover{border-color:var(--honey);color:var(--honey);}
         .load-more-btn.visible{display:block;}
@@ -320,7 +250,6 @@
 <div class="loading-screen" id="loadingScreen"><div class="spinner"></div><div style="color:var(--honey);">Loading the Hive...</div></div>
 <div class="levelup-toast" id="levelupToast">🐝 Rank Up!</div>
 
-<!-- CREATE ROOM MODAL -->
 <div class="modal-overlay" id="createRoomModal" onclick="closeCreateRoomModal(event)">
   <div class="modal" style="max-width:400px;">
     <button class="modal-close" onclick="document.getElementById('createRoomModal').classList.remove('open')">×</button>
@@ -347,7 +276,6 @@
   </div>
 </div>
 
-<!-- REQUEST ACCESS MODAL -->
 <div class="modal-overlay" id="requestAccessModal" onclick="closeRequestAccessModal(event)">
   <div class="modal" style="max-width:360px;text-align:center;">
     <button class="modal-close" onclick="document.getElementById('requestAccessModal').classList.remove('open')">×</button>
@@ -360,16 +288,13 @@
   </div>
 </div>
 
-<!-- IMAGE LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close">×</button>
   <img id="lightboxImg" src="" alt=""/>
 </div>
 
-<!-- Hidden file input -->
 <input type="file" id="fileInput" style="display:none;" accept="image/*,audio/*,.pdf,.doc,.docx,.txt" onchange="handleFileSelect(this)"/>
 
-<!-- USER CARD MODAL -->
 <div class="modal-overlay" id="userModal" onclick="closeModal(event)">
   <div class="modal" id="modalContent">
     <button class="modal-close" onclick="document.getElementById('userModal').classList.remove('open')">×</button>
@@ -415,9 +340,7 @@
         <div class="sidebar-tab" onclick="switchSidebarTab('search')" id="tab-search">🔍 Find</div>
         <div class="sidebar-tab" onclick="switchSidebarTab('leaderboard')" id="tab-leaderboard">👑 Ranks</div>
       </div>
-
       <div class="sidebar-panel active" id="panel-channels">
-        <!-- CREATE ROOM BUTTON -->
         <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;">
           <div class="section-title" style="margin:0;flex:1;">Rooms</div>
           <button class="btn" style="padding:4px 10px;font-size:11px;border-color:var(--honey);color:var(--honey);" onclick="openCreateRoomModal()">+ New</button>
@@ -430,20 +353,17 @@
           <div class="section-title">🔒 Private</div>
           <div id="privateRoomList"><div style="color:var(--text-muted);font-size:11px;padding:4px 0;">No private rooms yet</div></div>
         </div>
-        <!-- JOIN REQUESTS (only visible to room queens) -->
         <div id="joinRequestsPanel" style="display:none;padding:8px 12px;border-top:1px solid var(--border);">
           <div class="section-title">👑 Join Requests</div>
           <div id="joinRequestsList"></div>
         </div>
       </div>
-
       <div class="sidebar-panel" id="panel-dms">
         <div style="padding:12px;border-bottom:1px solid var(--border);">
           <div class="section-title">Direct Messages</div>
           <div id="dmList"><div style="color:var(--text-muted);font-size:12px;padding:8px 0;">No DMs yet!</div></div>
         </div>
       </div>
-
       <div class="sidebar-panel" id="panel-friends">
         <div class="add-friend-form">
           <div class="section-title">Add to Hive</div>
@@ -453,7 +373,6 @@
         <div id="pendingRequests"></div>
         <div id="friendsList"></div>
       </div>
-
       <div class="sidebar-panel" id="panel-search">
         <div class="search-box">
           <input class="search-input" id="searchInput" placeholder="🔍 Search the hive..." oninput="handleSearch(this.value)" />
@@ -462,8 +381,6 @@
           <div class="search-hint">🔍 Search for bees by username<br>Click a bee to see their rank<br>Add to your hive or send a DM</div>
         </div>
       </div>
-
-      <!-- LEADERBOARD with rank tiers -->
       <div class="sidebar-panel" id="panel-leaderboard">
         <div class="rank-tiers-header">
           <div class="section-title">🏆 Rank Tiers</div>
@@ -487,7 +404,6 @@
       <div class="message-input-container">
         <div class="mention-dropdown" id="mentionDropdown"></div>
         <div id="replyPreview"></div>
-        <!-- File preview -->
         <div class="file-preview-bar" id="filePreviewBar">
           <div id="filePreviewThumb"></div>
           <div class="file-preview-info">
@@ -508,9 +424,6 @@
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// 🐝 BEE RANK SYSTEM
-// ═══════════════════════════════════════════
 const BEE_RANKS = [
     { min:0,    max:99,        name:'Egg',        emoji:'🥚', color:'#9ca3af', glow:'rgba(156,163,175,0.4)', label:'Just hatched'      },
     { min:100,  max:299,       name:'Larva',       emoji:'🐛', color:'#84cc16', glow:'rgba(132,204,22,0.4)',  label:'Growing fast'      },
@@ -523,17 +436,8 @@ const BEE_RANKS = [
 ];
 
 function getBeeRank(points){return BEE_RANKS.find(r=>points>=r.min&&points<=r.max)||BEE_RANKS[0];}
-
-function getBeeProgress(points){
-    const r=getBeeRank(points);
-    if(r.max===Infinity)return 100;
-    return Math.min(100,Math.floor(((points-r.min)/(r.max-r.min+1))*100));
-}
-
-function getNextRank(points){
-    const idx=BEE_RANKS.findIndex(r=>points>=r.min&&points<=r.max);
-    return BEE_RANKS[idx+1]||null;
-}
+function getBeeProgress(points){const r=getBeeRank(points);if(r.max===Infinity)return 100;return Math.min(100,Math.floor(((points-r.min)/(r.max-r.min+1))*100));}
+function getNextRank(points){const idx=BEE_RANKS.findIndex(r=>points>=r.min&&points<=r.max);return BEE_RANKS[idx+1]||null;}
 
 function rankBadgeHTML(points,extra=''){
     const r=getBeeRank(points);
@@ -563,9 +467,6 @@ function rankProgressHTML(points){
     </div>`;
 }
 
-// ═══════════════════════════════════════════
-// APP CORE
-// ═══════════════════════════════════════════
 const SUPABASE_URL='https://cwoaqiwnpcpawignecsb.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
 
@@ -576,16 +477,12 @@ let replyingTo=null,channelUsers=[],mentionSelectedIndex=0;
 let friendsList=[],dmConversations=[];
 let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='',myUsername='';
 let selectedFile=null, selectedFileUrl=null, selectedFileType=null;
-
-// Pagination
 const PAGE_SIZE=50;
 let msgPage={channel:{},dm:{}};
 let msgHasMore={channel:{},dm:{}};
 let isLoadingMore=false;
 let profileCache={};
 let searchTimeout=null;
-
-// Static public channels (hardcoded)
 const PUBLIC_CHANNELS=[
     {id:'general',name:'general',desc:'The main hive'},
     {id:'random',name:'random',desc:'Anything goes'},
@@ -593,14 +490,12 @@ const PUBLIC_CHANNELS=[
     {id:'backend-wizards',name:'backend-wizards',desc:'Server side magic'},
     {id:'shipped-today',name:'shipped-today',desc:'Show your work'},
 ];
-
-// Dynamic rooms from DB
 let privateRooms=[];
-let myRoomMemberships={};   // roomId -> {role, status}
-let roomOnlineCounts={};    // roomId/channelId -> number
-let presenceChannels={};    // track presence subscriptions
-let isRoomPrivate=false;    // for create modal
-let pendingAccessRoomId=null; // for request access modal
+let myRoomMemberships={};
+let roomOnlineCounts={};
+let presenceChannels={};
+let isRoomPrivate=false;
+let pendingAccessRoomId=null;
 
 async function init(){
     try{
@@ -608,7 +503,6 @@ async function init(){
         const{data:{user},error}=await supabaseClient.auth.getUser();
         if(error||!user)throw new Error('Not authenticated');
         currentUser=user;
-        // Fallback username from auth metadata — will be overridden by profiles.username in loadMyProfile
         myUsername=user.user_metadata?.username||user.email.split('@')[0];
         document.getElementById('currentUser').textContent=myUsername;
         await loadMyProfile();
@@ -641,16 +535,12 @@ async function loadMyProfile(){
             myLevel=data.level||1;myPoints=data.points||0;
             myEmoji=data.avatar_emoji||'🐝';myColor=data.avatar_color||'#1a1a1a';
             myStatus=data.status_message||'';
-            // Use profiles.username as source of truth if set
-            if(data.username){
-                myUsername=data.username;
-                document.getElementById('currentUser').textContent=myUsername;
-            }
+            if(data.username){myUsername=data.username;document.getElementById('currentUser').textContent=myUsername;}
             profileCache[currentUser.id]=data;
             updateHeaderRank();
             const prevRank=getBeeRank(prevPoints);
             const newRank=getBeeRank(myPoints);
-            if(prevPoints>0&&prevRank.name!==newRank.name) showRankUpToast(newRank);
+            if(prevPoints>0&&prevRank.name!==newRank.name)showRankUpToast(newRank);
         }
     }catch(e){console.error('loadMyProfile:',e);}
 }
@@ -667,12 +557,9 @@ function updateHeaderRank(){
 function showRankUpToast(rank){
     const t=document.getElementById('levelupToast');
     t.textContent=`${rank.emoji} Rank Up! You are now a ${rank.name}!`;
-    t.style.background=rank.color+'22';
-    t.style.borderColor=rank.color;
-    t.style.color=rank.color;
+    t.style.background=rank.color+'22';t.style.borderColor=rank.color;t.style.color=rank.color;
     t.style.boxShadow=`0 0 20px ${rank.glow}`;
-    t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),4000);
+    t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000);
 }
 
 async function getProfile(userId){
@@ -690,7 +577,6 @@ function makeAvatar(emoji,color,size='',points=0){
     return `<div class="emoji-avatar ${size}" style="background:${color||'#1a1a1a'};${ring}">${emoji||'🐝'}</div>`;
 }
 
-// ─── USER MODAL ───────────────────────────
 async function showUserModal(userId){
     const modal=document.getElementById('userModal');
     modal.classList.add('open');
@@ -707,32 +593,20 @@ async function showUserModal(userId){
         const rank=getBeeRank(points);
         const isFriend=friendsList.find(f=>f.userId===userId&&f.status==='accepted');
         const isPending=friendsList.find(f=>f.userId===userId&&f.status==='pending');
-
         const av=document.getElementById('modalAvatar');
         av.textContent=profile.avatar_emoji||'🐝';
         av.style.background=profile.avatar_color||'#1a1a1a';
         av.style.cssText+=avatarRingStyle(points);
         av.style.width='80px';av.style.height='80px';av.style.fontSize='42px';
-
         document.getElementById('modalUsername').textContent=profile.username||'Unknown';
         document.getElementById('modalRankRow').innerHTML=rankBadgeHTML(points,` <span style="opacity:.6;font-size:10px;">· ${rank.label}</span>`)
             +(profile.status_message?`<div class="status-line">💬 ${escapeHtml(profile.status_message)}</div>`:'');
         document.getElementById('modalBio').textContent=profile.bio?`"${profile.bio}"`:'No bio yet.';
         document.getElementById('modalRankProgress').innerHTML=rankProgressHTML(points);
-
-        const{count:msgCount}=await supabaseClient.from('messages')
-            .select('*',{count:'exact',head:true}).eq('user_id',userId);
-
+        const{count:msgCount}=await supabaseClient.from('messages').select('*',{count:'exact',head:true}).eq('user_id',userId);
         document.getElementById('modalStats').innerHTML=`
-            <div class="modal-stat">
-                <div class="modal-stat-val" style="color:${rank.color};">${msgCount||0}</div>
-                <div class="modal-stat-label">Messages</div>
-            </div>
-            <div class="modal-stat">
-                <div class="modal-stat-val" style="color:${rank.color};">${points}</div>
-                <div class="modal-stat-label">Total XP</div>
-            </div>`;
-
+            <div class="modal-stat"><div class="modal-stat-val" style="color:${rank.color};">${msgCount||0}</div><div class="modal-stat-label">Messages</div></div>
+            <div class="modal-stat"><div class="modal-stat-val" style="color:${rank.color};">${points}</div><div class="modal-stat-label">Total XP</div></div>`;
         const username=profile.username||'Unknown';
         document.getElementById('modalActions').innerHTML=`
             <button class="btn" style="flex:1;" onclick="openDM('${userId}','${escapeHtml(username).replace(/'/g,"\\'")}');switchSidebarTab('dms');document.getElementById('userModal').classList.remove('open')">✉️ DM</button>
@@ -747,9 +621,7 @@ async function showUserModal(userId){
 
 function closeModal(e){if(e.target===document.getElementById('userModal'))document.getElementById('userModal').classList.remove('open');}
 
-// ─── LEADERBOARD ──────────────────────────
 async function loadLeaderboard(){
-    // Render rank tiers
     document.getElementById('rankTiersList').innerHTML=BEE_RANKS.map(r=>`
         <div class="rank-tier-row">
             <span style="font-size:16px;">${r.emoji}</span>
@@ -757,11 +629,8 @@ async function loadLeaderboard(){
             <span style="font-size:10px;color:var(--text-muted);">${r.label}</span>
             <span class="rank-tier-range" style="color:${r.color};">${r.max===Infinity?r.min+'+':r.min+'-'+r.max} pts</span>
         </div>`).join('');
-
     try{
-        const{data}=await supabaseClient.from('profiles')
-            .select('id,username,level,points,avatar_emoji,avatar_color')
-            .order('points',{ascending:false}).limit(20);
+        const{data}=await supabaseClient.from('profiles').select('id,username,level,points,avatar_emoji,avatar_color').order('points',{ascending:false}).limit(20);
         const container=document.getElementById('leaderboardList');
         if(!data||data.length===0){container.innerHTML=`<div style="padding:16px;color:var(--text-muted);font-size:12px;">No bees yet!</div>`;return;}
         container.innerHTML=data.map((p,i)=>{
@@ -770,8 +639,7 @@ async function loadLeaderboard(){
             const isMe=p.id===currentUser.id;
             const r=getBeeRank(p.points||0);
             const pct=getBeeProgress(p.points||0);
-            return `
-            <div class="leaderboard-item" onclick="showUserModal('${p.id}')" style="${isMe?`background:${r.color}11;border-left:3px solid ${r.color};`:''}">
+            return `<div class="leaderboard-item" onclick="showUserModal('${p.id}')" style="${isMe?`background:${r.color}11;border-left:3px solid ${r.color};`:''}">
                 <div class="leaderboard-rank ${rankClass}">${rankIcon}</div>
                 ${makeAvatar(p.avatar_emoji||'🐝',p.avatar_color||'#1a1a1a','sm',p.points||0)}
                 <div class="leaderboard-info">
@@ -792,7 +660,6 @@ async function loadLeaderboard(){
     }catch(e){console.error('loadLeaderboard:',e);}
 }
 
-// ─── SEARCH ──────────────────────────────
 function handleSearch(query){
     clearTimeout(searchTimeout);
     const q=query.trim();
@@ -803,18 +670,14 @@ function handleSearch(query){
 
 async function searchUsers(query){
     try{
-        const{data}=await supabaseClient.from('profiles')
-            .select('id,username,level,points,avatar_emoji,avatar_color,bio,status_message')
-            .ilike('username',`%${query}%`).neq('id',currentUser.id)
-            .order('points',{ascending:false}).limit(20);
+        const{data}=await supabaseClient.from('profiles').select('id,username,level,points,avatar_emoji,avatar_color,bio,status_message').ilike('username',`%${query}%`).neq('id',currentUser.id).order('points',{ascending:false}).limit(20);
         const container=document.getElementById('searchResults');
         if(!data||data.length===0){container.innerHTML=`<div class="search-empty">No bees found for "<strong>${escapeHtml(query)}</strong>"</div>`;return;}
         container.innerHTML=data.map(user=>{
             const isFriend=friendsList.find(f=>f.userId===user.id&&f.status==='accepted');
             const isPending=friendsList.find(f=>f.userId===user.id&&f.status==='pending');
             const r=getBeeRank(user.points||0);
-            return `
-            <div class="search-result" onclick="showUserModal('${user.id}')">
+            return `<div class="search-result" onclick="showUserModal('${user.id}')">
                 ${makeAvatar(user.avatar_emoji||'🐝',user.avatar_color||'#1a1a1a','',user.points||0)}
                 <div class="search-result-info">
                     <div class="search-result-name">${escapeHtml(user.username)}</div>
@@ -837,9 +700,9 @@ async function searchUsers(query){
     }catch(e){document.getElementById('searchResults').innerHTML=`<div class="search-empty">Error. Try again.</div>`;}
 }
 
+// FIX 1: Removed `const myUsername = myUsername` - uses global myUsername directly
 async function quickAddFriend(userId,username,btn){
     try{
-        const myUsername=myUsername;
         const{error}=await supabaseClient.from('friends').insert({user_id:currentUser.id,friend_id:userId,username:myUsername,friend_username:username,status:'pending'});
         if(error)throw error;
         btn.textContent='⏳';btn.disabled=true;btn.style.opacity='.5';
@@ -847,50 +710,29 @@ async function quickAddFriend(userId,username,btn){
     }catch(e){alert('Error: '+e.message);}
 }
 
-// ─── CHANNELS ────────────────────────────
-// ─── ROOMS: LOAD, RENDER, PRESENCE ───────────────────────────────
 async function loadRooms(){
     try{
-        // Load all private rooms
         const{data:rooms}=await supabaseClient.from('rooms').select('*').order('created_at',{ascending:true});
         privateRooms=(rooms||[]).filter(r=>r.is_private);
-
-        // Load my memberships
-        const{data:memberships}=await supabaseClient.from('room_members')
-            .select('*').eq('user_id',currentUser.id);
+        const{data:memberships}=await supabaseClient.from('room_members').select('*').eq('user_id',currentUser.id);
         myRoomMemberships={};
-        (memberships||[]).forEach(m=>{ myRoomMemberships[m.room_id]={role:m.role,status:m.status}; });
-
+        (memberships||[]).forEach(m=>{myRoomMemberships[m.room_id]={role:m.role,status:m.status};});
         renderRooms();
         loadJoinRequests();
     }catch(e){console.error('loadRooms:',e);}
 }
 
 function renderRooms(){
-    // PUBLIC rooms
     document.getElementById('publicRoomList').innerHTML=PUBLIC_CHANNELS.map(ch=>{
         const count=roomOnlineCounts[ch.id]||0;
         const isActive=currentMode==='channel'&&currentChannel===ch.id;
         return `<div class="room-item ${isActive?'active':''}" onclick="switchChannel('${ch.id}',false,'${ch.name}','${ch.desc}')">
-            <div class="room-name-row ${isActive?'active-name':''}">
-                <span>🍯 ${ch.name}</span>
-            </div>
-            <div class="room-meta">
-                <span class="online-count">
-                    <span class="online-dot"></span>
-                    ${count} online
-                </span>
-                <span style="font-size:10px;color:var(--text-muted);">· ${ch.desc}</span>
-            </div>
+            <div class="room-name-row ${isActive?'active-name':''}"><span>🍯 ${ch.name}</span></div>
+            <div class="room-meta"><span class="online-count"><span class="online-dot"></span>${count} online</span><span style="font-size:10px;color:var(--text-muted);">· ${ch.desc}</span></div>
         </div>`;
     }).join('');
-
-    // PRIVATE rooms
     const container=document.getElementById('privateRoomList');
-    if(privateRooms.length===0){
-        container.innerHTML=`<div style="color:var(--text-muted);font-size:11px;padding:4px 0 8px;">No private rooms yet</div>`;
-        return;
-    }
+    if(privateRooms.length===0){container.innerHTML=`<div style="color:var(--text-muted);font-size:11px;padding:4px 0 8px;">No private rooms yet</div>`;return;}
     container.innerHTML=privateRooms.map(room=>{
         const membership=myRoomMemberships[room.id];
         const isQueen=membership?.role==='queen';
@@ -899,78 +741,49 @@ function renderRooms(){
         const isActive=currentMode==='channel'&&currentChannel===room.id;
         const count=roomOnlineCounts[room.id]||0;
         const isCreator=room.creator_id===currentUser.id;
-
         if(isApproved||isCreator){
-            return `<div class="room-item ${isActive?'active':''}  " onclick="switchChannel('${room.id}',true,'${escapeHtml(room.name).replace(/'/g,"\\'")}','${escapeHtml(room.description||'').replace(/'/g,"\\'")}','${room.creator_username||''}')">
-                <div class="room-name-row ${isActive?'active-name':''}">
-                    <span>🔒 ${escapeHtml(room.name)}</span>
-                    ${isQueen||isCreator?`<span class="room-queen-badge">👑</span>`:''}
-                </div>
-                <div class="room-meta">
-                    <span class="online-count"><span class="online-dot orange"></span>${count} online</span>
-                    ${room.description?`<span style="font-size:10px;color:var(--text-muted);">· ${escapeHtml(room.description.substring(0,25))}</span>`:''}
-                </div>
+            return `<div class="room-item ${isActive?'active':''}" onclick="switchChannel('${room.id}',true,'${escapeHtml(room.name).replace(/'/g,"\\'")}','${escapeHtml(room.description||'').replace(/'/g,"\\'")}','${room.creator_username||''}')">
+                <div class="room-name-row ${isActive?'active-name':''}"><span>🔒 ${escapeHtml(room.name)}</span>${isQueen||isCreator?`<span class="room-queen-badge">👑</span>`:''}</div>
+                <div class="room-meta"><span class="online-count"><span class="online-dot orange"></span>${count} online</span>${room.description?`<span style="font-size:10px;color:var(--text-muted);">· ${escapeHtml(room.description.substring(0,25))}</span>`:''}</div>
             </div>`;
-        } else if(isPending){
-            return `<div class="room-item locked">
-                <div class="room-name-row">🔒 ${escapeHtml(room.name)}</div>
-                <div class="room-meta"><span class="pending-access">⏳ Pending approval</span></div>
-            </div>`;
-        } else {
+        }else if(isPending){
+            return `<div class="room-item locked"><div class="room-name-row">🔒 ${escapeHtml(room.name)}</div><div class="room-meta"><span class="pending-access">⏳ Pending approval</span></div></div>`;
+        }else{
             return `<div class="room-item locked" onclick="openRequestAccessModal('${room.id}','${escapeHtml(room.name).replace(/'/g,"\\'")}','${escapeHtml(room.description||'').replace(/'/g,"\\'")}','${room.creator_username||''}')">
                 <div class="room-name-row">🔒 ${escapeHtml(room.name)}</div>
-                <div class="room-meta">
-                    <span class="room-lock">Tap to request access</span>
-                    <span style="font-size:10px;color:var(--text-muted);">· 👑 ${room.creator_username}</span>
-                </div>
+                <div class="room-meta"><span class="room-lock">Tap to request access</span><span style="font-size:10px;color:var(--text-muted);">· 👑 ${room.creator_username}</span></div>
             </div>`;
         }
     }).join('');
 }
 
-// Track realtime presence for online counts
 function trackPresence(channelId){
-    if(presenceChannels[channelId]) return; // already tracking
-    const username=myUsername;
-    const presenceCh=supabaseClient.channel(`presence:${channelId}`,{
-        config:{presence:{key:currentUser.id}}
-    });
+    if(presenceChannels[channelId])return;
+    const presenceCh=supabaseClient.channel(`presence:${channelId}`,{config:{presence:{key:currentUser.id}}});
     presenceCh
         .on('presence',{event:'sync'},()=>{
             const state=presenceCh.presenceState();
             roomOnlineCounts[channelId]=Object.keys(state).length;
             renderRooms();
-            // Also update the header if we're currently in this room
-            if(currentChannel===channelId){
-                const el=document.getElementById('headerOnlineCount');
-                if(el) el.textContent=roomOnlineCounts[channelId];
-            }
+            const el=document.getElementById('headerOnlineCount');
+            if(el&&currentChannel===channelId)el.textContent=roomOnlineCounts[channelId];
         })
         .subscribe(async(status)=>{
-            if(status==='SUBSCRIBED'){
-                await presenceCh.track({user_id:currentUser.id,username,online_at:new Date().toISOString()});
-            }
+            if(status==='SUBSCRIBED'){await presenceCh.track({user_id:currentUser.id,username:myUsername,online_at:new Date().toISOString()});}
         });
     presenceChannels[channelId]=presenceCh;
 }
 
 function untrackPresence(channelId){
-    if(presenceChannels[channelId]){
-        presenceChannels[channelId].unsubscribe();
-        delete presenceChannels[channelId];
-        delete roomOnlineCounts[channelId];
-    }
+    if(presenceChannels[channelId]){presenceChannels[channelId].unsubscribe();delete presenceChannels[channelId];delete roomOnlineCounts[channelId];}
 }
 
-async function switchChannel(channelId, isPrivate=false, name='', desc='', queenUsername=''){
-    // Untrack old presence
-    if(currentChannel && currentChannel!==channelId) untrackPresence(currentChannel);
-
-    currentMode='channel'; currentChannel=channelId; currentDMUser=null;
+async function switchChannel(channelId,isPrivate=false,name='',desc='',queenUsername=''){
+    if(currentChannel&&currentChannel!==channelId)untrackPresence(currentChannel);
+    currentMode='channel';currentChannel=channelId;currentDMUser=null;
     const displayName=name||channelId;
     const membership=myRoomMemberships[channelId];
     const isQueenHere=membership?.role==='queen'||(isPrivate&&queenUsername&&myUsername===queenUsername);
-
     document.getElementById('chatHeader').innerHTML=`
         <div>
             <div style="font-size:16px;font-weight:600;">${isPrivate?'🔒':'🍯'} ${escapeHtml(displayName)}</div>
@@ -982,20 +795,18 @@ async function switchChannel(channelId, isPrivate=false, name='', desc='', queen
             </div>
         </div>`;
     document.getElementById('messageInput').placeholder=`Buzz in #${displayName}...`;
-
     renderRooms();
-    if(messageSubscription) messageSubscription.unsubscribe();
-    await loadMessages('channel', channelId);
+    if(messageSubscription)messageSubscription.unsubscribe();
+    await loadMessages('channel',channelId);
     await loadChannelUsers(channelId);
     subscribeToChannel(channelId);
     trackPresence(channelId);
     cancelReply();
-    if(window.innerWidth<=768) closeSidebar();
+    if(window.innerWidth<=768)closeSidebar();
 }
 
-function renderChannels(){ renderRooms(); } // backward compat alias
+function renderChannels(){renderRooms();}
 
-// ─── CREATE ROOM ──────────────────────────
 function openCreateRoomModal(){
     isRoomPrivate=false;
     document.getElementById('newRoomName').value='';
@@ -1005,22 +816,18 @@ function openCreateRoomModal(){
     setTimeout(()=>document.getElementById('newRoomName').focus(),100);
 }
 function closeCreateRoomModal(e){if(e.target===document.getElementById('createRoomModal'))document.getElementById('createRoomModal').classList.remove('open');}
-
-function toggleRoomPrivacy(){
-    isRoomPrivate=!isRoomPrivate;
-    updatePrivacyToggle();
-}
+function toggleRoomPrivacy(){isRoomPrivate=!isRoomPrivate;updatePrivacyToggle();}
 function updatePrivacyToggle(){
     const thumb=document.getElementById('privacyThumb');
     const toggle=document.getElementById('privacyToggle');
     if(isRoomPrivate){
-        thumb.style.left='22px'; thumb.style.background=document.body.getAttribute('data-theme')==='light'?'#d97706':'var(--honey)';
-        toggle.style.background='var(--honey)33'; toggle.style.borderColor='var(--honey)';
+        thumb.style.left='22px';thumb.style.background=document.body.getAttribute('data-theme')==='light'?'#d97706':'var(--honey)';
+        toggle.style.background='var(--honey)33';toggle.style.borderColor='var(--honey)';
         document.getElementById('privacyLabel').innerHTML='🔒 Private Room';
         document.getElementById('privacyDesc').textContent='Only approved bees can join';
     }else{
-        thumb.style.left='2px'; thumb.style.background='var(--text-muted)';
-        toggle.style.background='var(--bg-secondary)'; toggle.style.borderColor='var(--border)';
+        thumb.style.left='2px';thumb.style.background='var(--text-muted)';
+        toggle.style.background='var(--bg-secondary)';toggle.style.borderColor='var(--border)';
         document.getElementById('privacyLabel').innerHTML='🌍 Public Room';
         document.getElementById('privacyDesc').textContent='Anyone can join and chat';
     }
@@ -1031,29 +838,17 @@ async function createRoom(){
     if(!name){alert('Give your room a name!');return;}
     const safeName=name.toLowerCase().replace(/[^a-z0-9-_]/g,'-').replace(/-+/g,'-');
     const desc=document.getElementById('newRoomDesc').value.trim();
-    const username=myUsername;
     try{
-        const{data:room,error}=await supabaseClient.from('rooms').insert({
-            name:safeName, description:desc,
-            creator_id:currentUser.id, creator_username:username,
-            is_private:isRoomPrivate
-        }).select().single();
+        const{data:room,error}=await supabaseClient.from('rooms').insert({name:safeName,description:desc,creator_id:currentUser.id,creator_username:myUsername,is_private:isRoomPrivate}).select().single();
         if(error)throw error;
-
-        // Auto-add creator as queen member
-        await supabaseClient.from('room_members').insert({
-            room_id:room.id, user_id:currentUser.id,
-            username, role:'queen', status:'approved'
-        });
-
+        await supabaseClient.from('room_members').insert({room_id:room.id,user_id:currentUser.id,username:myUsername,role:'queen',status:'approved'});
         document.getElementById('createRoomModal').classList.remove('open');
         await loadRooms();
-        await switchChannel(room.id, isRoomPrivate, safeName, desc, username);
+        await switchChannel(room.id,isRoomPrivate,safeName,desc,myUsername);
     }catch(e){alert('Error creating room: '+e.message);}
 }
 
-// ─── ACCESS REQUESTS ──────────────────────
-function openRequestAccessModal(roomId, name, desc, queenUsername){
+function openRequestAccessModal(roomId,name,desc,queenUsername){
     pendingAccessRoomId=roomId;
     document.getElementById('requestRoomName').textContent='🔒 '+name;
     document.getElementById('requestRoomDesc').textContent=desc||'';
@@ -1068,42 +863,27 @@ async function sendAccessRequest(){
     if(!pendingAccessRoomId)return;
     const btn=document.getElementById('requestAccessBtn');
     btn.disabled=true;btn.textContent='Sending...';
-    const username=myUsername;
     try{
-        const{error}=await supabaseClient.from('room_members').insert({
-            room_id:pendingAccessRoomId, user_id:currentUser.id,
-            username, role:'member', status:'pending'
-        });
-        if(error&&error.code!=='23505') throw error; // ignore duplicate
+        const{error}=await supabaseClient.from('room_members').insert({room_id:pendingAccessRoomId,user_id:currentUser.id,username:myUsername,role:'member',status:'pending'});
+        if(error&&error.code!=='23505')throw error;
         document.getElementById('requestAccessModal').classList.remove('open');
         await loadRooms();
         alert('Request sent! The Queen will review it 👑');
     }catch(e){alert('Error: '+e.message);btn.disabled=false;btn.textContent='🐝 Request Access';}
 }
 
-// ─── QUEEN: JOIN REQUESTS PANEL ───────────
 async function loadJoinRequests(){
     try{
-        // Find rooms where user is queen
-        const queenRoomIds=privateRooms
-            .filter(r=>r.creator_id===currentUser.id||myRoomMemberships[r.id]?.role==='queen')
-            .map(r=>r.id);
+        const queenRoomIds=privateRooms.filter(r=>r.creator_id===currentUser.id||myRoomMemberships[r.id]?.role==='queen').map(r=>r.id);
         if(queenRoomIds.length===0){document.getElementById('joinRequestsPanel').style.display='none';return;}
-
-        const{data:requests}=await supabaseClient.from('room_members')
-            .select('*').in('room_id',queenRoomIds).eq('status','pending');
-
+        const{data:requests}=await supabaseClient.from('room_members').select('*').in('room_id',queenRoomIds).eq('status','pending');
         const panel=document.getElementById('joinRequestsPanel');
         if(!requests||requests.length===0){panel.style.display='none';return;}
-
         panel.style.display='block';
         document.getElementById('joinRequestsList').innerHTML=requests.map(req=>{
             const room=privateRooms.find(r=>r.id===req.room_id);
             return `<div class="join-req-item">
-                <div class="join-req-info">
-                    <div class="join-req-name">🐝 ${escapeHtml(req.username)}</div>
-                    <div class="join-req-room">wants into 🔒 ${room?escapeHtml(room.name):req.room_id}</div>
-                </div>
+                <div class="join-req-info"><div class="join-req-name">🐝 ${escapeHtml(req.username)}</div><div class="join-req-room">wants into 🔒 ${room?escapeHtml(room.name):req.room_id}</div></div>
                 <div class="join-req-actions">
                     <button class="friend-btn accept" onclick="approveJoinRequest('${req.id}','${req.room_id}')">✓</button>
                     <button class="friend-btn reject" onclick="denyJoinRequest('${req.id}')">✗</button>
@@ -1113,17 +893,13 @@ async function loadJoinRequests(){
     }catch(e){console.error('loadJoinRequests:',e);}
 }
 
-async function approveJoinRequest(reqId, roomId){
-    try{
-        await supabaseClient.from('room_members').update({status:'approved'}).eq('id',reqId);
-        await loadRooms();
-    }catch(e){alert('Error: '+e.message);}
+async function approveJoinRequest(reqId,roomId){
+    try{await supabaseClient.from('room_members').update({status:'approved'}).eq('id',reqId);await loadRooms();}
+    catch(e){alert('Error: '+e.message);}
 }
 async function denyJoinRequest(reqId){
-    try{
-        await supabaseClient.from('room_members').delete().eq('id',reqId);
-        await loadRooms();
-    }catch(e){alert('Error: '+e.message);}
+    try{await supabaseClient.from('room_members').delete().eq('id',reqId);await loadRooms();}
+    catch(e){alert('Error: '+e.message);}
 }
 
 async function loadChannelUsers(channelId){
@@ -1189,23 +965,17 @@ async function openDM(userId,username){
 }
 
 async function loadMessages(mode,id){
-    msgPage[mode][id]=null;
-    msgHasMore[mode][id]=false;
+    msgPage[mode][id]=null;msgHasMore[mode][id]=false;
     try{
         let data;
         if(mode==='channel'){
-            const res=await supabaseClient.from('messages').select('*')
-                .eq('channel_id',id).order('created_at',{ascending:false}).limit(PAGE_SIZE);
-            data=(res.data||[]).reverse();
-            msgHasMore.channel[id]=res.data?.length===PAGE_SIZE;
+            const res=await supabaseClient.from('messages').select('*').eq('channel_id',id).order('created_at',{ascending:false}).limit(PAGE_SIZE);
+            data=(res.data||[]).reverse();msgHasMore.channel[id]=res.data?.length===PAGE_SIZE;
             if(data.length)msgPage.channel[id]=data[0].created_at;
         }else{
             const myId=currentUser.id;
-            const res=await supabaseClient.from('direct_messages').select('*')
-                .or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`)
-                .order('created_at',{ascending:false}).limit(PAGE_SIZE);
-            data=(res.data||[]).reverse();
-            msgHasMore.dm[id]=res.data?.length===PAGE_SIZE;
+            const res=await supabaseClient.from('direct_messages').select('*').or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`).order('created_at',{ascending:false}).limit(PAGE_SIZE);
+            data=(res.data||[]).reverse();msgHasMore.dm[id]=res.data?.length===PAGE_SIZE;
             if(data.length)msgPage.dm[id]=data[0].created_at;
         }
         const userIds=[...new Set(data.map(m=>mode==='dm'?m.sender_id:m.user_id))];
@@ -1224,22 +994,15 @@ async function loadMoreMessages(){
     const btn=document.getElementById('loadMoreBtn');
     if(btn){btn.textContent='⏳ Loading...';btn.disabled=true;}
     try{
-        const cursor=msgPage[mode][id];
-        let data;
+        const cursor=msgPage[mode][id];let data;
         if(mode==='channel'){
-            const res=await supabaseClient.from('messages').select('*')
-                .eq('channel_id',id).lt('created_at',cursor)
-                .order('created_at',{ascending:false}).limit(PAGE_SIZE);
-            data=(res.data||[]).reverse();
-            msgHasMore.channel[id]=res.data?.length===PAGE_SIZE;
+            const res=await supabaseClient.from('messages').select('*').eq('channel_id',id).lt('created_at',cursor).order('created_at',{ascending:false}).limit(PAGE_SIZE);
+            data=(res.data||[]).reverse();msgHasMore.channel[id]=res.data?.length===PAGE_SIZE;
             if(data.length)msgPage.channel[id]=data[0].created_at;
         }else{
             const myId=currentUser.id;
-            const res=await supabaseClient.from('direct_messages').select('*')
-                .or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`)
-                .lt('created_at',cursor).order('created_at',{ascending:false}).limit(PAGE_SIZE);
-            data=(res.data||[]).reverse();
-            msgHasMore.dm[id]=res.data?.length===PAGE_SIZE;
+            const res=await supabaseClient.from('direct_messages').select('*').or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`).lt('created_at',cursor).order('created_at',{ascending:false}).limit(PAGE_SIZE);
+            data=(res.data||[]).reverse();msgHasMore.dm[id]=res.data?.length===PAGE_SIZE;
             if(data.length)msgPage.dm[id]=data[0].created_at;
         }
         const userIds=[...new Set(data.map(m=>mode==='dm'?m.sender_id:m.user_id))];
@@ -1335,10 +1098,10 @@ function renderFriends(){
         </div>`;
 }
 
+// FIX 2: Removed `const myUsername = myUsername` - uses global myUsername directly
 async function sendFriendRequest(){
     const input=document.getElementById('addFriendInput');
     const targetUsername=input.value.trim();if(!targetUsername)return;
-    const myUsername=myUsername;
     if(targetUsername.toLowerCase()===myUsername.toLowerCase()){alert("You can't add yourself!");return;}
     try{
         const{data:userData}=await supabaseClient.from('messages').select('user_id,username').eq('username',targetUsername).limit(1);
@@ -1357,7 +1120,6 @@ async function respondFriendRequest(id,status){
     catch(e){alert('Error: '+e.message);}
 }
 
-// ─── MESSAGES ────────────────────────────
 function renderMessages(messages,mode){
     const container=document.getElementById('messages');
     const modeKey=mode==='dm'?'dm':'channel';
@@ -1367,9 +1129,7 @@ function renderMessages(messages,mode){
         container.innerHTML=`<div class="empty-state"><div class="empty-state-icon">${mode==='dm'?'✉️':'🍯'}</div><div>${mode==='dm'?'Start the conversation!':'No buzz yet!'}</div></div>`;
         return;
     }
-    container.innerHTML=
-        `<button id="loadMoreBtn" class="load-more-btn${hasMore?' visible':''}" onclick="loadMoreMessages()">⬆ Load older messages</button>`
-        +messages.map(msg=>createMessageHTML(msg,mode)).join('');
+    container.innerHTML=`<button id="loadMoreBtn" class="load-more-btn${hasMore?' visible':''}" onclick="loadMoreMessages()">⬆ Load older messages</button>`+messages.map(msg=>createMessageHTML(msg,mode)).join('');
     scrollToBottom();
 }
 
@@ -1380,9 +1140,9 @@ function addMessageToUI(msg,mode){
     scrollToBottom();
 }
 
+// FIX 3: Removed `const myUsername = myUsername` - uses global myUsername directly
 function createMessageHTML(msg,mode){
     const time=new Date(msg.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    const myUsername=myUsername;
     const senderUsername=mode==='dm'?msg.sender_username:msg.username;
     const senderId=mode==='dm'?msg.sender_id:msg.user_id;
     const isOwn=senderId===currentUser.id;
@@ -1394,7 +1154,7 @@ function createMessageHTML(msg,mode){
     const rank=getBeeRank(pts);
     let replyHTML='';
     if(msg.reply_to_username&&msg.reply_to_content)replyHTML=`<div class="reply-reference"><span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0,60))}${msg.reply_to_content.length>60?'...':''}</div>`;
-    const contentHTML=renderMessageContent(msg, mode, myUsername);
+    const contentHTML=renderMessageContent(msg,mode,myUsername);
     const ringStyle=avatarRingStyle(pts);
     const actionsMenu=`<div class="message-actions" style="display:none;position:absolute;top:4px;${isOwn?'left':'right'}:4px;z-index:10;white-space:nowrap;">
         <button onclick="replyToMessage('${msg.id}','${escapeHtml(senderUsername).replace(/'/g,"\\'")}',\`${escapeHtml(msg.content||'').replace(/\`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">💬</button>
@@ -1419,36 +1179,22 @@ function createMessageHTML(msg,mode){
     </div>`;
 }
 
-// ─── FILE UPLOAD ──────────────────────────────────────────────────
 function handleFileSelect(input){
-    const file=input.files[0];
-    if(!file){return;}
+    const file=input.files[0];if(!file)return;
     const maxMB=file.type.startsWith('audio/')?15:10;
     if(file.size>maxMB*1024*1024){alert(`File too large! Max ${maxMB}MB.`);input.value='';return;}
-
     selectedFile=file;
     selectedFileType=file.type.startsWith('image/')?'image':file.type.startsWith('audio/')?'audio':'file';
-
-    // Show preview bar
-    const bar=document.getElementById('filePreviewBar');
-    bar.classList.add('show');
+    const bar=document.getElementById('filePreviewBar');bar.classList.add('show');
     document.getElementById('filePreviewName').textContent=file.name;
     document.getElementById('filePreviewSize').textContent=formatFileSize(file.size);
     document.getElementById('uploadProgress').classList.remove('show');
     document.getElementById('uploadProgressFill').style.width='0%';
-
-    // Show thumbnail or icon
     const thumbEl=document.getElementById('filePreviewThumb');
-    if(selectedFileType==='image'){
-        const reader=new FileReader();
-        reader.onload=e=>{thumbEl.innerHTML=`<img class="file-preview-thumb" src="${e.target.result}"/>`;};
-        reader.readAsDataURL(file);
-    } else if(selectedFileType==='audio'){
-        thumbEl.innerHTML=`<div class="file-preview-icon">🎵</div>`;
-    } else {
-        thumbEl.innerHTML=`<div class="file-preview-icon">📄</div>`;
-    }
-    input.value=''; // reset so same file can be re-selected
+    if(selectedFileType==='image'){const reader=new FileReader();reader.onload=e=>{thumbEl.innerHTML=`<img class="file-preview-thumb" src="${e.target.result}"/>`;};reader.readAsDataURL(file);}
+    else if(selectedFileType==='audio'){thumbEl.innerHTML=`<div class="file-preview-icon">🎵</div>`;}
+    else{thumbEl.innerHTML=`<div class="file-preview-icon">📄</div>`;}
+    input.value='';
 }
 
 function clearFileSelection(){
@@ -1468,126 +1214,67 @@ async function uploadFile(file){
     const ext=file.name.split('.').pop().toLowerCase();
     const folder=file.type.startsWith('image/')?'images':file.type.startsWith('audio/')?'audio':'files';
     const path=`${folder}/${currentUser.id}/${Date.now()}.${ext}`;
-
-    // Show progress
     const prog=document.getElementById('uploadProgress');
     const fill=document.getElementById('uploadProgressFill');
     prog.classList.add('show');
-
-    // Simulate progress while uploading
     let fakeProgress=0;
-    const ticker=setInterval(()=>{
-        fakeProgress=Math.min(fakeProgress+8,85);
-        fill.style.width=fakeProgress+'%';
-    },100);
-
+    const ticker=setInterval(()=>{fakeProgress=Math.min(fakeProgress+8,85);fill.style.width=fakeProgress+'%';},100);
     try{
-        const{data,error}=await supabaseClient.storage.from('hive-media').upload(path,file,{
-            cacheControl:'3600',upsert:false,contentType:file.type
-        });
-        clearInterval(ticker);
-        if(error)throw error;
-        fill.style.width='100%';
-        // Get public URL
+        const{data,error}=await supabaseClient.storage.from('hive-media').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});
+        clearInterval(ticker);if(error)throw error;fill.style.width='100%';
         const{data:{publicUrl}}=supabaseClient.storage.from('hive-media').getPublicUrl(path);
         return publicUrl;
-    }catch(e){
-        clearInterval(ticker);
-        throw e;
-    }
+    }catch(e){clearInterval(ticker);throw e;}
 }
 
-// Render media in messages
-function renderMessageContent(msg, mode, myUsername){
+function renderMessageContent(msg,mode,currentUsername){
     const type=msg.media_type||msg.type||'text';
     const url=msg.file_url||'';
     const text=msg.content||'';
-
     if(type==='image'&&url){
-        return `<div>
-            ${text?`<div class="message-text" style="margin-bottom:4px;">${mode==='dm'?escapeHtml(text):highlightMentions(escapeHtml(text),myUsername)}</div>`:''}
-            <img class="msg-image" src="${escapeHtml(url)}" alt="image" onclick="openLightbox('${escapeHtml(url)}')" loading="lazy"/>
-        </div>`;
-    } else if(type==='audio'&&url){
-        return `<div>
-            ${text?`<div class="message-text" style="margin-bottom:4px;">${escapeHtml(text)}</div>`:''}
-            <audio class="msg-audio" controls preload="metadata">
-                <source src="${escapeHtml(url)}"/>
-                Your browser doesn't support audio.
-            </audio>
-        </div>`;
-    } else if(type==='file'&&url){
+        return `<div>${text?`<div class="message-text" style="margin-bottom:4px;">${mode==='dm'?escapeHtml(text):highlightMentions(escapeHtml(text),currentUsername)}</div>`:''}<img class="msg-image" src="${escapeHtml(url)}" alt="image" onclick="openLightbox('${escapeHtml(url)}')" loading="lazy"/></div>`;
+    }else if(type==='audio'&&url){
+        return `<div>${text?`<div class="message-text" style="margin-bottom:4px;">${escapeHtml(text)}</div>`:''}<audio class="msg-audio" controls preload="metadata"><source src="${escapeHtml(url)}"/>Your browser doesn't support audio.</audio></div>`;
+    }else if(type==='file'&&url){
         const fname=msg.file_name||'Download file';
-        return `<div>
-            ${text?`<div class="message-text" style="margin-bottom:4px;">${escapeHtml(text)}</div>`:''}
-            <a class="msg-file-link" href="${escapeHtml(url)}" target="_blank" download>
-                📄 <span>${escapeHtml(fname)}</span>
-            </a>
-        </div>`;
-    } else {
-        // plain text
+        return `<div>${text?`<div class="message-text" style="margin-bottom:4px;">${escapeHtml(text)}</div>`:''}<a class="msg-file-link" href="${escapeHtml(url)}" target="_blank" download>📄 <span>${escapeHtml(fname)}</span></a></div>`;
+    }else{
         return mode==='dm'
             ?`<div class="message-text">${escapeHtml(text)}</div>`
-            :`<div class="message-text">${highlightMentions(escapeHtml(text||''),myUsername)}</div>`;
+            :`<div class="message-text">${highlightMentions(escapeHtml(text||''),currentUsername)}</div>`;
     }
 }
 
-// Lightbox
-function openLightbox(url){
-    document.getElementById('lightboxImg').src=url;
-    document.getElementById('lightbox').classList.add('open');
-}
+function openLightbox(url){document.getElementById('lightboxImg').src=url;document.getElementById('lightbox').classList.add('open');}
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
 async function sendMessage(){
     const input=document.getElementById('messageInput');
     const content=input.value.trim();
-    // Must have text OR a file
     if(!content&&!selectedFile)return;
     const btn=document.getElementById('sendBtn');btn.disabled=true;
     try{
         const username=myUsername;
-        let fileUrl=null, fileType='text', fileName=null;
-
-        // Upload file first if one is selected
-        if(selectedFile){
-            fileUrl=await uploadFile(selectedFile);
-            fileType=selectedFileType;
-            fileName=selectedFile.name;
-        }
-
+        let fileUrl=null,fileType='text',fileName=null;
+        if(selectedFile){fileUrl=await uploadFile(selectedFile);fileType=selectedFileType;fileName=selectedFile.name;}
         if(currentMode==='dm'&&currentDMUser){
-            const msgData={
-                sender_id:currentUser.id,sender_username:username,
-                recipient_id:currentDMUser.id,recipient_username:currentDMUser.username,
-                content:content||'',
-                ...(fileUrl&&{file_url:fileUrl,media_type:fileType,file_name:fileName})
-            };
+            const msgData={sender_id:currentUser.id,sender_username:username,recipient_id:currentDMUser.id,recipient_username:currentDMUser.username,content:content||'',...(fileUrl&&{file_url:fileUrl,media_type:fileType,file_name:fileName})};
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
             const{error}=await supabaseClient.from('direct_messages').insert(msgData);
             if(error)throw error;
             addMessageToUI({...msgData,id:Date.now(),created_at:new Date().toISOString(),_emoji:myEmoji,_color:myColor,_points:myPoints,_status:myStatus},'dm');
         }else{
-            const msgData={
-                channel_id:currentChannel,user_id:currentUser.id,username,
-                content:content||'',
-                type:fileType,
-                ...(fileUrl&&{file_url:fileUrl,file_name:fileName})
-            };
+            const msgData={channel_id:currentChannel,user_id:currentUser.id,username,content:content||'',type:fileType,...(fileUrl&&{file_url:fileUrl,file_name:fileName})};
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
             const{error}=await supabaseClient.from('messages').insert(msgData);
-            // If RLS blocks it, show a clear error
             if(error){
-                if(error.code==='42501'||error.message?.includes('policy')){
-                    throw new Error('Permission denied — you may not be an approved member of this room yet.');
-                }
+                if(error.code==='42501'||error.message?.includes('policy'))throw new Error('Permission denied — you may not be an approved member of this room yet.');
                 throw error;
             }
         }
         input.value='';input.style.height='auto';
-        clearFileSelection();
-        cancelReply();
+        clearFileSelection();cancelReply();
         setTimeout(()=>loadMyProfile(),1200);
     }catch(e){alert('Failed to send: '+e.message);}
     finally{btn.disabled=false;}
@@ -1606,12 +1293,22 @@ async function editMessage(messageId,currentContent,event){
     event.stopPropagation();
     const newContent=prompt('Edit message:',currentContent);
     if(!newContent||newContent===currentContent)return;
-    try{const{error}=await supabaseClient.from('messages').update({content:newContent,edited:true,edited_at:new Date().toISOString()}).eq('id',messageId);if(error)throw error;const el=document.querySelector(`[data-message-id="${messageId}"] .message-text`);if(el){const u=myUsername;el.innerHTML=highlightMentions(escapeHtml(newContent),u);}}catch(e){alert('Error: '+e.message);}
+    try{
+        const{error}=await supabaseClient.from('messages').update({content:newContent,edited:true,edited_at:new Date().toISOString()}).eq('id',messageId);
+        if(error)throw error;
+        const el=document.querySelector(`[data-message-id="${messageId}"] .message-text`);
+        if(el)el.innerHTML=highlightMentions(escapeHtml(newContent),myUsername);
+    }catch(e){alert('Error: '+e.message);}
 }
 
 async function deleteMessage(messageId,mode,event){
     event.stopPropagation();if(!confirm('Delete?'))return;
-    try{const{error}=await supabaseClient.from(mode==='dm'?'direct_messages':'messages').delete().eq('id',messageId);if(error)throw error;const el=document.querySelector(`[data-message-id="${messageId}"]`);if(el){el.style.opacity='0';setTimeout(()=>el.remove(),300);}}catch(e){alert('Error: '+e.message);}
+    try{
+        const{error}=await supabaseClient.from(mode==='dm'?'direct_messages':'messages').delete().eq('id',messageId);
+        if(error)throw error;
+        const el=document.querySelector(`[data-message-id="${messageId}"]`);
+        if(el){el.style.opacity='0';setTimeout(()=>el.remove(),300);}
+    }catch(e){alert('Error: '+e.message);}
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
@@ -1655,7 +1352,11 @@ function showMentionDropdown(users){
 
 function updateMentionSelection(items){items.forEach((item,i)=>item.classList.toggle('selected',i===mentionSelectedIndex));}
 function hideMentionDropdown(){const d=document.getElementById('mentionDropdown');d.classList.remove('active');d.innerHTML='';mentionSelectedIndex=0;}
-function insertMention(username){const input=document.getElementById('messageInput');const cp=input.selectionStart;const tb=input.value.substring(0,cp);const la=tb.lastIndexOf('@');input.value=input.value.substring(0,la)+'@'+username+' '+input.value.substring(cp);const np=la+username.length+2;input.setSelectionRange(np,np);hideMentionDropdown();input.focus();}
+function insertMention(username){
+    const input=document.getElementById('messageInput');const cp=input.selectionStart;const tb=input.value.substring(0,cp);const la=tb.lastIndexOf('@');
+    input.value=input.value.substring(0,la)+'@'+username+' '+input.value.substring(cp);
+    const np=la+username.length+2;input.setSelectionRange(np,np);hideMentionDropdown();input.focus();
+}
 
 function switchSidebarTab(tab){
     ['channels','dms','friends','search','leaderboard'].forEach(t=>{
