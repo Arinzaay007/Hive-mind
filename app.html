@@ -91,6 +91,33 @@
         .channel:hover{background:var(--bg-tertiary);}
         .channel.active{background:var(--bg-tertiary);border-left-color:var(--honey);color:var(--honey);}
 
+        /* ── ROOM ITEMS ── */
+        .room-item{padding:8px 12px;cursor:pointer;border-left:2px solid transparent;transition:all .2s;margin-bottom:3px;border-radius:0 4px 4px 0;}
+        .room-item:hover{background:var(--bg-tertiary);}
+        .room-item.active{background:var(--bg-tertiary);border-left-color:var(--honey);}
+        .room-item.locked{cursor:pointer;opacity:.7;}
+        .room-item.locked:hover{opacity:1;background:var(--bg-tertiary);}
+        .room-name-row{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;}
+        .room-name-row.active-name{color:var(--honey);}
+        .room-meta{display:flex;align-items:center;gap:6px;margin-top:2px;}
+        .online-count{font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:3px;}
+        .online-dot{width:6px;height:6px;background:#00ff41;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+        .online-dot.orange{background:#f5c518;}
+        .room-lock{font-size:10px;color:var(--text-muted);}
+        .room-queen-badge{font-size:10px;color:var(--honey);font-weight:700;}
+        .pending-access{font-size:10px;color:#f5c518;background:#f5c51822;padding:1px 6px;border-radius:8px;border:1px solid #f5c51844;}
+
+        /* ── JOIN REQUEST ITEM ── */
+        .join-req-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
+        .join-req-item:last-child{border-bottom:none;}
+        .join-req-info{flex:1;font-size:12px;}
+        .join-req-name{font-weight:700;}
+        .join-req-room{font-size:11px;color:var(--text-muted);}
+        .join-req-actions{display:flex;gap:4px;}
+
+        /* ── ROOM HEADER ── */
+        .room-header-queen{font-size:11px;color:var(--honey);display:flex;align-items:center;gap:4px;}
+
         /* ─── DM ─────────────────────────────────── */
         .dm-item{padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;border-left:2px solid transparent;}
         .dm-item:hover{background:var(--bg-tertiary);}
@@ -261,6 +288,46 @@
 <div class="loading-screen" id="loadingScreen"><div class="spinner"></div><div style="color:var(--honey);">Loading the Hive...</div></div>
 <div class="levelup-toast" id="levelupToast">🐝 Rank Up!</div>
 
+<!-- CREATE ROOM MODAL -->
+<div class="modal-overlay" id="createRoomModal" onclick="closeCreateRoomModal(event)">
+  <div class="modal" style="max-width:400px;">
+    <button class="modal-close" onclick="document.getElementById('createRoomModal').classList.remove('open')">×</button>
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px;">🍯 Create a Room</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:20px;">Public rooms are open to all bees. Private rooms need your approval.</div>
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Room Name</label>
+      <input id="newRoomName" style="width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;border-radius:4px;" placeholder="e.g. night-owls" maxlength="30" />
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Description <span style="opacity:.5;">(optional)</span></label>
+      <input id="newRoomDesc" style="width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;border-radius:4px;" placeholder="What's this room about?" maxlength="80" />
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:12px;background:var(--bg-tertiary);border-radius:8px;cursor:pointer;border:1px solid var(--border);" onclick="toggleRoomPrivacy()">
+      <div id="privacyToggle" style="width:42px;height:24px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;position:relative;transition:background .25s;flex-shrink:0;">
+        <div id="privacyThumb" style="width:18px;height:18px;background:var(--text-muted);border-radius:50%;position:absolute;top:2px;left:2px;transition:all .25s;"></div>
+      </div>
+      <div>
+        <div id="privacyLabel" style="font-size:13px;font-weight:700;">🌍 Public Room</div>
+        <div id="privacyDesc" style="font-size:11px;color:var(--text-muted);">Anyone can join and chat</div>
+      </div>
+    </div>
+    <button class="btn btn-accent" style="width:100%;padding:12px;" onclick="createRoom()">🐝 Create Room</button>
+  </div>
+</div>
+
+<!-- REQUEST ACCESS MODAL -->
+<div class="modal-overlay" id="requestAccessModal" onclick="closeRequestAccessModal(event)">
+  <div class="modal" style="max-width:360px;text-align:center;">
+    <button class="modal-close" onclick="document.getElementById('requestAccessModal').classList.remove('open')">×</button>
+    <div style="font-size:40px;margin-bottom:12px;">🔒</div>
+    <div style="font-size:17px;font-weight:700;margin-bottom:6px;" id="requestRoomName">Private Room</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;" id="requestRoomDesc"></div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">This is a private room. You need the Queen's approval to enter.</div>
+    <div style="font-size:13px;background:var(--bg-tertiary);padding:10px;border-radius:8px;margin-bottom:20px;">👑 Queen: <strong id="requestRoomQueen" style="color:var(--honey);"></strong></div>
+    <button class="btn btn-accent" style="width:100%;padding:12px;" id="requestAccessBtn" onclick="sendAccessRequest()">🐝 Request Access</button>
+  </div>
+</div>
+
 <!-- USER CARD MODAL -->
 <div class="modal-overlay" id="userModal" onclick="closeModal(event)">
   <div class="modal" id="modalContent">
@@ -309,9 +376,23 @@
       </div>
 
       <div class="sidebar-panel active" id="panel-channels">
-        <div class="sidebar-section">
-          <div class="section-title">Public Rooms</div>
-          <div id="channelList"></div>
+        <!-- CREATE ROOM BUTTON -->
+        <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;">
+          <div class="section-title" style="margin:0;flex:1;">Rooms</div>
+          <button class="btn" style="padding:4px 10px;font-size:11px;border-color:var(--honey);color:var(--honey);" onclick="openCreateRoomModal()">+ New</button>
+        </div>
+        <div style="padding:8px 12px 4px;border-bottom:1px solid var(--border)22;">
+          <div class="section-title">🌍 Public</div>
+          <div id="publicRoomList"></div>
+        </div>
+        <div style="padding:8px 12px 4px;">
+          <div class="section-title">🔒 Private</div>
+          <div id="privateRoomList"><div style="color:var(--text-muted);font-size:11px;padding:4px 0;">No private rooms yet</div></div>
+        </div>
+        <!-- JOIN REQUESTS (only visible to room queens) -->
+        <div id="joinRequestsPanel" style="display:none;padding:8px 12px;border-top:1px solid var(--border);">
+          <div class="section-title">👑 Join Requests</div>
+          <div id="joinRequestsList"></div>
         </div>
       </div>
 
@@ -445,11 +526,22 @@ let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='';
 let profileCache={};
 let searchTimeout=null;
 
-const channels=[
-    {id:'general',name:'general'},{id:'random',name:'random'},
-    {id:'react-native',name:'react-native'},{id:'backend-wizards',name:'backend-wizards'},
-    {id:'shipped-today',name:'shipped-today'}
+// Static public channels (hardcoded)
+const PUBLIC_CHANNELS=[
+    {id:'general',name:'general',desc:'The main hive'},
+    {id:'random',name:'random',desc:'Anything goes'},
+    {id:'react-native',name:'react-native',desc:'Mobile dev talk'},
+    {id:'backend-wizards',name:'backend-wizards',desc:'Server side magic'},
+    {id:'shipped-today',name:'shipped-today',desc:'Show your work'},
 ];
+
+// Dynamic rooms from DB
+let privateRooms=[];
+let myRoomMemberships={};   // roomId -> {role, status}
+let roomOnlineCounts={};    // roomId/channelId -> number
+let presenceChannels={};    // track presence subscriptions
+let isRoomPrivate=false;    // for create modal
+let pendingAccessRoomId=null; // for request access modal
 
 async function init(){
     try{
@@ -460,10 +552,11 @@ async function init(){
         const username=user.user_metadata?.username||user.email.split('@')[0];
         document.getElementById('currentUser').textContent=username;
         await loadMyProfile();
-        renderChannels();
+        await loadRooms();
         await loadMessages('channel','general');
         await loadChannelUsers('general');
         subscribeToChannel('general');
+        trackPresence('general');
         await loadFriends();
         await loadDMList();
         subscribeToDMs();
@@ -690,23 +783,282 @@ async function quickAddFriend(userId,username,btn){
 }
 
 // ─── CHANNELS ────────────────────────────
-function renderChannels(){
-    document.getElementById('channelList').innerHTML=channels.map(ch=>`
-        <div class="channel ${ch.id===currentChannel&&currentMode==='channel'?'active':''}" onclick="switchChannel('${ch.id}')">🍯 ${ch.name}</div>`).join('');
+// ─── ROOMS: LOAD, RENDER, PRESENCE ───────────────────────────────
+async function loadRooms(){
+    try{
+        // Load all private rooms
+        const{data:rooms}=await supabaseClient.from('rooms').select('*').order('created_at',{ascending:true});
+        privateRooms=(rooms||[]).filter(r=>r.is_private);
+
+        // Load my memberships
+        const{data:memberships}=await supabaseClient.from('room_members')
+            .select('*').eq('user_id',currentUser.id);
+        myRoomMemberships={};
+        (memberships||[]).forEach(m=>{ myRoomMemberships[m.room_id]={role:m.role,status:m.status}; });
+
+        renderRooms();
+        loadJoinRequests();
+    }catch(e){console.error('loadRooms:',e);}
 }
 
-async function switchChannel(channelId){
-    currentMode='channel';currentChannel=channelId;currentDMUser=null;
-    const ch=channels.find(c=>c.id===channelId);
-    document.getElementById('chatHeader').innerHTML=`<div><div style="font-size:16px;font-weight:600;">🍯 ${ch.name}</div><div style="font-size:11px;color:var(--text-muted);">Public Room · +5 XP per message</div></div>`;
-    document.getElementById('messageInput').placeholder=`Buzz in #${ch.name}...`;
-    renderChannels();
-    if(messageSubscription)messageSubscription.unsubscribe();
-    await loadMessages('channel',channelId);
+function renderRooms(){
+    // PUBLIC rooms
+    document.getElementById('publicRoomList').innerHTML=PUBLIC_CHANNELS.map(ch=>{
+        const count=roomOnlineCounts[ch.id]||0;
+        const isActive=currentMode==='channel'&&currentChannel===ch.id;
+        return `<div class="room-item ${isActive?'active':''}" onclick="switchChannel('${ch.id}',false,'${ch.name}','${ch.desc}')">
+            <div class="room-name-row ${isActive?'active-name':''}">
+                <span>🍯 ${ch.name}</span>
+            </div>
+            <div class="room-meta">
+                <span class="online-count">
+                    <span class="online-dot"></span>
+                    ${count} online
+                </span>
+                <span style="font-size:10px;color:var(--text-muted);">· ${ch.desc}</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    // PRIVATE rooms
+    const container=document.getElementById('privateRoomList');
+    if(privateRooms.length===0){
+        container.innerHTML=`<div style="color:var(--text-muted);font-size:11px;padding:4px 0 8px;">No private rooms yet</div>`;
+        return;
+    }
+    container.innerHTML=privateRooms.map(room=>{
+        const membership=myRoomMemberships[room.id];
+        const isQueen=membership?.role==='queen';
+        const isApproved=membership?.status==='approved';
+        const isPending=membership?.status==='pending';
+        const isActive=currentMode==='channel'&&currentChannel===room.id;
+        const count=roomOnlineCounts[room.id]||0;
+        const isCreator=room.creator_id===currentUser.id;
+
+        if(isApproved||isCreator){
+            return `<div class="room-item ${isActive?'active':''}  " onclick="switchChannel('${room.id}',true,'${escapeHtml(room.name).replace(/'/g,"\\'")}','${escapeHtml(room.description||'').replace(/'/g,"\\'")}','${room.creator_username||''}')">
+                <div class="room-name-row ${isActive?'active-name':''}">
+                    <span>🔒 ${escapeHtml(room.name)}</span>
+                    ${isQueen||isCreator?`<span class="room-queen-badge">👑</span>`:''}
+                </div>
+                <div class="room-meta">
+                    <span class="online-count"><span class="online-dot orange"></span>${count} online</span>
+                    ${room.description?`<span style="font-size:10px;color:var(--text-muted);">· ${escapeHtml(room.description.substring(0,25))}</span>`:''}
+                </div>
+            </div>`;
+        } else if(isPending){
+            return `<div class="room-item locked">
+                <div class="room-name-row">🔒 ${escapeHtml(room.name)}</div>
+                <div class="room-meta"><span class="pending-access">⏳ Pending approval</span></div>
+            </div>`;
+        } else {
+            return `<div class="room-item locked" onclick="openRequestAccessModal('${room.id}','${escapeHtml(room.name).replace(/'/g,"\\'")}','${escapeHtml(room.description||'').replace(/'/g,"\\'")}','${room.creator_username||''}')">
+                <div class="room-name-row">🔒 ${escapeHtml(room.name)}</div>
+                <div class="room-meta">
+                    <span class="room-lock">Tap to request access</span>
+                    <span style="font-size:10px;color:var(--text-muted);">· 👑 ${room.creator_username}</span>
+                </div>
+            </div>`;
+        }
+    }).join('');
+}
+
+// Track realtime presence for online counts
+function trackPresence(channelId){
+    if(presenceChannels[channelId]) return; // already tracking
+    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    const presenceCh=supabaseClient.channel(`presence:${channelId}`,{
+        config:{presence:{key:currentUser.id}}
+    });
+    presenceCh
+        .on('presence',{event:'sync'},()=>{
+            const state=presenceCh.presenceState();
+            roomOnlineCounts[channelId]=Object.keys(state).length;
+            renderRooms();
+            // Also update the header if we're currently in this room
+            if(currentChannel===channelId){
+                const el=document.getElementById('headerOnlineCount');
+                if(el) el.textContent=roomOnlineCounts[channelId];
+            }
+        })
+        .subscribe(async(status)=>{
+            if(status==='SUBSCRIBED'){
+                await presenceCh.track({user_id:currentUser.id,username,online_at:new Date().toISOString()});
+            }
+        });
+    presenceChannels[channelId]=presenceCh;
+}
+
+function untrackPresence(channelId){
+    if(presenceChannels[channelId]){
+        presenceChannels[channelId].unsubscribe();
+        delete presenceChannels[channelId];
+        delete roomOnlineCounts[channelId];
+    }
+}
+
+async function switchChannel(channelId, isPrivate=false, name='', desc='', queenUsername=''){
+    // Untrack old presence
+    if(currentChannel && currentChannel!==channelId) untrackPresence(currentChannel);
+
+    currentMode='channel'; currentChannel=channelId; currentDMUser=null;
+    const displayName=name||channelId;
+    const membership=myRoomMemberships[channelId];
+    const isQueenHere=membership?.role==='queen'||(isPrivate&&queenUsername&&currentUser.user_metadata?.username===queenUsername);
+
+    document.getElementById('chatHeader').innerHTML=`
+        <div>
+            <div style="font-size:16px;font-weight:600;">${isPrivate?'🔒':'🍯'} ${escapeHtml(displayName)}</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:2px;">
+                <span class="online-count"><span class="online-dot ${isPrivate?'orange':''}"></span><span id="headerOnlineCount">${roomOnlineCounts[channelId]||0}</span> online</span>
+                ${isPrivate&&queenUsername?`<span class="room-header-queen">· 👑 ${escapeHtml(queenUsername)}</span>`:''}
+                ${isQueenHere?`<span style="font-size:11px;color:var(--honey);">· You are the Queen</span>`:''}
+                <span style="font-size:11px;color:var(--text-muted);">· +5 XP per message</span>
+            </div>
+        </div>`;
+    document.getElementById('messageInput').placeholder=`Buzz in #${displayName}...`;
+
+    renderRooms();
+    if(messageSubscription) messageSubscription.unsubscribe();
+    await loadMessages('channel', channelId);
     await loadChannelUsers(channelId);
     subscribeToChannel(channelId);
+    trackPresence(channelId);
     cancelReply();
-    if(window.innerWidth<=768)closeSidebar();
+    if(window.innerWidth<=768) closeSidebar();
+}
+
+function renderChannels(){ renderRooms(); } // backward compat alias
+
+// ─── CREATE ROOM ──────────────────────────
+function openCreateRoomModal(){
+    isRoomPrivate=false;
+    document.getElementById('newRoomName').value='';
+    document.getElementById('newRoomDesc').value='';
+    updatePrivacyToggle();
+    document.getElementById('createRoomModal').classList.add('open');
+    setTimeout(()=>document.getElementById('newRoomName').focus(),100);
+}
+function closeCreateRoomModal(e){if(e.target===document.getElementById('createRoomModal'))document.getElementById('createRoomModal').classList.remove('open');}
+
+function toggleRoomPrivacy(){
+    isRoomPrivate=!isRoomPrivate;
+    updatePrivacyToggle();
+}
+function updatePrivacyToggle(){
+    const thumb=document.getElementById('privacyThumb');
+    const toggle=document.getElementById('privacyToggle');
+    if(isRoomPrivate){
+        thumb.style.left='22px'; thumb.style.background=document.body.getAttribute('data-theme')==='light'?'#d97706':'var(--honey)';
+        toggle.style.background='var(--honey)33'; toggle.style.borderColor='var(--honey)';
+        document.getElementById('privacyLabel').innerHTML='🔒 Private Room';
+        document.getElementById('privacyDesc').textContent='Only approved bees can join';
+    }else{
+        thumb.style.left='2px'; thumb.style.background='var(--text-muted)';
+        toggle.style.background='var(--bg-secondary)'; toggle.style.borderColor='var(--border)';
+        document.getElementById('privacyLabel').innerHTML='🌍 Public Room';
+        document.getElementById('privacyDesc').textContent='Anyone can join and chat';
+    }
+}
+
+async function createRoom(){
+    const name=document.getElementById('newRoomName').value.trim();
+    if(!name){alert('Give your room a name!');return;}
+    const safeName=name.toLowerCase().replace(/[^a-z0-9-_]/g,'-').replace(/-+/g,'-');
+    const desc=document.getElementById('newRoomDesc').value.trim();
+    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    try{
+        const{data:room,error}=await supabaseClient.from('rooms').insert({
+            name:safeName, description:desc,
+            creator_id:currentUser.id, creator_username:username,
+            is_private:isRoomPrivate
+        }).select().single();
+        if(error)throw error;
+
+        // Auto-add creator as queen member
+        await supabaseClient.from('room_members').insert({
+            room_id:room.id, user_id:currentUser.id,
+            username, role:'queen', status:'approved'
+        });
+
+        document.getElementById('createRoomModal').classList.remove('open');
+        await loadRooms();
+        await switchChannel(room.id, isRoomPrivate, safeName, desc, username);
+    }catch(e){alert('Error creating room: '+e.message);}
+}
+
+// ─── ACCESS REQUESTS ──────────────────────
+function openRequestAccessModal(roomId, name, desc, queenUsername){
+    pendingAccessRoomId=roomId;
+    document.getElementById('requestRoomName').textContent='🔒 '+name;
+    document.getElementById('requestRoomDesc').textContent=desc||'';
+    document.getElementById('requestRoomQueen').textContent=queenUsername;
+    const btn=document.getElementById('requestAccessBtn');
+    btn.textContent='🐝 Request Access';btn.disabled=false;
+    document.getElementById('requestAccessModal').classList.add('open');
+}
+function closeRequestAccessModal(e){if(e.target===document.getElementById('requestAccessModal'))document.getElementById('requestAccessModal').classList.remove('open');}
+
+async function sendAccessRequest(){
+    if(!pendingAccessRoomId)return;
+    const btn=document.getElementById('requestAccessBtn');
+    btn.disabled=true;btn.textContent='Sending...';
+    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    try{
+        const{error}=await supabaseClient.from('room_members').insert({
+            room_id:pendingAccessRoomId, user_id:currentUser.id,
+            username, role:'member', status:'pending'
+        });
+        if(error&&error.code!=='23505') throw error; // ignore duplicate
+        document.getElementById('requestAccessModal').classList.remove('open');
+        await loadRooms();
+        alert('Request sent! The Queen will review it 👑');
+    }catch(e){alert('Error: '+e.message);btn.disabled=false;btn.textContent='🐝 Request Access';}
+}
+
+// ─── QUEEN: JOIN REQUESTS PANEL ───────────
+async function loadJoinRequests(){
+    try{
+        // Find rooms where user is queen
+        const queenRoomIds=privateRooms
+            .filter(r=>r.creator_id===currentUser.id||myRoomMemberships[r.id]?.role==='queen')
+            .map(r=>r.id);
+        if(queenRoomIds.length===0){document.getElementById('joinRequestsPanel').style.display='none';return;}
+
+        const{data:requests}=await supabaseClient.from('room_members')
+            .select('*').in('room_id',queenRoomIds).eq('status','pending');
+
+        const panel=document.getElementById('joinRequestsPanel');
+        if(!requests||requests.length===0){panel.style.display='none';return;}
+
+        panel.style.display='block';
+        document.getElementById('joinRequestsList').innerHTML=requests.map(req=>{
+            const room=privateRooms.find(r=>r.id===req.room_id);
+            return `<div class="join-req-item">
+                <div class="join-req-info">
+                    <div class="join-req-name">🐝 ${escapeHtml(req.username)}</div>
+                    <div class="join-req-room">wants into 🔒 ${room?escapeHtml(room.name):req.room_id}</div>
+                </div>
+                <div class="join-req-actions">
+                    <button class="friend-btn accept" onclick="approveJoinRequest('${req.id}','${req.room_id}')">✓</button>
+                    <button class="friend-btn reject" onclick="denyJoinRequest('${req.id}')">✗</button>
+                </div>
+            </div>`;
+        }).join('');
+    }catch(e){console.error('loadJoinRequests:',e);}
+}
+
+async function approveJoinRequest(reqId, roomId){
+    try{
+        await supabaseClient.from('room_members').update({status:'approved'}).eq('id',reqId);
+        await loadRooms();
+    }catch(e){alert('Error: '+e.message);}
+}
+async function denyJoinRequest(reqId){
+    try{
+        await supabaseClient.from('room_members').delete().eq('id',reqId);
+        await loadRooms();
+    }catch(e){alert('Error: '+e.message);}
 }
 
 async function loadChannelUsers(channelId){
