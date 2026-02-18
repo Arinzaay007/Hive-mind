@@ -1493,41 +1493,22 @@ async function triggerBotReply(msg, channelId){
     const cleanContent = (msg.content || '').replace(/@HiveBot/gi, '').trim();
     if(!cleanContent) return;
 
-    // Get API key — stored in localStorage so user only needs to enter once
-    let apiKey = localStorage.getItem('hivebot_api_key');
-    if(!apiKey){
-        apiKey = prompt('🤖 Enter your Anthropic API key to activate HiveBot:\n(Get one at console.anthropic.com)');
-        if(!apiKey) return;
-        localStorage.setItem('hivebot_api_key', apiKey.trim());
-    }
-
     addToBotMemory(channelId, 'user', `${msg.username}: ${cleanContent}`);
     showBotTyping(channelId);
 
     try{
         const memory = getBotMemory(channelId);
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
+        const response = await fetch('https://cwoaqiwnpcpawignecsb.supabase.co/functions/v1/hivebot', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': apiKey,
-                'anthropic-version': '2023-06-01',
-                'anthropic-dangerous-direct-browser-access': 'true'
+                'Authorization': `Bearer ${SUPABASE_KEY}`
             },
             body: JSON.stringify({
-                model: 'claude-haiku-4-5-20251001',
-                max_tokens: 500,
                 system: `You are HiveBot, the AI assistant of Hive Mind — a honeybee-themed chat app. You are helpful, witty, and occasionally use bee puns. Keep replies concise (1-3 sentences usually) unless asked for something detailed. Current channel: ${channelId}.`,
                 messages: memory.map(m => ({role: m.role === 'user' ? 'user' : 'assistant', content: m.content}))
             })
         });
-
-        if(response.status === 401){
-            localStorage.removeItem('hivebot_api_key');
-            hideBotTyping(channelId);
-            renderBotMessage('🔑 Invalid API key! @mention me again to re-enter it.', channelId);
-            return;
-        }
 
         const data = await response.json();
         const reply = data.content?.[0]?.text || 'Bzz... something went wrong in the hive! 🐝';
