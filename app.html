@@ -59,6 +59,33 @@
         .rank-progress-bar-fill{height:100%;border-radius:6px;transition:width .6s ease;}
         .rank-next-label{font-size:10px;color:var(--text-muted);margin-top:4px;text-align:right;}
 
+        /* ─── FILE UPLOAD ─────────────────────────── */
+        .attach-btn{background:transparent;border:1px solid var(--border);padding:0 12px;color:var(--text-muted);cursor:pointer;font-size:18px;transition:all .2s;min-height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .attach-btn:hover{border-color:var(--honey);color:var(--honey);}
+        .file-preview-bar{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;align-items:center;gap:10px;}
+        .file-preview-bar.show{display:flex;}
+        .file-preview-thumb{width:44px;height:44px;border-radius:4px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);}
+        .file-preview-icon{font-size:26px;flex-shrink:0;}
+        .file-preview-info{flex:1;min-width:0;}
+        .file-preview-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .file-preview-size{font-size:10px;color:var(--text-muted);margin-top:2px;}
+        .file-preview-remove{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;padding:4px;flex-shrink:0;line-height:1;}
+        .file-preview-remove:hover{color:#ff006e;}
+        .upload-progress{height:3px;background:var(--bg-secondary);border-radius:2px;margin-top:4px;overflow:hidden;display:none;}
+        .upload-progress.show{display:block;}
+        .upload-progress-fill{height:100%;background:var(--honey);border-radius:2px;transition:width .15s;}
+        .msg-image{max-width:260px;max-height:260px;border-radius:8px;cursor:zoom-in;display:block;margin-top:6px;border:1px solid var(--border);object-fit:cover;}
+        .msg-image:hover{opacity:.88;transform:scale(1.01);}
+        .msg-audio{margin-top:6px;width:100%;max-width:280px;border-radius:8px;display:block;}
+        audio{accent-color:var(--honey);}
+        .msg-file-link{display:inline-flex;align-items:center;gap:8px;background:var(--bg-tertiary);border:1px solid var(--border);padding:8px 12px;border-radius:8px;margin-top:6px;font-size:12px;text-decoration:none;color:var(--text-primary);transition:border-color .2s;max-width:260px;}
+        .msg-file-link:hover{border-color:var(--honey);color:var(--honey);}
+        .lightbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.93);z-index:3000;align-items:center;justify-content:center;cursor:zoom-out;}
+        .lightbox.open{display:flex;}
+        .lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;object-fit:contain;}
+        .lightbox-close{position:absolute;top:16px;right:20px;background:transparent;border:none;color:#fff;font-size:32px;cursor:pointer;opacity:.6;line-height:1;}
+        .lightbox-close:hover{opacity:1;}
+
         /* ─── LAYOUT ─────────────────────────────── */
         .app-container{display:flex;height:100vh;height:100dvh;flex-direction:column;overflow:hidden;}
         .header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-shrink:0;}
@@ -328,6 +355,15 @@
   </div>
 </div>
 
+<!-- IMAGE LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close">×</button>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<!-- Hidden file input -->
+<input type="file" id="fileInput" style="display:none;" accept="image/*,audio/*,.pdf,.doc,.docx,.txt" onchange="handleFileSelect(this)"/>
+
 <!-- USER CARD MODAL -->
 <div class="modal-overlay" id="userModal" onclick="closeModal(event)">
   <div class="modal" id="modalContent">
@@ -446,7 +482,18 @@
       <div class="message-input-container">
         <div class="mention-dropdown" id="mentionDropdown"></div>
         <div id="replyPreview"></div>
+        <!-- File preview -->
+        <div class="file-preview-bar" id="filePreviewBar">
+          <div id="filePreviewThumb"></div>
+          <div class="file-preview-info">
+            <div class="file-preview-name" id="filePreviewName"></div>
+            <div class="file-preview-size" id="filePreviewSize"></div>
+            <div class="upload-progress" id="uploadProgress"><div class="upload-progress-fill" id="uploadProgressFill"></div></div>
+          </div>
+          <button class="file-preview-remove" onclick="clearFileSelection()">×</button>
+        </div>
         <div class="input-wrapper">
+          <button class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Attach image or audio">📎</button>
           <textarea class="message-input" id="messageInput" placeholder="Buzz the hive..." rows="1"></textarea>
           <button class="btn btn-accent" id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
@@ -523,6 +570,7 @@ let messageSubscription,dmSubscription;
 let replyingTo=null,channelUsers=[],mentionSelectedIndex=0;
 let friendsList=[],dmConversations=[];
 let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='';
+let selectedFile=null, selectedFileUrl=null, selectedFileType=null;
 let profileCache={};
 let searchTimeout=null;
 
@@ -1127,13 +1175,7 @@ async function loadMessages(mode,id){
     try{
         let data;
         if(mode==='channel'){
-            const res=await supabaseClient.from('messages').select('*').eq('channel_id',id).order('created_at',{ascending:false});
-            data=(res.data||[]).reverse();
-        }else{
-            const myId=currentUser.id;
-            const res=await supabaseClient.from('direct_messages').select('*')
-                .or(`and(sender_id.eq.${myId},recipient_id.eq.${id}),and(sender_id.eq.${id},recipient_id.eq.${myId})`)
-                .order('created_at',{ascending:false});
+            const res=await supabaseClient.from('messages').select('*').eq('channel_id',id).order('created_at',{ascending:false}).limit(100);
             data=(res.data||[]).reverse();
         }else{
             const myId=currentUser.id;
@@ -1277,9 +1319,7 @@ function createMessageHTML(msg,mode){
     const rank=getBeeRank(pts);
     let replyHTML='';
     if(msg.reply_to_username&&msg.reply_to_content)replyHTML=`<div class="reply-reference"><span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0,60))}${msg.reply_to_content.length>60?'...':''}</div>`;
-    const contentText=mode==='dm'
-        ?`<div class="message-text">${escapeHtml(msg.content)}</div>`
-        :`<div class="message-text">${highlightMentions(escapeHtml(msg.content||''),myUsername)}</div>`;
+    const contentHTML=renderMessageContent(msg, mode, myUsername);
     const ringStyle=avatarRingStyle(pts);
     const actionsMenu=`<div class="message-actions" style="display:none;position:absolute;top:4px;${isOwn?'left':'right'}:4px;z-index:10;white-space:nowrap;">
         <button onclick="replyToMessage('${msg.id}','${escapeHtml(senderUsername).replace(/'/g,"\\'")}',\`${escapeHtml(msg.content||'').replace(/\`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">💬</button>
@@ -1297,32 +1337,182 @@ function createMessageHTML(msg,mode){
                 <span class="timestamp">${time}${editedLabel}</span>
             </div>
             ${status?`<div class="msg-status">${escapeHtml(status)}</div>`:''}
-            ${replyHTML}${contentText}
+            ${replyHTML}${contentHTML}
         </div>
         ${isOwn?`<div class="emoji-avatar" style="background:${color};${ringStyle};flex-shrink:0;">${emoji}</div>`:''}
         ${actionsMenu}
     </div>`;
 }
 
+// ─── FILE UPLOAD ──────────────────────────────────────────────────
+function handleFileSelect(input){
+    const file=input.files[0];
+    if(!file){return;}
+    const maxMB=file.type.startsWith('audio/')?15:10;
+    if(file.size>maxMB*1024*1024){alert(`File too large! Max ${maxMB}MB.`);input.value='';return;}
+
+    selectedFile=file;
+    selectedFileType=file.type.startsWith('image/')?'image':file.type.startsWith('audio/')?'audio':'file';
+
+    // Show preview bar
+    const bar=document.getElementById('filePreviewBar');
+    bar.classList.add('show');
+    document.getElementById('filePreviewName').textContent=file.name;
+    document.getElementById('filePreviewSize').textContent=formatFileSize(file.size);
+    document.getElementById('uploadProgress').classList.remove('show');
+    document.getElementById('uploadProgressFill').style.width='0%';
+
+    // Show thumbnail or icon
+    const thumbEl=document.getElementById('filePreviewThumb');
+    if(selectedFileType==='image'){
+        const reader=new FileReader();
+        reader.onload=e=>{thumbEl.innerHTML=`<img class="file-preview-thumb" src="${e.target.result}"/>`;};
+        reader.readAsDataURL(file);
+    } else if(selectedFileType==='audio'){
+        thumbEl.innerHTML=`<div class="file-preview-icon">🎵</div>`;
+    } else {
+        thumbEl.innerHTML=`<div class="file-preview-icon">📄</div>`;
+    }
+    input.value=''; // reset so same file can be re-selected
+}
+
+function clearFileSelection(){
+    selectedFile=null;selectedFileUrl=null;selectedFileType=null;
+    document.getElementById('filePreviewBar').classList.remove('show');
+    document.getElementById('filePreviewThumb').innerHTML='';
+    document.getElementById('fileInput').value='';
+}
+
+function formatFileSize(bytes){
+    if(bytes<1024)return bytes+'B';
+    if(bytes<1024*1024)return (bytes/1024).toFixed(1)+'KB';
+    return (bytes/(1024*1024)).toFixed(1)+'MB';
+}
+
+async function uploadFile(file){
+    const ext=file.name.split('.').pop().toLowerCase();
+    const folder=file.type.startsWith('image/')?'images':file.type.startsWith('audio/')?'audio':'files';
+    const path=`${folder}/${currentUser.id}/${Date.now()}.${ext}`;
+
+    // Show progress
+    const prog=document.getElementById('uploadProgress');
+    const fill=document.getElementById('uploadProgressFill');
+    prog.classList.add('show');
+
+    // Simulate progress while uploading
+    let fakeProgress=0;
+    const ticker=setInterval(()=>{
+        fakeProgress=Math.min(fakeProgress+8,85);
+        fill.style.width=fakeProgress+'%';
+    },100);
+
+    try{
+        const{data,error}=await supabaseClient.storage.from('hive-media').upload(path,file,{
+            cacheControl:'3600',upsert:false,contentType:file.type
+        });
+        clearInterval(ticker);
+        if(error)throw error;
+        fill.style.width='100%';
+        // Get public URL
+        const{data:{publicUrl}}=supabaseClient.storage.from('hive-media').getPublicUrl(path);
+        return publicUrl;
+    }catch(e){
+        clearInterval(ticker);
+        throw e;
+    }
+}
+
+// Render media in messages
+function renderMessageContent(msg, mode, myUsername){
+    const type=msg.media_type||msg.type||'text';
+    const url=msg.file_url||'';
+    const text=msg.content||'';
+
+    if(type==='image'&&url){
+        return `<div>
+            ${text?`<div class="message-text" style="margin-bottom:4px;">${mode==='dm'?escapeHtml(text):highlightMentions(escapeHtml(text),myUsername)}</div>`:''}
+            <img class="msg-image" src="${escapeHtml(url)}" alt="image" onclick="openLightbox('${escapeHtml(url)}')" loading="lazy"/>
+        </div>`;
+    } else if(type==='audio'&&url){
+        return `<div>
+            ${text?`<div class="message-text" style="margin-bottom:4px;">${escapeHtml(text)}</div>`:''}
+            <audio class="msg-audio" controls preload="metadata">
+                <source src="${escapeHtml(url)}"/>
+                Your browser doesn't support audio.
+            </audio>
+        </div>`;
+    } else if(type==='file'&&url){
+        const fname=msg.file_name||'Download file';
+        return `<div>
+            ${text?`<div class="message-text" style="margin-bottom:4px;">${escapeHtml(text)}</div>`:''}
+            <a class="msg-file-link" href="${escapeHtml(url)}" target="_blank" download>
+                📄 <span>${escapeHtml(fname)}</span>
+            </a>
+        </div>`;
+    } else {
+        // plain text
+        return mode==='dm'
+            ?`<div class="message-text">${escapeHtml(text)}</div>`
+            :`<div class="message-text">${highlightMentions(escapeHtml(text||''),myUsername)}</div>`;
+    }
+}
+
+// Lightbox
+function openLightbox(url){
+    document.getElementById('lightboxImg').src=url;
+    document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+
 async function sendMessage(){
     const input=document.getElementById('messageInput');
-    const content=input.value.trim();if(!content)return;
+    const content=input.value.trim();
+    // Must have text OR a file
+    if(!content&&!selectedFile)return;
     const btn=document.getElementById('sendBtn');btn.disabled=true;
     try{
         const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+        let fileUrl=null, fileType='text', fileName=null;
+
+        // Upload file first if one is selected
+        if(selectedFile){
+            fileUrl=await uploadFile(selectedFile);
+            fileType=selectedFileType;
+            fileName=selectedFile.name;
+        }
+
         if(currentMode==='dm'&&currentDMUser){
-            const msgData={sender_id:currentUser.id,sender_username:username,recipient_id:currentDMUser.id,recipient_username:currentDMUser.username,content};
+            const msgData={
+                sender_id:currentUser.id,sender_username:username,
+                recipient_id:currentDMUser.id,recipient_username:currentDMUser.username,
+                content:content||'',
+                ...(fileUrl&&{file_url:fileUrl,media_type:fileType,file_name:fileName})
+            };
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
             const{error}=await supabaseClient.from('direct_messages').insert(msgData);
             if(error)throw error;
             addMessageToUI({...msgData,id:Date.now(),created_at:new Date().toISOString(),_emoji:myEmoji,_color:myColor,_points:myPoints,_status:myStatus},'dm');
         }else{
-            const msgData={channel_id:currentChannel,user_id:currentUser.id,username,content,type:'text'};
+            const msgData={
+                channel_id:currentChannel,user_id:currentUser.id,username,
+                content:content||'',
+                type:fileType,
+                ...(fileUrl&&{file_url:fileUrl,file_name:fileName})
+            };
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
             const{error}=await supabaseClient.from('messages').insert(msgData);
-            if(error)throw error;
+            // If RLS blocks it, show a clear error
+            if(error){
+                if(error.code==='42501'||error.message?.includes('policy')){
+                    throw new Error('Permission denied — you may not be an approved member of this room yet.');
+                }
+                throw error;
+            }
         }
-        input.value='';input.style.height='auto';cancelReply();
+        input.value='';input.style.height='auto';
+        clearFileSelection();
+        cancelReply();
         setTimeout(()=>loadMyProfile(),1200);
     }catch(e){alert('Failed to send: '+e.message);}
     finally{btn.disabled=false;}
