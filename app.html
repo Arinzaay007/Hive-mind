@@ -574,7 +574,7 @@ let currentMode='channel',currentDMUser=null;
 let messageSubscription,dmSubscription;
 let replyingTo=null,channelUsers=[],mentionSelectedIndex=0;
 let friendsList=[],dmConversations=[];
-let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='';
+let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='',myUsername='';
 let selectedFile=null, selectedFileUrl=null, selectedFileType=null;
 
 // Pagination
@@ -608,8 +608,9 @@ async function init(){
         const{data:{user},error}=await supabaseClient.auth.getUser();
         if(error||!user)throw new Error('Not authenticated');
         currentUser=user;
-        const username=user.user_metadata?.username||user.email.split('@')[0];
-        document.getElementById('currentUser').textContent=username;
+        // Fallback username from auth metadata — will be overridden by profiles.username in loadMyProfile
+        myUsername=user.user_metadata?.username||user.email.split('@')[0];
+        document.getElementById('currentUser').textContent=myUsername;
         await loadMyProfile();
         await loadRooms();
         await loadMessages('channel','general');
@@ -634,12 +635,17 @@ async function init(){
 async function loadMyProfile(){
     try{
         const{data}=await supabaseClient.from('profiles')
-            .select('level,points,avatar_emoji,avatar_color,status_message').eq('id',currentUser.id).single();
+            .select('level,points,avatar_emoji,avatar_color,status_message,username').eq('id',currentUser.id).single();
         if(data){
             const prevPoints=myPoints;
             myLevel=data.level||1;myPoints=data.points||0;
             myEmoji=data.avatar_emoji||'🐝';myColor=data.avatar_color||'#1a1a1a';
             myStatus=data.status_message||'';
+            // Use profiles.username as source of truth if set
+            if(data.username){
+                myUsername=data.username;
+                document.getElementById('currentUser').textContent=myUsername;
+            }
             profileCache[currentUser.id]=data;
             updateHeaderRank();
             const prevRank=getBeeRank(prevPoints);
@@ -833,7 +839,7 @@ async function searchUsers(query){
 
 async function quickAddFriend(userId,username,btn){
     try{
-        const myUsername=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+        const myUsername=myUsername;
         const{error}=await supabaseClient.from('friends').insert({user_id:currentUser.id,friend_id:userId,username:myUsername,friend_username:username,status:'pending'});
         if(error)throw error;
         btn.textContent='⏳';btn.disabled=true;btn.style.opacity='.5';
@@ -925,7 +931,7 @@ function renderRooms(){
 // Track realtime presence for online counts
 function trackPresence(channelId){
     if(presenceChannels[channelId]) return; // already tracking
-    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    const username=myUsername;
     const presenceCh=supabaseClient.channel(`presence:${channelId}`,{
         config:{presence:{key:currentUser.id}}
     });
@@ -963,7 +969,7 @@ async function switchChannel(channelId, isPrivate=false, name='', desc='', queen
     currentMode='channel'; currentChannel=channelId; currentDMUser=null;
     const displayName=name||channelId;
     const membership=myRoomMemberships[channelId];
-    const isQueenHere=membership?.role==='queen'||(isPrivate&&queenUsername&&currentUser.user_metadata?.username===queenUsername);
+    const isQueenHere=membership?.role==='queen'||(isPrivate&&queenUsername&&myUsername===queenUsername);
 
     document.getElementById('chatHeader').innerHTML=`
         <div>
@@ -1025,7 +1031,7 @@ async function createRoom(){
     if(!name){alert('Give your room a name!');return;}
     const safeName=name.toLowerCase().replace(/[^a-z0-9-_]/g,'-').replace(/-+/g,'-');
     const desc=document.getElementById('newRoomDesc').value.trim();
-    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    const username=myUsername;
     try{
         const{data:room,error}=await supabaseClient.from('rooms').insert({
             name:safeName, description:desc,
@@ -1062,7 +1068,7 @@ async function sendAccessRequest(){
     if(!pendingAccessRoomId)return;
     const btn=document.getElementById('requestAccessBtn');
     btn.disabled=true;btn.textContent='Sending...';
-    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    const username=myUsername;
     try{
         const{error}=await supabaseClient.from('room_members').insert({
             room_id:pendingAccessRoomId, user_id:currentUser.id,
@@ -1332,7 +1338,7 @@ function renderFriends(){
 async function sendFriendRequest(){
     const input=document.getElementById('addFriendInput');
     const targetUsername=input.value.trim();if(!targetUsername)return;
-    const myUsername=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    const myUsername=myUsername;
     if(targetUsername.toLowerCase()===myUsername.toLowerCase()){alert("You can't add yourself!");return;}
     try{
         const{data:userData}=await supabaseClient.from('messages').select('user_id,username').eq('username',targetUsername).limit(1);
@@ -1376,7 +1382,7 @@ function addMessageToUI(msg,mode){
 
 function createMessageHTML(msg,mode){
     const time=new Date(msg.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    const myUsername=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    const myUsername=myUsername;
     const senderUsername=mode==='dm'?msg.sender_username:msg.username;
     const senderId=mode==='dm'?msg.sender_id:msg.user_id;
     const isOwn=senderId===currentUser.id;
@@ -1541,7 +1547,7 @@ async function sendMessage(){
     if(!content&&!selectedFile)return;
     const btn=document.getElementById('sendBtn');btn.disabled=true;
     try{
-        const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+        const username=myUsername;
         let fileUrl=null, fileType='text', fileName=null;
 
         // Upload file first if one is selected
@@ -1600,7 +1606,7 @@ async function editMessage(messageId,currentContent,event){
     event.stopPropagation();
     const newContent=prompt('Edit message:',currentContent);
     if(!newContent||newContent===currentContent)return;
-    try{const{error}=await supabaseClient.from('messages').update({content:newContent,edited:true,edited_at:new Date().toISOString()}).eq('id',messageId);if(error)throw error;const el=document.querySelector(`[data-message-id="${messageId}"] .message-text`);if(el){const u=currentUser.user_metadata?.username||currentUser.email.split('@')[0];el.innerHTML=highlightMentions(escapeHtml(newContent),u);}}catch(e){alert('Error: '+e.message);}
+    try{const{error}=await supabaseClient.from('messages').update({content:newContent,edited:true,edited_at:new Date().toISOString()}).eq('id',messageId);if(error)throw error;const el=document.querySelector(`[data-message-id="${messageId}"] .message-text`);if(el){const u=myUsername;el.innerHTML=highlightMentions(escapeHtml(newContent),u);}}catch(e){alert('Error: '+e.message);}
 }
 
 async function deleteMessage(messageId,mode,event){
