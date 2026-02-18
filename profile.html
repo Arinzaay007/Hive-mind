@@ -74,7 +74,19 @@
         .color-option:hover{transform:scale(1.15);}
         .color-option.selected{border-color:#fff;transform:scale(1.15);}
 
-        /* ── FORM ── */
+        /* ── STATUS MESSAGE ── */
+        .status-section{margin-bottom:20px;}
+        .status-input-wrap{position:relative;}
+        .status-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 40px 10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;border-radius:4px;font-style:italic;}
+        .status-input:focus{outline:none;border-color:var(--honey);box-shadow:0 0 10px var(--matrix-glow);}
+        .status-input::placeholder{color:var(--text-muted);}
+        .status-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px;}
+        .status-clear:hover{color:var(--accent);}
+        .status-presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+        .status-preset{background:var(--bg-tertiary);border:1px solid var(--border);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s;color:var(--text-muted);font-style:italic;}
+        .status-preset:hover{border-color:var(--honey);color:var(--honey);}
+        .status-preset.active{border-color:var(--honey);color:var(--honey);background:var(--honey)22;}
+        .status-char-count{font-size:10px;color:var(--text-muted);text-align:right;margin-top:4px;}
         .form-group{margin-bottom:16px;}
         .form-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:block;}
         .form-input{width:100%;background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 12px;color:var(--text-primary);font-family:inherit;font-size:13px;border-radius:4px;}
@@ -157,6 +169,21 @@
             <label class="form-label">Username</label>
             <input class="form-input" id="usernameInput" disabled />
         </div>
+
+        <!-- STATUS MESSAGE -->
+        <div class="status-section">
+            <label class="form-label">Status Message</label>
+            <div class="status-input-wrap">
+                <input class="status-input" id="statusInput" maxlength="60"
+                    placeholder="currently feeling... 😎"
+                    oninput="updateCharCount();updateStatusPresets(this.value)" />
+                <button class="status-clear" onclick="clearStatus()" title="Clear status">×</button>
+            </div>
+            <div class="status-char-count"><span id="charCount">0</span>/60</div>
+            <div class="status-presets" id="statusPresets"></div>
+        </div>
+
+        <!-- BIO -->
         <div class="form-group">
             <label class="form-label">Bio</label>
             <textarea class="form-input" id="bioInput" placeholder="Tell the hive about yourself..."></textarea>
@@ -184,10 +211,49 @@ function getNextRank(p){const i=BEE_RANKS.findIndex(r=>p>=r.min&&p<=r.max);retur
 
 const SUPABASE_URL='https://cwoaqiwnpcpawignecsb.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
-let supabaseClient,currentUser,selectedEmoji='🐝',selectedColor='#1a1a1a',currentPoints=0;
+let supabaseClient,currentUser,selectedEmoji='🐝',selectedColor='#1a1a1a',currentPoints=0,currentStatus='';
 
 const EMOJIS=['🐝','🦊','🐺','🦁','🐯','🐻','🐼','🐨','🦄','🐸','🐙','🦋','🦅','🦉','🐬','🦈','🐲','👾','🤖','👻','💀','🔥','⚡','🌈','🌙','⭐','💎','🎮','🎯','🚀','💜','❤️','💚','💙','🧡','🖤','🤍','🎭','🎪','🏆'];
 const COLORS=['#1a1a1a','#0a2a0a','#0a0a2a','#2a0a0a','#1a0a2a','#f5c518','#a855f7','#ff6b6b','#ffd93d','#06b6d4','#ff006e','#00ccff','#ff8800','#44ff00','#ff44ff','#1e3a5f','#3a1e5f','#5f1e1e','#1e5f3a','#2d2d2d'];
+
+const STATUS_PRESETS = [
+    '😎 chilling','🔥 in the zone','🍯 making honey','💤 away',
+    '🎮 gaming','📚 studying','🎵 vibing to music','😴 tired',
+    '🚀 shipping code','☕ grabbing coffee','🌙 night mode','👑 queen hours',
+    '🐝 busy bee','💪 grinding','✈️ travelling','🎉 celebrating',
+];
+
+function renderStatusPresets(){
+    const current=document.getElementById('statusInput')?.value||'';
+    document.getElementById('statusPresets').innerHTML=STATUS_PRESETS.map(s=>`
+        <div class="status-preset ${current===s?'active':''}" onclick="setStatus('${s.replace(/'/g,"\\'")}')">
+            ${s}
+        </div>`).join('');
+}
+
+function setStatus(status){
+    document.getElementById('statusInput').value=status;
+    updateCharCount();
+    updateStatusPresets(status);
+}
+
+function clearStatus(){
+    document.getElementById('statusInput').value='';
+    updateCharCount();
+    updateStatusPresets('');
+}
+
+function updateCharCount(){
+    const len=document.getElementById('statusInput')?.value?.length||0;
+    const el=document.getElementById('charCount');
+    if(el){el.textContent=len;el.style.color=len>50?'#ff6b6b':'var(--text-muted)';}
+}
+
+function updateStatusPresets(current){
+    document.querySelectorAll('.status-preset').forEach(el=>{
+        el.classList.toggle('active',el.textContent.trim()===current.trim());
+    });
+}
 
 async function init(){
     try{
@@ -196,6 +262,7 @@ async function init(){
         if(error||!user){window.location.href='signin.html';return;}
         currentUser=user;
         renderEmojiPicker();renderColorPicker();
+        renderStatusPresets();
         await loadProfile();
         document.getElementById('loadingScreen').classList.add('hidden');
     }catch(e){console.error(e);window.location.href='signin.html';}
@@ -210,7 +277,11 @@ async function loadProfile(){
             selectedEmoji=data.avatar_emoji||'🐝';
             selectedColor=data.avatar_color||'#1a1a1a';
             currentPoints=data.points||0;
+            currentStatus=data.status_message||'';
             document.getElementById('bioInput').value=data.bio||'';
+            document.getElementById('statusInput').value=currentStatus;
+            updateCharCount();
+            updateStatusPresets(currentStatus);
             updateAvatarPreview();updateRankUI(currentPoints);
             updateEmojiSelection();updateColorSelection();
         }
@@ -292,8 +363,10 @@ function toggleEmojiPicker(){document.getElementById('emojiPicker').classList.to
 async function saveProfile(){
     try{
         const bio=document.getElementById('bioInput').value.trim();
-        const{error}=await supabaseClient.from('profiles').update({bio,avatar_emoji:selectedEmoji,avatar_color:selectedColor}).eq('id',currentUser.id);
+        const status_message=document.getElementById('statusInput').value.trim().substring(0,60);
+        const{error}=await supabaseClient.from('profiles').update({bio,avatar_emoji:selectedEmoji,avatar_color:selectedColor,status_message}).eq('id',currentUser.id);
         if(error)throw error;
+        currentStatus=status_message;
         document.getElementById('emojiPicker').classList.remove('open');
         showToast('✅ Profile saved!');
     }catch(e){showToast('❌ Error: '+e.message,true);}
