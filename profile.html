@@ -93,6 +93,10 @@
         .form-input:focus{outline:none;border-color:var(--honey);box-shadow:0 0 10px var(--matrix-glow);}
         .form-input[disabled]{opacity:.5;cursor:not-allowed;}
         textarea.form-input{resize:vertical;min-height:80px;}
+        .username-status{font-size:11px;margin-top:5px;min-height:16px;}
+        .username-status.ok{color:#00ff41;}
+        .username-status.err{color:#ff006e;}
+        .username-status.checking{color:var(--text-muted);}
         .save-row{display:flex;gap:12px;justify-content:flex-end;margin-top:20px;}
 
         /* ── TOAST ── */
@@ -167,7 +171,8 @@
         <!-- FORM -->
         <div class="form-group">
             <label class="form-label">Username</label>
-            <input class="form-input" id="usernameInput" disabled />
+            <input class="form-input" id="usernameInput" maxlength="20" placeholder="your username" oninput="onUsernameInput(this.value)" />
+            <div class="username-status" id="usernameStatus"></div>
         </div>
 
         <!-- STATUS MESSAGE -->
@@ -211,7 +216,8 @@ function getNextRank(p){const i=BEE_RANKS.findIndex(r=>p>=r.min&&p<=r.max);retur
 
 const SUPABASE_URL='https://cwoaqiwnpcpawignecsb.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
-let supabaseClient,currentUser,selectedEmoji='🐝',selectedColor='#1a1a1a',currentPoints=0,currentStatus='';
+let supabaseClient,currentUser,selectedEmoji='🐝',selectedColor='#1a1a1a',currentPoints=0,currentStatus='',currentUsername='';
+let usernameCheckTimer=null,usernameValid=true;
 
 const EMOJIS=['🐝','🦊','🐺','🦁','🐯','🐻','🐼','🐨','🦄','🐸','🐙','🦋','🦅','🦉','🐬','🦈','🐲','👾','🤖','👻','💀','🔥','⚡','🌈','🌙','⭐','💎','🎮','🎯','🚀','💜','❤️','💚','💙','🧡','🖤','🤍','🎭','🎪','🏆'];
 const COLORS=['#1a1a1a','#0a2a0a','#0a0a2a','#2a0a0a','#1a0a2a','#f5c518','#a855f7','#ff6b6b','#ffd93d','#06b6d4','#ff006e','#00ccff','#ff8800','#44ff00','#ff44ff','#1e3a5f','#3a1e5f','#5f1e1e','#1e5f3a','#2d2d2d'];
@@ -269,11 +275,14 @@ async function init(){
 }
 
 async function loadProfile(){
-    const username=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
-    document.getElementById('usernameInput').value=username;
+    currentUsername=currentUser.user_metadata?.username||currentUser.email.split('@')[0];
+    document.getElementById('usernameInput').value=currentUsername;
     try{
         const{data}=await supabaseClient.from('profiles').select('*').eq('id',currentUser.id).single();
         if(data){
+            // Prefer profiles.username as source of truth
+            if(data.username)currentUsername=data.username;
+            document.getElementById('usernameInput').value=currentUsername;
             selectedEmoji=data.avatar_emoji||'🐝';
             selectedColor=data.avatar_color||'#1a1a1a';
             currentPoints=data.points||0;
@@ -360,15 +369,86 @@ function updateEmojiSelection(){document.querySelectorAll('.emoji-option').forEa
 function updateColorSelection(){document.querySelectorAll('.color-option').forEach(el=>el.classList.toggle('selected',el.getAttribute('onclick')?.includes(selectedColor)));}
 function toggleEmojiPicker(){document.getElementById('emojiPicker').classList.toggle('open');}
 
+// ── USERNAME VALIDATION ──────────────────
+function onUsernameInput(val){
+    clearTimeout(usernameCheckTimer);
+    const status=document.getElementById('usernameStatus');
+    const clean=val.trim();
+
+    // Instant local checks
+    if(clean===currentUsername){status.textContent='';usernameValid=true;return;}
+    if(clean.length<3){status.textContent='Min 3 characters';status.className='username-status err';usernameValid=false;return;}
+    if(clean.length>20){status.textContent='Max 20 characters';status.className='username-status err';usernameValid=false;return;}
+    if(!/^[a-zA-Z0-9_-]+$/.test(clean)){status.textContent='Only letters, numbers, _ and - allowed';status.className='username-status err';usernameValid=false;return;}
+
+    // Debounced availability check
+    status.textContent='Checking...';status.className='username-status checking';usernameValid=false;
+    usernameCheckTimer=setTimeout(()=>checkUsernameAvailable(clean),400);
+}
+
+async function checkUsernameAvailable(username){
+    const status=document.getElementById('usernameStatus');
+    try{
+        const{data}=await supabaseClient.from('profiles')
+            .select('id').eq('username',username).neq('id',currentUser.id).maybeSingle();
+        if(data){
+            status.textContent='❌ Username already taken';
+            status.className='username-status err';
+            usernameValid=false;
+        }else{
+            status.textContent='✓ Available!';
+            status.className='username-status ok';
+            usernameValid=true;
+        }
+    }catch(e){status.textContent='';usernameValid=true;}
+}
+
 async function saveProfile(){
+    const newUsername=document.getElementById('usernameInput').value.trim();
+
+    // Validate username before saving
+    if(!newUsername||newUsername.length<3){showToast('❌ Username must be at least 3 characters',true);return;}
+    if(!usernameValid&&newUsername!==currentUsername){showToast('❌ Fix username before saving',true);return;}
+
     try{
         const bio=document.getElementById('bioInput').value.trim();
         const status_message=document.getElementById('statusInput').value.trim().substring(0,60);
-        const{error}=await supabaseClient.from('profiles').update({bio,avatar_emoji:selectedEmoji,avatar_color:selectedColor,status_message}).eq('id',currentUser.id);
+        const usernameChanged=newUsername!==currentUsername;
+
+        // 1. Update profiles table
+        const{error}=await supabaseClient.from('profiles').update({
+            bio,avatar_emoji:selectedEmoji,avatar_color:selectedColor,
+            status_message,username:newUsername
+        }).eq('id',currentUser.id);
         if(error)throw error;
+
+        // 2. If username changed, update all denormalized tables
+        if(usernameChanged){
+            await Promise.all([
+                // Messages sent by this user
+                supabaseClient.from('messages').update({username:newUsername}).eq('user_id',currentUser.id),
+                // DMs sent by this user
+                supabaseClient.from('direct_messages').update({sender_username:newUsername}).eq('sender_id',currentUser.id),
+                // DMs received by this user (recipient_username field)
+                supabaseClient.from('direct_messages').update({recipient_username:newUsername}).eq('recipient_id',currentUser.id),
+                // Friends where this user sent the request
+                supabaseClient.from('friends').update({username:newUsername}).eq('user_id',currentUser.id),
+                // Friends where this user received the request
+                supabaseClient.from('friends').update({friend_username:newUsername}).eq('friend_id',currentUser.id),
+                // Room memberships
+                supabaseClient.from('room_members').update({username:newUsername}).eq('user_id',currentUser.id),
+                // Rooms created by this user
+                supabaseClient.from('rooms').update({creator_username:newUsername}).eq('creator_id',currentUser.id),
+                // Update Supabase auth metadata
+                supabaseClient.auth.updateUser({data:{username:newUsername}})
+            ]);
+            currentUsername=newUsername;
+            document.getElementById('usernameStatus').textContent='';
+        }
+
         currentStatus=status_message;
         document.getElementById('emojiPicker').classList.remove('open');
-        showToast('✅ Profile saved!');
+        showToast(usernameChanged?`✅ Saved! Welcome, ${newUsername} 🐝`:'✅ Profile saved!');
     }catch(e){showToast('❌ Error: '+e.message,true);}
 }
 
