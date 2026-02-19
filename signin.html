@@ -51,16 +51,43 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-top: 2px solid var(--accent);
-            padding: 40px 32px;
+            padding: 0;
             box-shadow: 0 0 40px rgba(255,230,0,0.1);
         }
+
+        /* ── TABS ── */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            flex: 1; padding: 14px;
+            text-align: center; cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px; letter-spacing: 1px;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            transition: all .2s;
+        }
+        .tab:hover { color: var(--text-primary); }
+        .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* ── FORM PANELS ── */
+        .form-panel { display: none; padding: 32px; }
+        .form-panel.active { display: block; }
+
         .card-title {
             font-family: 'Space Mono', monospace;
-            font-size: 22px; font-weight: 700; margin-bottom: 8px;
+            font-size: 18px; font-weight: 700; margin-bottom: 6px;
         }
         .card-title::before { content: '# '; color: var(--accent); }
-        .card-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 32px; }
-        .form-group { margin-bottom: 24px; }
+        .card-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; }
+        .honeycomb-divider {
+            text-align: center; font-size: 10px;
+            color: var(--border); letter-spacing: 4px;
+            margin: 20px 0; opacity: 0.5;
+        }
+        .form-group { margin-bottom: 20px; }
         .form-label {
             display: block; font-size: 12px; color: var(--text-muted);
             text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
@@ -78,6 +105,17 @@
             box-shadow: 0 0 15px var(--matrix-glow);
         }
         .form-input::placeholder { color: var(--text-muted); }
+
+        /* Username availability hint */
+        .username-hint {
+            font-size: 11px; margin-top: 5px; min-height: 16px;
+            transition: color .2s;
+        }
+        .username-hint.ok  { color: #00ff41; }
+        .username-hint.err { color: var(--error); }
+        .username-hint.checking { color: var(--text-muted); }
+
+        /* ── BUTTONS ── */
         .submit-btn {
             width: 100%; background: var(--accent);
             border: none; padding: 14px 24px;
@@ -85,101 +123,337 @@
             font-size: 14px; font-weight: 700;
             cursor: pointer; transition: all 0.3s ease;
             color: #000000; letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .submit-btn:hover:not(:disabled) {
             box-shadow: 0 0 30px var(--matrix-glow);
             transform: translateY(-2px);
         }
-        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .signin-footer {
-            text-align: center; margin-top: 24px;
-            font-size: 13px; color: var(--text-muted);
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .or-divider {
+            display: flex; align-items: center; gap: 10px;
+            color: var(--text-muted); font-size: 11px; margin: 16px 0;
         }
-        .signin-footer a { color: var(--accent); text-decoration: none; }
-        .signin-footer a:hover { text-shadow: 0 0 8px var(--matrix-glow); }
-        .honeycomb-divider {
-            text-align: center; font-size: 10px;
-            color: var(--border); letter-spacing: 4px;
-            margin: 20px 0; opacity: 0.5;
+        .or-divider::before,.or-divider::after {
+            content:''; flex:1; height:1px; background:var(--border);
+        }
+
+        .google-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px; color: var(--text-primary);
+            cursor: pointer; transition: all .2s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            letter-spacing: .5px;
+        }
+        .google-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 15px var(--matrix-glow);
+        }
+        .google-btn:disabled { opacity: .5; cursor: not-allowed; }
+        .google-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* ── ERROR / SUCCESS MESSAGES ── */
+        .msg {
+            font-size: 12px; padding: 10px 14px;
+            border: 1px solid; margin-bottom: 16px;
+            display: none;
+        }
+        .msg.show { display: block; }
+        .msg.err { background: #ff006e18; border-color: var(--error); color: var(--error); }
+        .msg.ok  { background: #00ff4118; border-color: #00ff41; color: #00ff41; }
+
+        /* Spinner inside button */
+        .btn-spinner {
+            width: 14px; height: 14px;
+            border: 2px solid #00000044;
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            display: none;
+        }
+        .btn-spinner.show { display: block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .signin-footer {
+            text-align: center; margin-top: 20px;
+            font-size: 12px; color: var(--text-muted);
         }
     </style>
 </head>
 <body>
-    <canvas id="matrix-canvas"></canvas>
-    <div class="container">
-        <div class="header">
-            <div class="logo">HIVE MIND</div>
-            <div class="tagline">WHERE MINDS CONNECT</div>
+<canvas id="matrix-canvas"></canvas>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">HIVE MIND</div>
+        <div class="tagline">WHERE MINDS CONNECT</div>
+    </div>
+
+    <div class="signin-card">
+        <!-- TABS -->
+        <div class="tabs">
+            <div class="tab active" id="tabSignin" onclick="switchTab('signin')">Sign In</div>
+            <div class="tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</div>
         </div>
-        <div class="signin-card">
+
+        <!-- SIGN IN PANEL -->
+        <div class="form-panel active" id="panelSignin">
             <h1 class="card-title">Sign In</h1>
             <p class="card-subtitle">Welcome back to the hive 🐝</p>
             <div class="honeycomb-divider">⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡</div>
-            <form id="signinForm">
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" id="email" placeholder="you@example.dev" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-input" id="password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="submit-btn" id="submitBtn">🐝 Sign In</button>
-            </form>
+            <div class="msg" id="siMsg"></div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="siEmail" placeholder="you@example.dev"
+                    onkeydown="if(event.key==='Enter')signIn()"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="siPassword" placeholder="••••••••"
+                    onkeydown="if(event.key==='Enter')signIn()"/>
+            </div>
+            <button class="submit-btn" id="siBtn" onclick="signIn()">
+                <span id="siBtnText">🐝 Sign In</span>
+                <div class="btn-spinner" id="siSpinner"></div>
+            </button>
+            <div class="or-divider">or</div>
+            <button class="google-btn" id="siGoogleBtn" onclick="signInWithGoogle()">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continue with Google
+            </button>
         </div>
-        <div class="signin-footer">
-            Don't have an account? <a href="signup.html">Sign up</a>
+
+        <!-- SIGN UP PANEL -->
+        <div class="form-panel" id="panelSignup">
+            <h1 class="card-title">Sign Up</h1>
+            <p class="card-subtitle">Join the swarm 🍯</p>
+            <div class="honeycomb-divider">⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡</div>
+            <div class="msg" id="suMsg"></div>
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="suUsername" placeholder="choose a username"
+                    maxlength="20" oninput="onUsernameInput(this.value)"
+                    onkeydown="if(event.key==='Enter')signUp()"/>
+                <div class="username-hint" id="usernameHint">3–20 chars · letters, numbers, _ and - only</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="suEmail" placeholder="you@example.dev"
+                    onkeydown="if(event.key==='Enter')signUp()"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="suPassword" placeholder="min 6 characters"
+                    onkeydown="if(event.key==='Enter')signUp()"/>
+            </div>
+            <button class="submit-btn" id="suBtn" onclick="signUp()">
+                <span id="suBtnText">🐝 Create Account</span>
+                <div class="btn-spinner" id="suSpinner"></div>
+            </button>
+            <div class="or-divider">or</div>
+            <button class="google-btn" id="suGoogleBtn" onclick="signInWithGoogle()">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continue with Google
+            </button>
         </div>
     </div>
-    <script>
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const chars = '⬡⬢01アイウエオカキクケコ';
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0,0,0,0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#ffe600';
-            ctx.font = fontSize + 'px monospace';
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
+
+    <div class="signin-footer">⬡ HIVE MIND · STAY BUZZING ⬡</div>
+</div>
+
+<script>
+// ── MATRIX RAIN ──────────────────────────────────────────────
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const chars = '⬡⬢01アイウエオカキクケコ';
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+const drops = Array(Math.floor(columns)).fill(1);
+function drawMatrix(){
+    ctx.fillStyle='rgba(0,0,0,0.05)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#ffe600';
+    ctx.font=fontSize+'px monospace';
+    for(let i=0;i<drops.length;i++){
+        const text=chars[Math.floor(Math.random()*chars.length)];
+        ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+        if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;
+        drops[i]++;
+    }
+}
+setInterval(drawMatrix,50);
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+
+// ── SUPABASE ─────────────────────────────────────────────────
+const SUPABASE_URL='https://cwoaqiwnpcpawignecsb.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// Redirect if already signed in
+sb.auth.getSession().then(({data:{session}})=>{if(session)window.location.href='app.html';});
+
+// Handle OAuth redirect callback
+sb.auth.onAuthStateChange(async(event,session)=>{
+    if((event==='SIGNED_IN')&&session){
+        await ensureProfile(session.user);
+        window.location.href='app.html';
+    }
+});
+
+// Create profile for new Google users
+async function ensureProfile(user){
+    const{data}=await sb.from('profiles').select('id').eq('id',user.id).maybeSingle();
+    if(data) return; // already has profile
+    // Derive a username from their Google name/email
+    const base=(user.user_metadata?.full_name?.split(' ')[0]||user.email?.split('@')[0]||'bee')
+        .toLowerCase().replace(/[^a-z0-9_]/g,'').substring(0,16)||'bee';
+    const username=await makeUniqueUsername(base);
+    await sb.from('profiles').insert({
+        id:user.id, username,
+        avatar_emoji:'🐝', avatar_color:'#1a1a1a',
+        points:0, level:1
+    });
+    await sb.auth.updateUser({data:{username}});
+}
+
+async function makeUniqueUsername(base){
+    const{data}=await sb.from('profiles').select('username').eq('username',base).maybeSingle();
+    if(!data) return base;
+    return base+Math.floor(Math.random()*999);
+}
+
+// ── TAB SWITCHING ────────────────────────────────────────────
+function switchTab(tab){
+    document.getElementById('tabSignin').classList.toggle('active',tab==='signin');
+    document.getElementById('tabSignup').classList.toggle('active',tab==='signup');
+    document.getElementById('panelSignin').classList.toggle('active',tab==='signin');
+    document.getElementById('panelSignup').classList.toggle('active',tab==='signup');
+    // Clear messages
+    ['siMsg','suMsg'].forEach(id=>{const el=document.getElementById(id);el.className='msg';el.textContent='';});
+}
+
+// ── HELPERS ──────────────────────────────────────────────────
+function showMsg(id,text,type='err'){
+    const el=document.getElementById(id);
+    el.textContent=text; el.className='msg '+type+' show';
+}
+function setLoading(form,on){
+    const isSignin=form==='si';
+    document.getElementById(form+'Btn').disabled=on;
+    document.getElementById(form+'BtnText').style.display=on?'none':'inline';
+    document.getElementById(form+'Spinner').className='btn-spinner'+(on?' show':'');
+    document.getElementById(isSignin?'siGoogleBtn':'suGoogleBtn').disabled=on;
+}
+
+// ── USERNAME VALIDATION ──────────────────────────────────────
+let usernameTimer=null, usernameOk=false;
+function onUsernameInput(val){
+    clearTimeout(usernameTimer);
+    const hint=document.getElementById('usernameHint');
+    const v=val.trim();
+    if(!v){hint.textContent='3–20 chars · letters, numbers, _ and - only';hint.className='username-hint';usernameOk=false;return;}
+    if(v.length<3){hint.textContent='Too short — min 3 characters';hint.className='username-hint err';usernameOk=false;return;}
+    if(!/^[a-zA-Z0-9_-]+$/.test(v)){hint.textContent='Only letters, numbers, _ and - allowed';hint.className='username-hint err';usernameOk=false;return;}
+    hint.textContent='Checking...';hint.className='username-hint checking';usernameOk=false;
+    usernameTimer=setTimeout(async()=>{
+        const{data}=await sb.from('profiles').select('id').eq('username',v).maybeSingle();
+        if(data){hint.textContent='❌ Already taken';hint.className='username-hint err';usernameOk=false;}
+        else{hint.textContent='✓ Available!';hint.className='username-hint ok';usernameOk=true;}
+    },400);
+}
+
+// ── SIGN IN ──────────────────────────────────────────────────
+async function signIn(){
+    const email=document.getElementById('siEmail').value.trim();
+    const password=document.getElementById('siPassword').value;
+    if(!email||!password){showMsg('siMsg','Please enter your email and password.');return;}
+    setLoading('si',true);
+    try{
+        const{data,error}=await sb.auth.signInWithPassword({email,password});
+        if(error)throw error;
+        // Check email confirmation
+        if(!data.user.email_confirmed_at){
+            showMsg('siMsg','⚠️ Please verify your email first! Check your inbox.');
+            setLoading('si',false);return;
         }
-        setInterval(drawMatrix, 50);
+        window.location.href='app.html';
+    }catch(e){
+        showMsg('siMsg','❌ '+e.message);
+        setLoading('si',false);
+    }
+}
 
-        const SUPABASE_URL = 'https://cwoaqiwnpcpawignecsb.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
-        const { createClient } = window.supabase;
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+// ── SIGN UP ──────────────────────────────────────────────────
+async function signUp(){
+    const username=document.getElementById('suUsername').value.trim();
+    const email=document.getElementById('suEmail').value.trim();
+    const password=document.getElementById('suPassword').value;
 
-        document.getElementById('signinForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            if (!email || !password) { alert('Please enter email and password!'); return; }
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true; btn.textContent = '⏳ Signing in...';
-            try {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                if (error) throw error;
-                if (!data.user.email_confirmed_at) {
-                    alert('⚠️ Please verify your email first! Check your inbox.');
-                    btn.disabled = false; btn.textContent = '🐝 Sign In'; return;
-                }
-                window.location.href = 'app.html';
-            } catch (error) {
-                alert('❌ Sign in failed: ' + error.message);
-                btn.disabled = false; btn.textContent = '🐝 Sign In';
+    if(!username||!email||!password){showMsg('suMsg','Please fill in all fields.');return;}
+    if(username.length<3){showMsg('suMsg','Username must be at least 3 characters.');return;}
+    if(!usernameOk){showMsg('suMsg','Please choose an available username.');return;}
+    if(password.length<6){showMsg('suMsg','Password must be at least 6 characters.');return;}
+
+    setLoading('su',true);
+    try{
+        const{data,error}=await sb.auth.signUp({
+            email, password,
+            options:{data:{username}}
+        });
+        if(error)throw error;
+
+        // Create profile row immediately
+        if(data.user){
+            await sb.from('profiles').insert({
+                id:data.user.id, username,
+                avatar_emoji:'🐝', avatar_color:'#1a1a1a',
+                points:0, level:1
+            });
+        }
+
+        showMsg('suMsg','✅ Account created! Check your email to confirm, then sign in.','ok');
+        setLoading('su',false);
+        // Switch to signin tab after 2s
+        setTimeout(()=>switchTab('signin'),2000);
+    }catch(e){
+        showMsg('suMsg','❌ '+e.message);
+        setLoading('su',false);
+    }
+}
+
+// ── GOOGLE OAUTH ─────────────────────────────────────────────
+async function signInWithGoogle(){
+    try{
+        const{error}=await sb.auth.signInWithOAuth({
+            provider:'google',
+            options:{
+                redirectTo:window.location.origin+'/app.html'
             }
         });
-        document.getElementById('email').focus();
-    </script>
+        if(error)throw error;
+        // Page will redirect to Google — nothing else needed here
+    }catch(e){
+        showMsg('siMsg','❌ Google sign in failed: '+e.message);
+    }
+}
+</script>
 </body>
 </html>
