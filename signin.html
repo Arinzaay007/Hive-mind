@@ -442,14 +442,15 @@ async function signUp(){
 // ── GOOGLE OAUTH ─────────────────────────────────────────────
 async function signInWithGoogle(){
     try{
+        // Use absolute URL so it works from both local and Vercel
+        const redirect=window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'
+            ? window.location.origin+'/app.html'
+            : 'https://hive-mind-henna.vercel.app/app.html';
         const{error}=await sb.auth.signInWithOAuth({
             provider:'google',
-            options:{
-                redirectTo:window.location.origin+'/app.html'
-            }
+            options:{redirectTo:redirect}
         });
         if(error)throw error;
-        // Page will redirect to Google — nothing else needed here
     }catch(e){
         showMsg('siMsg','❌ Google sign in failed: '+e.message);
     }
