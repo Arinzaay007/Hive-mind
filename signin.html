@@ -308,7 +308,12 @@ const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 // Redirect if already signed in
-sb.auth.getSession().then(({data:{session}})=>{if(session)window.location.href='app.html';});
+sb.auth.getSession().then(({data:{session}})=>{
+    if(session){window.location.href='app.html';return;}
+    // Auto-open signup tab if linked from guest prompt
+    const params=new URLSearchParams(window.location.search);
+    if(params.get('tab')==='signup') switchTab('signup');
+});
 
 // Handle OAuth redirect callback
 sb.auth.onAuthStateChange(async(event,session)=>{
