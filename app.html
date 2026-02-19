@@ -80,7 +80,6 @@
         .header-xp{font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:4px;}
         .header-xp-bar{width:50px;height:4px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden;}
         .header-xp-fill{height:100%;border-radius:4px;transition:width .4s;}
-        /* ── NEW SIDEBAR LAYOUT ── */
         .sidebar-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:99;}
         .sidebar-overlay.active{display:block;}
         .nav-rail{position:fixed;left:0;top:0;width:56px;height:100%;height:100dvh;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px;z-index:200;flex-shrink:0;}
@@ -100,12 +99,10 @@
         .drawer-close:hover{color:var(--honey);}
         .sidebar-panel{display:none;flex:1;overflow-y:auto;flex-direction:column;}
         .sidebar-panel.active{display:flex;}
-        /* theme grid */
         .theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;}
         .theme-btn{background:var(--bg-tertiary);border:1px solid var(--border);padding:10px 8px;cursor:pointer;border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-primary);transition:all .2s;text-align:center;}
         .theme-btn:hover{border-color:var(--honey);color:var(--honey);}
         .theme-btn.active{border-color:var(--honey);background:var(--honey)22;color:var(--honey);}
-        /* profile panel */
         .profile-panel-avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 10px;}
         .profile-panel-name{text-align:center;font-size:16px;font-weight:700;margin-bottom:6px;}
         .profile-panel-rank{display:flex;justify-content:center;margin-bottom:16px;}
@@ -229,8 +226,6 @@
         .mention-item:hover,.mention-item.selected{background:var(--bg-tertiary);}
         .mention{background:var(--honey);color:#1a0a00;padding:2px 4px;border-radius:3px;font-weight:600;}
         .mention-me{background:#ff006e;color:#fff;padding:2px 4px;border-radius:3px;font-weight:600;}
-        .mobile-menu-btn{display:none;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;cursor:pointer;font-size:18px;}
-        .sidebar-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:99;}
         .loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;z-index:9999;}
         .loading-screen.hidden{display:none;}
         .spinner{width:50px;height:50px;border:3px solid var(--border);border-top-color:var(--honey);border-radius:50%;animation:spin 1s linear infinite;}
@@ -250,24 +245,26 @@
         .levelup-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:14px 28px;border-radius:10px;font-weight:700;font-size:14px;z-index:9999;animation:toastIn .4s ease;display:none;border:1px solid;text-align:center;}
         .levelup-toast.show{display:block;}
         @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-24px) scale(.9);}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}}
-        @media(max-width:768px){
-            .header{padding:8px 12px;}
-            .logo{font-size:13px;}
-            .user-info{font-size:11px;gap:6px;}
-            .btn{padding:4px 8px;font-size:11px;}
-            .chat-area{display:flex;flex-direction:column;height:100%;overflow:hidden;}
-            .messages{flex:1;overflow-y:auto;padding:12px;min-height:0;padding-bottom:16px;}
-            .message-input-container{position:relative;bottom:auto;left:auto;right:auto;padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));flex-shrink:0;background:var(--bg-secondary);border-top:2px solid var(--border);}
-            .message-input{font-size:16px;padding:12px;min-height:44px;}
-            .btn-accent{padding:12px 16px;min-height:44px;font-size:13px;}
-            .message-content{max-width:85%;}
-            #sendBtn{flex-shrink:0;}
-            .msg-rank{display:none;}
-            .nav-btn-label{display:none;}
-            .nav-rail{width:48px;}
-            .nav-btn{width:38px;height:38px;}
-        }
-        @media(max-width:380px){.message-content{max-width:90%;}.logo{font-size:12px;}}
+
+        /* ── GUEST MODE STYLES ── */
+        .guest-banner{background:var(--honey)22;border-bottom:1px solid var(--honey)44;padding:6px 16px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--honey);flex-shrink:0;}
+        .guest-banner-btns{display:flex;gap:6px;margin-left:auto;}
+        .guest-join-btn{background:var(--honey);color:#1a0a00;border:none;padding:5px 14px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;transition:all .2s;}
+        .guest-join-btn:hover{box-shadow:0 0 10px var(--honey-glow);}
+        .guest-signin-btn{background:transparent;border:1px solid var(--honey);color:var(--honey);padding:5px 12px;font-family:inherit;font-size:11px;cursor:pointer;border-radius:4px;transition:all .2s;}
+        .guest-signin-btn:hover{background:var(--honey)22;}
+        .guest-input-blocker{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 16px;background:var(--bg-tertiary);border-top:1px solid var(--border);}
+        .guest-input-blocker span{font-size:12px;color:var(--text-muted);}
+        .guest-auth-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:2000;align-items:center;justify-content:center;}
+        .guest-auth-modal.open{display:flex;}
+        .guest-auth-inner{background:var(--bg-secondary);border:1px solid var(--honey)55;border-radius:14px;padding:32px 28px;width:90%;max-width:360px;text-align:center;position:relative;}
+        .guest-auth-icon{font-size:48px;margin-bottom:12px;}
+        .guest-auth-title{font-size:18px;font-weight:700;margin-bottom:6px;}
+        .guest-auth-subtitle{font-size:13px;color:var(--text-muted);margin-bottom:24px;line-height:1.6;}
+        .guest-auth-actions{display:flex;flex-direction:column;gap:10px;}
+        .guest-auth-dismiss{background:transparent;border:none;color:var(--text-muted);font-size:12px;cursor:pointer;margin-top:8px;font-family:inherit;}
+        .guest-auth-dismiss:hover{color:var(--text-primary);}
+
         .load-more-btn{display:none;width:100%;padding:8px;background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:inherit;font-size:11px;cursor:pointer;transition:all .2s;margin-bottom:8px;}
         .load-more-btn:hover{border-color:var(--honey);color:var(--honey);}
         .load-more-btn.visible{display:block;}
@@ -286,8 +283,25 @@
         .call-frame{flex:1;width:100%;border:none;}
         .call-start-btn{background:transparent;border:1px solid #00cc66;color:#00cc66;padding:6px 14px;cursor:pointer;font-family:inherit;font-size:12px;border-radius:4px;transition:all .2s;display:flex;align-items:center;gap:6px;}
         .call-start-btn:hover{background:#00cc6622;box-shadow:0 0 10px rgba(0,204,102,.3);}
-        .dm-call-btn{background:transparent;border:1px solid #00cc66;color:#00cc66;padding:4px 10px;cursor:pointer;font-family:inherit;font-size:11px;border-radius:4px;transition:all .2s;}
-        .dm-call-btn:hover{background:#00cc6622;}
+
+        @media(max-width:768px){
+            .header{padding:8px 12px;}
+            .logo{font-size:13px;}
+            .user-info{font-size:11px;gap:6px;}
+            .btn{padding:4px 8px;font-size:11px;}
+            .chat-area{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+            .messages{flex:1;overflow-y:auto;padding:12px;min-height:0;padding-bottom:16px;}
+            .message-input-container{position:relative;bottom:auto;left:auto;right:auto;padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));flex-shrink:0;background:var(--bg-secondary);border-top:2px solid var(--border);}
+            .message-input{font-size:16px;padding:12px;min-height:44px;}
+            .btn-accent{padding:12px 16px;min-height:44px;font-size:13px;}
+            .message-content{max-width:85%;}
+            #sendBtn{flex-shrink:0;}
+            .msg-rank{display:none;}
+            .nav-btn-label{display:none;}
+            .nav-rail{width:48px;}
+            .nav-btn{width:38px;height:38px;}
+        }
+        @media(max-width:380px){.message-content{max-width:90%;}.logo{font-size:12px;}}
     </style>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ffe600">
@@ -299,6 +313,20 @@
 <body>
 <div class="loading-screen" id="loadingScreen"><div class="spinner"></div><div style="color:var(--honey);">Loading the Hive...</div></div>
 <div class="levelup-toast" id="levelupToast">🐝 Rank Up!</div>
+
+<!-- ── GUEST AUTH PROMPT MODAL ── -->
+<div class="guest-auth-modal" id="guestAuthModal">
+  <div class="guest-auth-inner">
+    <div class="guest-auth-icon" id="guestAuthIcon">🐝</div>
+    <div class="guest-auth-title" id="guestAuthTitle">Join the Hive!</div>
+    <div class="guest-auth-subtitle" id="guestAuthSubtitle">Sign up free to start buzzing with the community.</div>
+    <div class="guest-auth-actions">
+      <button class="btn btn-accent" style="width:100%;padding:12px;font-size:14px;" onclick="window.location.href='signin.html?tab=signup'">🐝 Sign Up Free</button>
+      <button class="btn" style="width:100%;padding:10px;" onclick="window.location.href='signin.html'">Sign In</button>
+    </div>
+    <button class="guest-auth-dismiss" onclick="document.getElementById('guestAuthModal').classList.remove('open')">Maybe later</button>
+  </div>
+</div>
 
 <div class="modal-overlay" id="createRoomModal" onclick="closeCreateRoomModal(event)">
   <div class="modal" style="max-width:400px;">
@@ -360,21 +388,24 @@
 
 <div class="app-container" style="display:none;" id="appContainer">
 
-  <!-- HEADER: logo + username + rank only -->
+  <!-- GUEST BANNER (shown only for guests) -->
+  <div class="guest-banner" id="guestBanner" style="display:none;">
+    <span>👀 Browsing as guest — read-only mode</span>
+    <div class="guest-banner-btns">
+      <button class="guest-join-btn" onclick="window.location.href='signin.html?tab=signup'">Join Free 🐝</button>
+      <button class="guest-signin-btn" onclick="window.location.href='signin.html'">Sign In</button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
   <div class="header" style="padding-left:68px;">
     <div class="logo">HIVE MIND</div>
-    <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
-      <span class="status-indicator"></span>
-      <span id="currentUser">...</span>
-      <span id="headerRankBadge"></span>
-      <div class="header-xp">
-        <div class="header-xp-bar"><div class="header-xp-fill" id="headerXpFill" style="width:0%"></div></div>
-      </div>
+    <div id="headerRight" style="display:flex;align-items:center;gap:8px;font-size:13px;">
+      <!-- Filled dynamically: user info for signed-in, buttons for guest -->
     </div>
   </div>
 
   <div class="main-content" style="padding-left:56px;">
-    <!-- OVERLAY for drawer -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeDrawer()"></div>
 
     <!-- VERTICAL NAV RAIL -->
@@ -384,12 +415,13 @@
         <div class="nav-btn-icon">🍯</div>
         <div class="nav-btn-label">Rooms</div>
       </div>
-      <div class="nav-btn" id="nav-dms" onclick="openDrawer('dms')">
+      <!-- DMs & Friends hidden for guests via JS -->
+      <div class="nav-btn" id="nav-dms" onclick="isGuest ? requireAuth('dm') : openDrawer('dms')">
         <div class="nav-btn-icon">✉️</div>
         <div class="nav-btn-label">DMs</div>
         <span id="dmNotifDot" style="display:none;" class="notif-dot"></span>
       </div>
-      <div class="nav-btn" id="nav-friends" onclick="openDrawer('friends')">
+      <div class="nav-btn" id="nav-friends" onclick="isGuest ? requireAuth('friend') : openDrawer('friends')">
         <div class="nav-btn-icon">🐝</div>
         <div class="nav-btn-label">Friends</div>
       </div>
@@ -406,7 +438,7 @@
         <div class="nav-btn-icon">🎨</div>
         <div class="nav-btn-label">Theme</div>
       </div>
-      <div class="nav-btn" id="nav-profile" onclick="openDrawer('profile')">
+      <div class="nav-btn" id="nav-profile" onclick="isGuest ? requireAuth('profile') : openDrawer('profile')">
         <div class="nav-btn-icon" id="headerAvatarEmoji">🐝</div>
         <div class="nav-btn-label">Profile</div>
       </div>
@@ -499,7 +531,7 @@
         </div>
       </div>
 
-      <!-- PROFILE PANEL -->
+      <!-- PROFILE PANEL (signed-in only) -->
       <div class="sidebar-panel" id="panel-profile">
         <div style="padding:24px 16px;">
           <div class="profile-panel-avatar" id="profilePanelAvatar" style="background:#1a1a1a;">🐝</div>
@@ -521,7 +553,9 @@
         </div>
       </div>
       <div class="messages" id="messages"></div>
-      <div class="message-input-container">
+
+      <!-- Input area: shown for signed-in users, replaced with blocker for guests -->
+      <div class="message-input-container" id="messageInputContainer">
         <div class="mention-dropdown" id="mentionDropdown"></div>
         <div id="replyPreview"></div>
         <div class="file-preview-bar" id="filePreviewBar">
@@ -539,10 +573,15 @@
           <button class="btn btn-accent" id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
       </div>
+
+      <!-- Guest blocker (hidden for signed-in users) -->
+      <div class="guest-input-blocker" id="guestInputBlocker" style="display:none;">
+        <span>👀 You're browsing as a guest</span>
+        <button class="guest-join-btn" onclick="requireAuth('message')">Join to Chat 🐝</button>
+      </div>
     </div>
   </div>
 </div>
-
 
 <!-- VIDEO CALL MODAL -->
 <div class="call-modal" id="callModal">
@@ -604,12 +643,12 @@ function rankProgressHTML(points){
 const SUPABASE_URL='https://cwoaqiwnpcpawignecsb.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3b2FxaXducGNwYXdpZ25lY3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMTM1OTksImV4cCI6MjA4NjY4OTU5OX0.o7eW1g7r8PYvtE4G1lxLDqVZpxpbxs3_cwg_7STBZTI';
 
-let supabaseClient,currentUser,currentChannel='general';
-let currentMode='channel',currentDMUser=null;
-let messageSubscription,dmSubscription;
-let replyingTo=null,channelUsers=[],mentionSelectedIndex=0;
-let friendsList=[],dmConversations=[];
-let myLevel=1,myPoints=0,myEmoji='🐝',myColor='#1a1a1a',myStatus='',myUsername='';
+let supabaseClient, currentUser, currentChannel='general';
+let currentMode='channel', currentDMUser=null;
+let messageSubscription, dmSubscription;
+let replyingTo=null, channelUsers=[], mentionSelectedIndex=0;
+let friendsList=[], dmConversations=[];
+let myLevel=1, myPoints=0, myEmoji='🐝', myColor='#1a1a1a', myStatus='', myUsername='';
 let selectedFile=null, selectedFileUrl=null, selectedFileType=null;
 const PAGE_SIZE=50;
 let msgPage={channel:{},dm:{}};
@@ -631,15 +670,50 @@ let presenceChannels={};
 let isRoomPrivate=false;
 let pendingAccessRoomId=null;
 
+// ── GUEST MODE ──
+let isGuest = false;
+
+// Gate interactions for guests — shows contextual prompt
+function requireAuth(action='message'){
+    const configs={
+        message:{ icon:'💬', title:'Join to chat!', sub:'Sign up free to send messages, earn XP, and climb the ranks.' },
+        dm:     { icon:'✉️', title:'DMs need an account', sub:'Sign up to send direct messages to other bees.' },
+        friend: { icon:'🐝', title:'Add to your Hive!', sub:'Sign up to add friends and build your bee network.' },
+        room:   { icon:'🔒', title:'Join to create rooms', sub:'Sign up to create private rooms and invite other bees.' },
+        profile:{ icon:'👤', title:'Create your profile', sub:'Sign up to customise your bee avatar, bio, and status.' },
+    };
+    const c=configs[action]||configs.message;
+    document.getElementById('guestAuthIcon').textContent=c.icon;
+    document.getElementById('guestAuthTitle').textContent=c.title;
+    document.getElementById('guestAuthSubtitle').textContent=c.sub;
+    document.getElementById('guestAuthModal').classList.add('open');
+}
+
 async function init(){
     try{
         supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-        const{data:{user},error}=await supabaseClient.auth.getUser();
-        if(error||!user)throw new Error('Not authenticated');
+        const savedTheme=localStorage.getItem('theme')||'dark';
+        document.body.setAttribute('data-theme',savedTheme);
+
+        const{data:{user}}=await supabaseClient.auth.getUser();
+
+        if(!user){
+            // ── GUEST MODE ──
+            isGuest=true;
+            setupGuestUI();
+            await loadRoomsGuest();
+            await loadMessages('channel','general');
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('appContainer').style.display='flex';
+            return;
+        }
+
+        // ── SIGNED-IN MODE ──
+        isGuest=false;
         currentUser=user;
         myUsername=user.user_metadata?.username||user.email.split('@')[0];
-        document.getElementById('currentUser').textContent=myUsername;
         await loadMyProfile();
+        setupSignedInUI();
         await loadRooms();
         await loadMessages('channel','general');
         await loadChannelUsers('general');
@@ -650,14 +724,102 @@ async function init(){
         subscribeToDMs();
         document.getElementById('loadingScreen').classList.add('hidden');
         document.getElementById('appContainer').style.display='flex';
-        const savedTheme=localStorage.getItem('theme')||'dark';
-        document.body.setAttribute('data-theme',savedTheme);
-        // no themeSelector anymore - theme panel used instead
     }catch(e){
-        console.error('Init:',e);
-        alert('⚠️ Not signed in! Redirecting...');
-        window.location.href='signin.html';
+        console.error('Init error:',e);
+        // On unexpected error, still try guest mode
+        isGuest=true;
+        setupGuestUI();
+        await loadRoomsGuest().catch(()=>{});
+        document.getElementById('loadingScreen').classList.add('hidden');
+        document.getElementById('appContainer').style.display='flex';
     }
+}
+
+function setupGuestUI(){
+    // Show guest banner
+    document.getElementById('guestBanner').style.display='flex';
+    // Header right: join/signin buttons
+    document.getElementById('headerRight').innerHTML=`
+        <span style="font-size:11px;color:var(--text-muted);">👀 Guest</span>
+        <button class="guest-join-btn" onclick="window.location.href='signin.html?tab=signup'">Join Free 🐝</button>
+        <button class="guest-signin-btn" onclick="window.location.href='signin.html'">Sign In</button>`;
+    // Hide message input, show blocker
+    document.getElementById('messageInputContainer').style.display='none';
+    document.getElementById('guestInputBlocker').style.display='flex';
+    // Hide DMs & Friends in nav (guests can't use them)
+    document.getElementById('nav-dms').style.display='none';
+    document.getElementById('nav-friends').style.display='none';
+    // Override create room button in drawer
+    const newRoomBtn=document.querySelector('#panel-channels .btn');
+    if(newRoomBtn)newRoomBtn.onclick=()=>requireAuth('room');
+}
+
+function setupSignedInUI(){
+    // Header right: user info
+    document.getElementById('headerRight').innerHTML=`
+        <span class="status-indicator"></span>
+        <span id="currentUser">${escapeHtml(myUsername)}</span>
+        <span id="headerRankBadge"></span>
+        <div class="header-xp">
+            <div class="header-xp-bar"><div class="header-xp-fill" id="headerXpFill" style="width:0%"></div></div>
+        </div>`;
+    updateHeaderRank();
+    // Show DMs & Friends
+    document.getElementById('nav-dms').style.display='';
+    document.getElementById('nav-friends').style.display='';
+    // Show input, hide blocker
+    document.getElementById('messageInputContainer').style.display='';
+    document.getElementById('guestInputBlocker').style.display='none';
+    document.getElementById('guestBanner').style.display='none';
+}
+
+// Guest-safe room loader (no auth required, just reads public rooms)
+async function loadRoomsGuest(){
+    try{
+        const{data:rooms}=await supabaseClient.from('rooms').select('*').order('created_at',{ascending:true});
+        privateRooms=(rooms||[]).filter(r=>r.is_private);
+        renderRoomsGuest();
+    }catch(e){console.error('loadRoomsGuest:',e);}
+}
+
+function renderRoomsGuest(){
+    document.getElementById('publicRoomList').innerHTML=PUBLIC_CHANNELS.map(ch=>{
+        const isActive=currentChannel===ch.id;
+        return `<div class="room-item ${isActive?'active':''}" onclick="switchChannelGuest('${ch.id}','${ch.name}','${ch.desc}')">
+            <div class="room-name-row ${isActive?'active-name':''}"><span>🍯 ${ch.name}</span></div>
+            <div class="room-meta"><span style="font-size:10px;color:var(--text-muted);">${ch.desc}</span></div>
+        </div>`;
+    }).join('');
+    const container=document.getElementById('privateRoomList');
+    if(privateRooms.length===0){container.innerHTML=`<div style="color:var(--text-muted);font-size:11px;padding:4px 0 8px;">No private rooms yet</div>`;return;}
+    container.innerHTML=privateRooms.map(room=>`
+        <div class="room-item locked" onclick="requireAuth('room')">
+            <div class="room-name-row">🔒 ${escapeHtml(room.name)}</div>
+            <div class="room-meta"><span class="room-lock">Sign up to request access</span></div>
+        </div>`).join('');
+}
+
+async function switchChannelGuest(channelId, name, desc){
+    currentChannel=channelId;
+    document.getElementById('chatHeader').innerHTML=`
+        <div>
+            <div style="font-size:16px;font-weight:600;">🍯 ${escapeHtml(name)}</div>
+            <div style="font-size:11px;color:var(--text-muted);">${escapeHtml(desc)} · Read-only (guest)</div>
+        </div>`;
+    if(messageSubscription)messageSubscription.unsubscribe();
+    await loadMessages('channel',channelId);
+    renderRoomsGuest();
+    subscribeToChannelGuest(channelId);
+    closeDrawer();
+}
+
+function subscribeToChannelGuest(channelId){
+    messageSubscription=supabaseClient.channel(`ch:${channelId}`)
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`channel_id=eq.${channelId}`},async(payload)=>{
+            if(currentChannel===channelId){
+                await enrichAndAddMessage(payload.new,'channel');
+            }
+        }).subscribe();
 }
 
 async function loadMyProfile(){
@@ -669,9 +831,8 @@ async function loadMyProfile(){
             myLevel=data.level||1;myPoints=data.points||0;
             myEmoji=data.avatar_emoji||'🐝';myColor=data.avatar_color||'#1a1a1a';
             myStatus=data.status_message||'';
-            if(data.username){myUsername=data.username;document.getElementById('currentUser').textContent=myUsername;}
+            if(data.username){myUsername=data.username;}
             profileCache[currentUser.id]=data;
-            updateHeaderRank();
             const prevRank=getBeeRank(prevPoints);
             const newRank=getBeeRank(myPoints);
             if(prevPoints>0&&prevRank.name!==newRank.name)showRankUpToast(newRank);
@@ -680,13 +841,18 @@ async function loadMyProfile(){
 }
 
 function updateHeaderRank(){
+    if(isGuest)return;
     const r=getBeeRank(myPoints);
     const pct=getBeeProgress(myPoints);
-    document.getElementById('headerRankBadge').innerHTML=rankBadgeHTML(myPoints);
+    const badge=document.getElementById('headerRankBadge');
+    if(badge)badge.innerHTML=rankBadgeHTML(myPoints);
     document.getElementById('headerAvatarEmoji').textContent=myEmoji;
-        if(currentDrawer==='profile')updateProfilePanel();
+    if(currentDrawer==='profile')updateProfilePanel();
     const fill=document.getElementById('headerXpFill');
     if(fill){fill.style.width=pct+'%';fill.style.background=r.color;}
+    // Update username span too
+    const cu=document.getElementById('currentUser');
+    if(cu)cu.textContent=myUsername;
 }
 
 function showRankUpToast(rank){
@@ -726,8 +892,8 @@ async function showUserModal(userId){
         if(!profile){modal.classList.remove('open');return;}
         const points=profile.points||0;
         const rank=getBeeRank(points);
-        const isFriend=friendsList.find(f=>f.userId===userId&&f.status==='accepted');
-        const isPending=friendsList.find(f=>f.userId===userId&&f.status==='pending');
+        const isFriend=!isGuest&&friendsList.find(f=>f.userId===userId&&f.status==='accepted');
+        const isPending=!isGuest&&friendsList.find(f=>f.userId===userId&&f.status==='pending');
         const av=document.getElementById('modalAvatar');
         av.textContent=profile.avatar_emoji||'🐝';
         av.style.background=profile.avatar_color||'#1a1a1a';
@@ -743,14 +909,20 @@ async function showUserModal(userId){
             <div class="modal-stat"><div class="modal-stat-val" style="color:${rank.color};">${msgCount||0}</div><div class="modal-stat-label">Messages</div></div>
             <div class="modal-stat"><div class="modal-stat-val" style="color:${rank.color};">${points}</div><div class="modal-stat-label">Total XP</div></div>`;
         const username=profile.username||'Unknown';
-        document.getElementById('modalActions').innerHTML=`
-            <button class="btn" style="flex:1;" onclick="openDM('${userId}','${escapeHtml(username).replace(/'/g,"\\'")}');switchSidebarTab('dms');document.getElementById('userModal').classList.remove('open')">✉️ DM</button>
-            ${isFriend
-                ?`<button class="btn" style="flex:1;border-color:#00ff41;color:#00ff41;" disabled>✓ Friends</button>`
-                :isPending
-                ?`<button class="btn" style="flex:1;opacity:.5;" disabled>⏳ Pending</button>`
-                :`<button class="btn btn-accent" style="flex:1;" onclick="quickAddFriend('${userId}','${escapeHtml(username).replace(/'/g,"\\'")}',this)">🐝 Add to Hive</button>`
-            }`;
+        if(isGuest){
+            document.getElementById('modalActions').innerHTML=`
+                <button class="btn btn-accent" style="flex:1;" onclick="requireAuth('dm')">✉️ DM</button>
+                <button class="btn btn-accent" style="flex:1;" onclick="requireAuth('friend')">🐝 Add to Hive</button>`;
+        }else{
+            document.getElementById('modalActions').innerHTML=`
+                <button class="btn" style="flex:1;" onclick="openDM('${userId}','${escapeHtml(username).replace(/'/g,"\\'")}');switchSidebarTab('dms');document.getElementById('userModal').classList.remove('open')">✉️ DM</button>
+                ${isFriend
+                    ?`<button class="btn" style="flex:1;border-color:#00ff41;color:#00ff41;" disabled>✓ Friends</button>`
+                    :isPending
+                    ?`<button class="btn" style="flex:1;opacity:.5;" disabled>⏳ Pending</button>`
+                    :`<button class="btn btn-accent" style="flex:1;" onclick="quickAddFriend('${userId}','${escapeHtml(username).replace(/'/g,"\\'")}',this)">🐝 Add to Hive</button>`
+                }`;
+        }
     }catch(e){console.error('showUserModal:',e);}
 }
 
@@ -771,7 +943,7 @@ async function loadLeaderboard(){
         container.innerHTML=data.map((p,i)=>{
             const rankIcon=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
             const rankClass=i===0?'gold':i===1?'silver':i===2?'bronze':'';
-            const isMe=p.id===currentUser.id;
+            const isMe=!isGuest&&p.id===currentUser?.id;
             const r=getBeeRank(p.points||0);
             const pct=getBeeProgress(p.points||0);
             return `<div class="leaderboard-item" onclick="showUserModal('${p.id}')" style="${isMe?`background:${r.color}11;border-left:3px solid ${r.color};`:''}">
@@ -805,12 +977,12 @@ function handleSearch(query){
 
 async function searchUsers(query){
     try{
-        const{data}=await supabaseClient.from('profiles').select('id,username,level,points,avatar_emoji,avatar_color,bio,status_message').ilike('username',`%${query}%`).neq('id',currentUser.id).order('points',{ascending:false}).limit(20);
+        const{data}=await supabaseClient.from('profiles').select('id,username,level,points,avatar_emoji,avatar_color,bio,status_message').ilike('username',`%${query}%`).order('points',{ascending:false}).limit(20);
         const container=document.getElementById('searchResults');
         if(!data||data.length===0){container.innerHTML=`<div class="search-empty">No bees found for "<strong>${escapeHtml(query)}</strong>"</div>`;return;}
         container.innerHTML=data.map(user=>{
-            const isFriend=friendsList.find(f=>f.userId===user.id&&f.status==='accepted');
-            const isPending=friendsList.find(f=>f.userId===user.id&&f.status==='pending');
+            const isFriend=!isGuest&&friendsList.find(f=>f.userId===user.id&&f.status==='accepted');
+            const isPending=!isGuest&&friendsList.find(f=>f.userId===user.id&&f.status==='pending');
             const r=getBeeRank(user.points||0);
             return `<div class="search-result" onclick="showUserModal('${user.id}')">
                 ${makeAvatar(user.avatar_emoji||'🐝',user.avatar_color||'#1a1a1a','',user.points||0)}
@@ -823,7 +995,9 @@ async function searchUsers(query){
                     </div>
                 </div>
                 <div class="search-result-actions" onclick="event.stopPropagation()">
-                    ${isFriend
+                    ${isGuest
+                        ?`<button class="friend-btn accept" onclick="requireAuth('friend')">🐝</button>`
+                        :isFriend
                         ?`<button class="friend-btn dm-btn" onclick="openDM('${user.id}','${escapeHtml(user.username).replace(/'/g,"\\'")}');switchSidebarTab('dms')">✉️</button>`
                         :isPending
                         ?`<button class="friend-btn" disabled style="opacity:.5;">⏳</button>`
@@ -835,8 +1009,8 @@ async function searchUsers(query){
     }catch(e){document.getElementById('searchResults').innerHTML=`<div class="search-empty">Error. Try again.</div>`;}
 }
 
-// FIX 1: Removed `const myUsername = myUsername` - uses global myUsername directly
 async function quickAddFriend(userId,username,btn){
+    if(isGuest){requireAuth('friend');return;}
     try{
         const{error}=await supabaseClient.from('friends').insert({user_id:currentUser.id,friend_id:userId,username:myUsername,friend_username:username,status:'pending'});
         if(error)throw error;
@@ -858,6 +1032,7 @@ async function loadRooms(){
 }
 
 function renderRooms(){
+    if(isGuest){renderRoomsGuest();return;}
     document.getElementById('publicRoomList').innerHTML=PUBLIC_CHANNELS.map(ch=>{
         const count=roomOnlineCounts[ch.id]||0;
         const isActive=currentMode==='channel'&&currentChannel===ch.id;
@@ -893,7 +1068,7 @@ function renderRooms(){
 }
 
 function trackPresence(channelId){
-    if(presenceChannels[channelId])return;
+    if(isGuest||presenceChannels[channelId])return;
     const presenceCh=supabaseClient.channel(`presence:${channelId}`,{config:{presence:{key:currentUser.id}}});
     presenceCh
         .on('presence',{event:'sync'},()=>{
@@ -914,6 +1089,7 @@ function untrackPresence(channelId){
 }
 
 async function switchChannel(channelId,isPrivate=false,name='',desc='',queenUsername=''){
+    if(isGuest){await switchChannelGuest(channelId,name,desc);return;}
     if(currentChannel&&currentChannel!==channelId)untrackPresence(currentChannel);
     currentMode='channel';currentChannel=channelId;currentDMUser=null;
     const displayName=name||channelId;
@@ -944,6 +1120,7 @@ async function switchChannel(channelId,isPrivate=false,name='',desc='',queenUser
 function renderChannels(){renderRooms();}
 
 function openCreateRoomModal(){
+    if(isGuest){requireAuth('room');return;}
     isRoomPrivate=false;
     document.getElementById('newRoomName').value='';
     document.getElementById('newRoomDesc').value='';
@@ -970,6 +1147,7 @@ function updatePrivacyToggle(){
 }
 
 async function createRoom(){
+    if(isGuest){requireAuth('room');return;}
     const name=document.getElementById('newRoomName').value.trim();
     if(!name){alert('Give your room a name!');return;}
     const safeName=name.toLowerCase().replace(/[^a-z0-9-_]/g,'-').replace(/-+/g,'-');
@@ -985,6 +1163,7 @@ async function createRoom(){
 }
 
 function openRequestAccessModal(roomId,name,desc,queenUsername){
+    if(isGuest){requireAuth('room');return;}
     pendingAccessRoomId=roomId;
     document.getElementById('requestRoomName').textContent='🔒 '+name;
     document.getElementById('requestRoomDesc').textContent=desc||'';
@@ -1009,6 +1188,7 @@ async function sendAccessRequest(){
 }
 
 async function loadJoinRequests(){
+    if(isGuest)return;
     try{
         const queenRoomIds=privateRooms.filter(r=>r.creator_id===currentUser.id||myRoomMemberships[r.id]?.role==='queen').map(r=>r.id);
         if(queenRoomIds.length===0){document.getElementById('joinRequestsPanel').style.display='none';return;}
@@ -1039,6 +1219,7 @@ async function denyJoinRequest(reqId){
 }
 
 async function loadChannelUsers(channelId){
+    if(isGuest){channelUsers=[];return;}
     try{
         const{data}=await supabaseClient.from('messages').select('username,user_id').eq('channel_id',channelId).order('created_at',{ascending:false}).limit(100);
         const seen=new Set();
@@ -1053,10 +1234,9 @@ function subscribeToChannel(channelId){
                 await enrichAndAddMessage(payload.new,'channel');
                 if(!channelUsers.find(u=>u.user_id===payload.new.user_id))channelUsers.push({username:payload.new.username,user_id:payload.new.user_id});
             }
-            if(payload.new.user_id===currentUser.id)setTimeout(()=>loadMyProfile(),1000);
-            // 🤖 Bot trigger
-            if(shouldBotReply(payload.new, channelId)){
-                setTimeout(()=>triggerBotReply(payload.new, channelId), 800);
+            if(!isGuest&&payload.new.user_id===currentUser.id)setTimeout(()=>loadMyProfile(),1000);
+            if(!isGuest&&shouldBotReply(payload.new,channelId)){
+                setTimeout(()=>triggerBotReply(payload.new,channelId),800);
             }
         }).subscribe();
 }
@@ -1068,6 +1248,7 @@ async function enrichAndAddMessage(msg,mode){
 }
 
 function subscribeToDMs(){
+    if(isGuest)return;
     dmSubscription=supabaseClient.channel('dm-realtime')
         .on('postgres_changes',{event:'INSERT',schema:'public',table:'direct_messages'},async(payload)=>{
             const msg=payload.new,myId=currentUser.id;
@@ -1083,6 +1264,7 @@ function subscribeToDMs(){
 }
 
 async function openDM(userId,username){
+    if(isGuest){requireAuth('dm');return;}
     currentMode='dm';currentDMUser={id:userId,username};
     const profile=await getProfile(userId);
     const emoji=profile?.avatar_emoji||'🐝',color=profile?.avatar_color||'#1a1a1a';
@@ -1163,10 +1345,12 @@ async function loadMoreMessages(){
 }
 
 async function markDMsAsRead(senderId){
+    if(isGuest)return;
     await supabaseClient.from('direct_messages').update({read:true}).eq('sender_id',senderId).eq('recipient_id',currentUser.id).eq('read',false);
 }
 
 async function loadDMList(){
+    if(isGuest)return;
     try{
         const myId=currentUser.id;
         const{data}=await supabaseClient.from('direct_messages').select('*').or(`sender_id.eq.${myId},recipient_id.eq.${myId}`).order('created_at',{ascending:false});
@@ -1197,6 +1381,7 @@ function renderDMList(){
 }
 
 async function loadFriends(){
+    if(isGuest)return;
     try{
         const myId=currentUser.id;
         const{data}=await supabaseClient.from('friends').select('*').or(`user_id.eq.${myId},friend_id.eq.${myId}`);
@@ -1239,8 +1424,8 @@ function renderFriends(){
         </div>`;
 }
 
-// FIX 2: Removed `const myUsername = myUsername` - uses global myUsername directly
 async function sendFriendRequest(){
+    if(isGuest){requireAuth('friend');return;}
     const input=document.getElementById('addFriendInput');
     const targetUsername=input.value.trim();if(!targetUsername)return;
     if(targetUsername.toLowerCase()===myUsername.toLowerCase()){alert("You can't add yourself!");return;}
@@ -1281,12 +1466,11 @@ function addMessageToUI(msg,mode){
     scrollToBottom();
 }
 
-// FIX 3: Removed `const myUsername = myUsername` - uses global myUsername directly
 function createMessageHTML(msg,mode){
     const time=new Date(msg.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
     const senderUsername=mode==='dm'?msg.sender_username:msg.username;
     const senderId=mode==='dm'?msg.sender_id:msg.user_id;
-    const isOwn=senderId===currentUser.id;
+    const isOwn=!isGuest&&senderId===currentUser?.id;
     const editedLabel=msg.edited?'<span style="font-size:10px;color:var(--text-muted);"> (edited)</span>':'';
     const emoji=isOwn?myEmoji:(msg._emoji||'🐝');
     const color=isOwn?myColor:(msg._color||'#1a1a1a');
@@ -1295,9 +1479,11 @@ function createMessageHTML(msg,mode){
     const rank=getBeeRank(pts);
     let replyHTML='';
     if(msg.reply_to_username&&msg.reply_to_content)replyHTML=`<div class="reply-reference"><span class="reply-reference-user">@${escapeHtml(msg.reply_to_username)}</span>: ${escapeHtml(msg.reply_to_content.substring(0,60))}${msg.reply_to_content.length>60?'...':''}</div>`;
-    const contentHTML=renderMessageContent(msg,mode,myUsername);
+    const currentUsername=isGuest?'':myUsername;
+    const contentHTML=renderMessageContent(msg,mode,currentUsername);
     const ringStyle=avatarRingStyle(pts);
-    const actionsMenu=`<div class="message-actions" style="display:none;position:absolute;top:4px;${isOwn?'left':'right'}:4px;z-index:10;white-space:nowrap;">
+    // Only show action buttons to signed-in users
+    const actionsMenu=isGuest?'':`<div class="message-actions" style="display:none;position:absolute;top:4px;${isOwn?'left':'right'}:4px;z-index:10;white-space:nowrap;">
         <button onclick="replyToMessage('${msg.id}','${escapeHtml(senderUsername).replace(/'/g,"\\'")}',\`${escapeHtml(msg.content||'').replace(/\`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">💬</button>
         ${isOwn&&mode!=='dm'?`<button onclick="editMessage('${msg.id}',\`${escapeHtml(msg.content||'').replace(/\`/g,'\\`')}\`,event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;margin-right:2px;cursor:pointer;color:var(--text-primary);font-size:10px;font-family:inherit;">✏️</button>`:''}
         ${isOwn?`<button onclick="deleteMessage('${msg.id}','${mode}',event)" style="background:var(--bg-tertiary);border:1px solid var(--border);padding:4px 8px;cursor:pointer;color:#ff006e;font-size:10px;font-family:inherit;">🗑️</button>`:''}
@@ -1321,6 +1507,7 @@ function createMessageHTML(msg,mode){
 }
 
 function handleFileSelect(input){
+    if(isGuest){requireAuth('message');return;}
     const file=input.files[0];if(!file)return;
     const maxMB=file.type.startsWith('audio/')?15:10;
     if(file.size>maxMB*1024*1024){alert(`File too large! Max ${maxMB}MB.`);input.value='';return;}
@@ -1391,22 +1578,22 @@ function closeLightbox(){document.getElementById('lightbox').classList.remove('o
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
 async function sendMessage(){
+    if(isGuest){requireAuth('message');return;}
     const input=document.getElementById('messageInput');
     const content=input.value.trim();
     if(!content&&!selectedFile)return;
     const btn=document.getElementById('sendBtn');btn.disabled=true;
     try{
-        const username=myUsername;
         let fileUrl=null,fileType='text',fileName=null;
         if(selectedFile){fileUrl=await uploadFile(selectedFile);fileType=selectedFileType;fileName=selectedFile.name;}
         if(currentMode==='dm'&&currentDMUser){
-            const msgData={sender_id:currentUser.id,sender_username:username,recipient_id:currentDMUser.id,recipient_username:currentDMUser.username,content:content||'',...(fileUrl&&{file_url:fileUrl,media_type:fileType,file_name:fileName})};
+            const msgData={sender_id:currentUser.id,sender_username:myUsername,recipient_id:currentDMUser.id,recipient_username:currentDMUser.username,content:content||'',...(fileUrl&&{file_url:fileUrl,media_type:fileType,file_name:fileName})};
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
             const{error}=await supabaseClient.from('direct_messages').insert(msgData);
             if(error)throw error;
             addMessageToUI({...msgData,id:Date.now(),created_at:new Date().toISOString(),_emoji:myEmoji,_color:myColor,_points:myPoints,_status:myStatus},'dm');
         }else{
-            const msgData={channel_id:currentChannel,user_id:currentUser.id,username,content:content||'',type:fileType,...(fileUrl&&{file_url:fileUrl,file_name:fileName})};
+            const msgData={channel_id:currentChannel,user_id:currentUser.id,username:myUsername,content:content||'',type:fileType,...(fileUrl&&{file_url:fileUrl,file_name:fileName})};
             if(replyingTo){msgData.reply_to_username=replyingTo.username;msgData.reply_to_content=replyingTo.content;}
             const{error}=await supabaseClient.from('messages').insert(msgData);
             if(error){
@@ -1458,11 +1645,13 @@ document.addEventListener('DOMContentLoaded',()=>{
         input.addEventListener('input',handleMentionInput);
         input.addEventListener('keydown',handleMentionKeydown);
         input.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});
+        // Intercept focus for guests
+        input.addEventListener('focus',()=>{if(isGuest){input.blur();requireAuth('message');}});
     }
 });
 
 function handleMentionInput(e){
-    if(currentMode==='dm')return;
+    if(isGuest||currentMode==='dm')return;
     const input=e.target,textBefore=input.value.substring(0,input.selectionStart),lastAt=textBefore.lastIndexOf('@');
     if(lastAt!==-1){
         const afterAt=textBefore.substring(lastAt+1);
@@ -1528,12 +1717,11 @@ function openDrawer(tab){
     document.getElementById('drawerTitle').textContent=DRAWER_TITLES[tab]||tab;
     document.getElementById('sidebarDrawer').classList.add('open');
     document.getElementById('sidebarOverlay').classList.add('active');
-    // lazy load
-    if(tab==='dms'){document.getElementById('dmNotifDot').style.display='none';loadDMList();}
-    if(tab==='friends')loadFriends();
+    if(tab==='dms'&&!isGuest){document.getElementById('dmNotifDot').style.display='none';loadDMList();}
+    if(tab==='friends'&&!isGuest)loadFriends();
     if(tab==='leaderboard')loadLeaderboard();
     if(tab==='search')setTimeout(()=>document.getElementById('searchInput').focus(),100);
-    if(tab==='profile')updateProfilePanel();
+    if(tab==='profile'&&!isGuest)updateProfilePanel();
 }
 
 function closeDrawer(){
@@ -1547,12 +1735,15 @@ function switchSidebarTab(tab){openDrawer(tab);}
 
 function scrollToBottom(){const c=document.getElementById('messages');requestAnimationFrame(()=>{c.scrollTop=c.scrollHeight;});}
 function escapeHtml(text){if(!text)return'';const d=document.createElement('div');d.textContent=text;return d.innerHTML;}
-function highlightMentions(text,currentUsername){return text.replace(/@(\w+)/g,(match,username)=>`<span class="${username.toLowerCase()===currentUsername.toLowerCase()?'mention-me':'mention'}">${match}</span>`);}
+function highlightMentions(text,currentUsername){
+    if(!currentUsername)return text;
+    return text.replace(/@(\w+)/g,(match,username)=>`<span class="${username.toLowerCase()===currentUsername.toLowerCase()?'mention-me':'mention'}">${match}</span>`);
+}
 function changeTheme(theme){
     document.body.setAttribute('data-theme',theme);
     localStorage.setItem('theme',theme);
     document.querySelectorAll('.theme-btn').forEach(b=>{
-        b.classList.toggle('active', b.textContent.toLowerCase().includes(theme.replace('-',' ').toLowerCase())||b.onclick?.toString().includes(`'${theme}'`));
+        b.classList.toggle('active',b.onclick?.toString().includes(`'${theme}'`));
     });
 }
 function goToProfile(){window.location.href='profile.html';}
@@ -1568,51 +1759,29 @@ const BOT_EMOJI = '🤖';
 const BOT_COLOR = '#1a1a2e';
 const BOT_USER_ID = 'hivebot-000-000-000';
 const BOT_STATUS = 'Always watching the hive 👁️';
-
-// Channels where bot auto-responds to every message (leave empty [] for @mention only)
 const BOT_AUTO_CHANNELS = [];
-
-// Conversation memory per channel: channelId -> [{role,content}]
 const botMemory = {};
-
-// Typing indicator tracker
 const botTyping = {};
 
-function isBotMessage(msg){
-    return msg.user_id === BOT_USER_ID || msg.username === BOT_NAME;
+function isBotMessage(msg){return msg.user_id===BOT_USER_ID||msg.username===BOT_NAME;}
+function shouldBotReply(msg,channelId){
+    if(isBotMessage(msg))return false;
+    const mentionsBot=msg.content&&msg.content.toLowerCase().includes(`@${BOT_NAME.toLowerCase()}`);
+    const isAutoChannel=BOT_AUTO_CHANNELS.includes(channelId);
+    return mentionsBot||isAutoChannel;
 }
-
-function shouldBotReply(msg, channelId){
-    if(isBotMessage(msg)) return false;                          // don't reply to itself
-    const mentionsBot = msg.content && msg.content.toLowerCase().includes(`@${BOT_NAME.toLowerCase()}`);
-    const isAutoChannel = BOT_AUTO_CHANNELS.includes(channelId);
-    return mentionsBot || isAutoChannel;
-}
-
-function getBotMemory(channelId){
-    if(!botMemory[channelId]) botMemory[channelId] = [];
-    return botMemory[channelId];
-}
-
-function addToBotMemory(channelId, role, content){
-    const mem = getBotMemory(channelId);
-    mem.push({role, content});
-    // Keep last 20 messages for context
-    if(mem.length > 20) mem.splice(0, mem.length - 20);
-}
+function getBotMemory(channelId){if(!botMemory[channelId])botMemory[channelId]=[];return botMemory[channelId];}
+function addToBotMemory(channelId,role,content){const mem=getBotMemory(channelId);mem.push({role,content});if(mem.length>20)mem.splice(0,mem.length-20);}
 
 function showBotTyping(channelId){
-    if(currentMode !== 'channel' || currentChannel !== channelId) return;
-    if(botTyping[channelId]) return;
-    botTyping[channelId] = true;
-    const container = document.getElementById('messages');
-    const typingHTML = `<div id="bot-typing" class="message" style="opacity:.7;">
+    if(currentMode!=='channel'||currentChannel!==channelId)return;
+    if(botTyping[channelId])return;
+    botTyping[channelId]=true;
+    const container=document.getElementById('messages');
+    container.innerHTML+=`<div id="bot-typing" class="message" style="opacity:.7;">
         <div class="emoji-avatar" style="background:${BOT_COLOR};border:2px solid #00ffff;box-shadow:0 0 10px rgba(0,255,255,0.5);">${BOT_EMOJI}</div>
         <div class="message-content">
-            <div class="message-header">
-                <span class="username" style="color:#00ffff;">${BOT_NAME}</span>
-                <span class="msg-rank" style="background:#00ffff22;border:1px solid #00ffff55;color:#00ffff;">⬡</span>
-            </div>
+            <div class="message-header"><span class="username" style="color:#00ffff;">${BOT_NAME}</span><span class="msg-rank" style="background:#00ffff22;border:1px solid #00ffff55;color:#00ffff;">⬡</span></div>
             <div class="message-text" style="color:var(--text-muted);">
                 <span style="animation:pulse 1s infinite;">●</span>
                 <span style="animation:pulse 1s infinite;animation-delay:.2s;">●</span>
@@ -1620,165 +1789,107 @@ function showBotTyping(channelId){
             </div>
         </div>
     </div>`;
-    container.innerHTML += typingHTML;
     scrollToBottom();
 }
 
-function hideBotTyping(channelId){
-    botTyping[channelId] = false;
-    const el = document.getElementById('bot-typing');
-    if(el) el.remove();
-}
+function hideBotTyping(channelId){botTyping[channelId]=false;const el=document.getElementById('bot-typing');if(el)el.remove();}
 
-function renderBotMessage(content, channelId){
-    if(currentMode !== 'channel' || currentChannel !== channelId) return;
-    const container = document.getElementById('messages');
-    if(container.querySelector('.empty-state')) container.innerHTML = '';
-    const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    const msgHTML = `<div class="message" data-message-id="bot-${Date.now()}" style="animation:slideIn .3s ease;">
+function renderBotMessage(content,channelId){
+    if(currentMode!=='channel'||currentChannel!==channelId)return;
+    const container=document.getElementById('messages');
+    if(container.querySelector('.empty-state'))container.innerHTML='';
+    const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    container.innerHTML+=`<div class="message" data-message-id="bot-${Date.now()}" style="animation:slideIn .3s ease;">
         <div class="emoji-avatar" style="background:${BOT_COLOR};border:2px solid #00ffff;box-shadow:0 0 10px rgba(0,255,255,0.5);flex-shrink:0;">${BOT_EMOJI}</div>
         <div class="message-content">
-            <div class="message-header">
-                <span class="username" style="color:#00ffff;">${BOT_NAME}</span>
-                <span class="msg-rank" style="background:#00ffff22;border:1px solid #00ffff55;color:#00ffff;">⬡</span>
-                <span class="timestamp">${time}</span>
-            </div>
+            <div class="message-header"><span class="username" style="color:#00ffff;">${BOT_NAME}</span><span class="msg-rank" style="background:#00ffff22;border:1px solid #00ffff55;color:#00ffff;">⬡</span><span class="timestamp">${time}</span></div>
             <div class="msg-status">${BOT_STATUS}</div>
-            <div class="message-text">${highlightMentions(escapeHtml(content), myUsername)}</div>
+            <div class="message-text">${highlightMentions(escapeHtml(content),myUsername)}</div>
         </div>
     </div>`;
-    container.innerHTML += msgHTML;
     scrollToBottom();
 }
 
-async function triggerBotReply(msg, channelId){
-    const cleanContent = (msg.content || '').replace(/@HiveBot/gi, '').trim();
-    if(!cleanContent) return;
-
-    addToBotMemory(channelId, 'user', `${msg.username}: ${cleanContent}`);
+async function triggerBotReply(msg,channelId){
+    const cleanContent=(msg.content||'').replace(/@HiveBot/gi,'').trim();
+    if(!cleanContent)return;
+    addToBotMemory(channelId,'user',`${msg.username}: ${cleanContent}`);
     showBotTyping(channelId);
-
     try{
-        const memory = getBotMemory(channelId);
-        const response = await fetch('https://cwoaqiwnpcpawignecsb.supabase.co/functions/v1/hivebot', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${SUPABASE_KEY}`
-            },
-            body: JSON.stringify({
-                system: `You are HiveBot, the AI assistant of Hive Mind — a honeybee-themed chat app. You are helpful, witty, and occasionally use bee puns. Keep replies concise (1-3 sentences usually) unless asked for something detailed. Current channel: ${channelId}.`,
-                messages: memory.map(m => ({role: m.role === 'user' ? 'user' : 'assistant', content: m.content}))
+        const memory=getBotMemory(channelId);
+        const response=await fetch('https://cwoaqiwnpcpawignecsb.supabase.co/functions/v1/hivebot',{
+            method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${SUPABASE_KEY}`},
+            body:JSON.stringify({
+                system:`You are HiveBot, the AI assistant of Hive Mind — a honeybee-themed chat app. You are helpful, witty, and occasionally use bee puns. Keep replies concise (1-3 sentences usually) unless asked for something detailed. Current channel: ${channelId}.`,
+                messages:memory.map(m=>({role:m.role==='user'?'user':'assistant',content:m.content}))
             })
         });
-
-        const data = await response.json();
-        const reply = data.content?.[0]?.text || 'Bzz... something went wrong in the hive! 🐝';
-
-        hideBotTyping(channelId);
-        renderBotMessage(reply, channelId);
-        addToBotMemory(channelId, 'assistant', reply);
-
+        const data=await response.json();
+        const reply=data.content?.[0]?.text||'Bzz... something went wrong in the hive! 🐝';
+        hideBotTyping(channelId);renderBotMessage(reply,channelId);
+        addToBotMemory(channelId,'assistant',reply);
     }catch(e){
         hideBotTyping(channelId);
-        renderBotMessage('Bzz! My antennae are down, try again later 🐝', channelId);
-        console.error('HiveBot error:', e);
+        renderBotMessage('Bzz! My antennae are down, try again later 🐝',channelId);
+        console.error('HiveBot error:',e);
     }
 }
-
 
 // ═══════════════════════════════════════════
 // 📹 VIDEO CALLS
 // ═══════════════════════════════════════════
-const SUPABASE_FUNCTIONS_URL = 'https://cwoaqiwnpcpawignecsb.supabase.co/functions/v1';
-let callMuted = false;
-let callVideoOff = false;
+const SUPABASE_FUNCTIONS_URL='https://cwoaqiwnpcpawignecsb.supabase.co/functions/v1';
+let callMuted=false,callVideoOff=false;
 
-async function startCall(mode, id, displayName){
-    // Build a room name: channel id or dm- + sorted user ids
+async function startCall(mode,id,displayName){
+    if(isGuest){requireAuth('message');return;}
     let roomName;
-    if(mode === 'channel'){
-        roomName = 'hive-' + id.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase().substring(0, 40);
-    } else {
-        // DM: sort ids so both users get same room name
-        const sorted = [currentUser.id, id].sort();
-        roomName = 'hive-dm-' + sorted[0].substring(0,8) + '-' + sorted[1].substring(0,8);
-    }
-
-    // Show loading state
-    document.getElementById('callTitle').textContent = '📹 Connecting...';
+    if(mode==='channel'){roomName='hive-'+id.replace(/[^a-zA-Z0-9-]/g,'-').toLowerCase().substring(0,40);}
+    else{const sorted=[currentUser.id,id].sort();roomName='hive-dm-'+sorted[0].substring(0,8)+'-'+sorted[1].substring(0,8);}
+    document.getElementById('callTitle').textContent='📹 Connecting...';
     document.getElementById('callModal').classList.add('open');
-    document.getElementById('callFrame').src = '';
-
-    try {
-        const res = await fetch(`${SUPABASE_FUNCTIONS_URL}/daily-room`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${SUPABASE_KEY}`
-            },
-            body: JSON.stringify({ roomName })
+    document.getElementById('callFrame').src='';
+    try{
+        const res=await fetch(`${SUPABASE_FUNCTIONS_URL}/daily-room`,{
+            method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${SUPABASE_KEY}`},
+            body:JSON.stringify({roomName})
         });
-        const data = await res.json();
-        if(data.error) throw new Error(data.error);
-
-        // Build Daily.co URL with username prefilled
-        const callUrl = `${data.url}?userName=${encodeURIComponent(myUsername)}&showLeaveButton=false`;
-        document.getElementById('callFrame').src = callUrl;
-        document.getElementById('callTitle').textContent = mode === 'channel'
-            ? `📹 ${displayName} — Group Call`
-            : `📹 Call with ${displayName}`;
-
-        // Send a message to chat that a call has started
-        if(mode === 'channel'){
-            await supabaseClient.from('messages').insert({
-                channel_id: currentChannel,
-                user_id: currentUser.id,
-                username: myUsername,
-                content: `📹 **${myUsername}** started a video call — click "Start Call" to join!`,
-                type: 'text'
-            });
+        const data=await res.json();if(data.error)throw new Error(data.error);
+        const callUrl=`${data.url}?userName=${encodeURIComponent(myUsername)}&showLeaveButton=false`;
+        document.getElementById('callFrame').src=callUrl;
+        document.getElementById('callTitle').textContent=mode==='channel'?`📹 ${displayName} — Group Call`:`📹 Call with ${displayName}`;
+        if(mode==='channel'){
+            await supabaseClient.from('messages').insert({channel_id:currentChannel,user_id:currentUser.id,username:myUsername,content:`📹 **${myUsername}** started a video call — click "Start Call" to join!`,type:'text'});
         }
-    } catch(e) {
-        endCall();
-        alert('Failed to start call: ' + e.message);
-    }
+    }catch(e){endCall();alert('Failed to start call: '+e.message);}
 }
 
 function endCall(){
     document.getElementById('callModal').classList.remove('open');
-    document.getElementById('callFrame').src = '';
-    callMuted = false;
-    callVideoOff = false;
-    document.getElementById('muteBtn').textContent = '🎤 Mute';
-    document.getElementById('videoBtn').textContent = '📷 Hide Video';
+    document.getElementById('callFrame').src='';
+    callMuted=false;callVideoOff=false;
+    document.getElementById('muteBtn').textContent='🎤 Mute';
+    document.getElementById('videoBtn').textContent='📷 Hide Video';
 }
 
 function toggleCallMute(){
-    callMuted = !callMuted;
-    document.getElementById('muteBtn').textContent = callMuted ? '🔇 Unmute' : '🎤 Mute';
-    // Post message to Daily iframe
-    const frame = document.getElementById('callFrame');
-    if(frame.contentWindow){
-        frame.contentWindow.postMessage({action: callMuted ? 'mute-audio' : 'unmute-audio'}, '*');
-    }
+    callMuted=!callMuted;document.getElementById('muteBtn').textContent=callMuted?'🔇 Unmute':'🎤 Mute';
+    const frame=document.getElementById('callFrame');
+    if(frame.contentWindow)frame.contentWindow.postMessage({action:callMuted?'mute-audio':'unmute-audio'},'*');
 }
 
 function toggleCallVideo(){
-    callVideoOff = !callVideoOff;
-    document.getElementById('videoBtn').textContent = callVideoOff ? '📷 Show Video' : '📷 Hide Video';
-    const frame = document.getElementById('callFrame');
-    if(frame.contentWindow){
-        frame.contentWindow.postMessage({action: callVideoOff ? 'disable-camera' : 'enable-camera'}, '*');
-    }
+    callVideoOff=!callVideoOff;document.getElementById('videoBtn').textContent=callVideoOff?'📷 Show Video':'📷 Hide Video';
+    const frame=document.getElementById('callFrame');
+    if(frame.contentWindow)frame.contentWindow.postMessage({action:callVideoOff?'disable-camera':'enable-camera'},'*');
 }
 
-// Close call on Escape key
-document.addEventListener('keydown', e => {
-    if(e.key === 'Escape' && document.getElementById('callModal').classList.contains('open')) endCall();
+document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&document.getElementById('callModal').classList.contains('open'))endCall();
 });
 
 function updateProfilePanel(){
+    if(isGuest)return;
     const panel=document.getElementById('profilePanelAvatar');
     const name=document.getElementById('profilePanelName');
     const rank=document.getElementById('profilePanelRank');
@@ -1791,40 +1902,27 @@ init();
 </script>
     <script>
       if('serviceWorker' in navigator){
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(r => console.log('SW registered'))
-            .catch(e => console.log('SW failed:', e));
+        window.addEventListener('load',()=>{
+          navigator.serviceWorker.register('/sw.js').catch(e=>console.log('SW failed:',e));
         });
       }
     </script>
-    <!-- PWA Install Banner -->
-    <div id="installBanner" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ffe600;color:#000;padding:12px 20px;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;z-index:9999;cursor:pointer;box-shadow:0 4px 20px rgba(255,230,0,0.5);display:none;align-items:center;gap:10px;">
+    <div id="installBanner" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ffe600;color:#000;padding:12px 20px;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;z-index:9999;cursor:pointer;box-shadow:0 4px 20px rgba(255,230,0,0.5);align-items:center;gap:10px;">
       <span>⬡</span> Install Hive Mind as an app
       <button onclick="installApp()" style="background:#000;color:#ffe600;border:none;padding:6px 14px;cursor:pointer;font-family:inherit;font-weight:700;border-radius:4px;font-size:12px;">Install</button>
       <button onclick="document.getElementById('installBanner').style.display='none'" style="background:transparent;border:none;cursor:pointer;font-size:18px;color:#000;padding:0 4px;">×</button>
     </div>
     <script>
       let deferredPrompt;
-      window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const banner = document.getElementById('installBanner');
-        if(banner){ banner.style.display = 'flex'; }
+      window.addEventListener('beforeinstallprompt',e=>{
+        e.preventDefault();deferredPrompt=e;
+        const banner=document.getElementById('installBanner');if(banner)banner.style.display='flex';
       });
       function installApp(){
-        if(!deferredPrompt) return;
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-          const banner = document.getElementById('installBanner');
-          if(banner) banner.style.display = 'none';
-        });
+        if(!deferredPrompt)return;deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(()=>{deferredPrompt=null;const banner=document.getElementById('installBanner');if(banner)banner.style.display='none';});
       }
-      window.addEventListener('appinstalled', () => {
-        const banner = document.getElementById('installBanner');
-        if(banner) banner.style.display = 'none';
-      });
+      window.addEventListener('appinstalled',()=>{const banner=document.getElementById('installBanner');if(banner)banner.style.display='none';});
     </script>
 </body>
 </html>
